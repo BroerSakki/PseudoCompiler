@@ -1,9 +1,13 @@
-package classes.libraries;
+// Package Formatter to tools folder
+package classes.tools;
 
-import classes.libraries.MethodLibrary;
+// Import Java Classes
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+// Import Custom Libraries
+import classes.libraries.*;
 
 public class Formatter extends MethodLibrary {
 	// Declarations

@@ -1,6 +1,7 @@
-package classes.pseudoID;
+// Package Dissector to tools folder
+package classes.tools;
 
-// Import file handling classes
+// Import Java Classes
 import java.io.FileNotFoundException;
 import java.io.File;
 import java.util.ArrayList;
@@ -8,12 +9,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-// Import Constants Library
-import classes.libraries.ConstLibrary;
+// Import Formatter Class
+import classes.tools.Formatter;
 
-// Import Method Libraries
-import classes.libraries.MethodLibrary;
-import classes.libraries.Formatter;
+// Import Custom Libraries
+import classes.libraries.*;
 
 public class Dissector extends MethodLibrary {	
 	// Create Objects

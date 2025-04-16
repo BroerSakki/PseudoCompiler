@@ -1,6 +1,9 @@
-// Import custom libraries
-import classes.libraries.Formatter;
-import classes.pseudoID.Dissector;
+// Package Main to core folder
+package core;
+
+// Import custom tools
+import classes.tools.Formatter;
+import classes.tools.Dissector;
 
 public class Main {
 	public static void main(String[] args) {

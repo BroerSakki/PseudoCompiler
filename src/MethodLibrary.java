@@ -1,7 +1,7 @@
 // Package basic methods file in custom library
 package classes.libraries;
 
-// Import Method and Array classes
+// Import Java Classes
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.ArrayList;

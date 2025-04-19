@@ -13,7 +13,7 @@ public class Directories extends MethodLibrary {
 	// Utility funtions
 	private static ArrayList<String> splitPath(String filePath) {
 		// Declarations
-		String[] arrPath = filePath.split("/");
+		String[] arrPath = filePath.split("\\\\");
 		ArrayList<String> path = new ArrayList<String>(Arrays.asList(arrPath));
 		
 		return path;
@@ -32,10 +32,12 @@ public class Directories extends MethodLibrary {
 		ArrayList<String> path = splitPath(currentDirectory());
 		int rootDir = path.indexOf("PseudoCompiler");
 		int dirDepth = (path.size() - 1) - rootDir;
+		printCurrentDirectory();
+		System.out.println(rootDir + "\n" + dirDepth + "\n" + path.size());
 		String targetPath = "";
 		
 		// Navigate to root folder
-		for (int i = 1; i < dirDepth; i++) {
+		for (int i = 0; i < dirDepth; i++) {
 			targetPath = targetPath + "../";
 		}
 		
@@ -76,4 +78,11 @@ public class Directories extends MethodLibrary {
 		
 		return customPath(userTextFilePath(), fileName);
 	}	
+
+	public static void printCurrentDirectory() {
+		ArrayList<String> path = splitPath(currentDirectory());
+		for (int i = 0; i < path.size(); i++) {
+			System.out.println(path.get(i));
+		}
+	}
 }

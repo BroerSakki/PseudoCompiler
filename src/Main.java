@@ -5,6 +5,7 @@ package core;
 import classes.tools.Formatter;
 import classes.tools.ColoringTools;
 import classes.tools.Dissector;
+import classes.tools.Directories;
 
 public class Main {
 	public static void main(String[] args) {

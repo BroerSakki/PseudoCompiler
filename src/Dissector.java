@@ -2,6 +2,8 @@
 package classes.tools;
 
 // Import Java Classes
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.io.FileNotFoundException;
 import java.io.File;
 import java.util.ArrayList;
@@ -9,9 +11,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-// Import Formatter Class
+// Import Tool Classes
 import classes.tools.Formatter;
-import classes.tools.ColoringTools;
+import classes.tools.Directories;
 
 // Import Custom Libraries
 import classes.libraries.*;
@@ -25,6 +27,7 @@ public class Dissector extends MethodLibrary {
 		private static ColoringTools coloring = new ColoringTools();
 		// File handling
 		private static File file;
+		private static Path pathVariable;
 		private static Scanner reader;
 	//================================================================
 	
@@ -43,16 +46,13 @@ public class Dissector extends MethodLibrary {
 	// Constructor
 	//================================================================
 		public Dissector(String path) {
-			filePath = path;
-			setTextBody();
-			setTextBodyFormatted();
-			lines = textBody.size();
+			setPath(path);
 			List<String> list = Arrays.asList(returnMethodIndex(currentClass));
 			methodIndex = new ArrayList<>(list);
 		}
 	//================================================================
 	
-	// Pront Methods
+	// Print Methods
 	//================================================================
 		// Overloaded printInfo
 		public void printInfo() {
@@ -130,7 +130,28 @@ public class Dissector extends MethodLibrary {
 	// Setters
 	//================================================================
 	public void setPath(String path) {
-		filePath = path;
+		// Declarations
+		boolean hasType, isTxt;
+		String type, filePathStep;
+		
+		// Verify file name and type
+		hasType = (path.lastIndexOf(".") != 0);
+		if (!hasType) {
+			filePathStep = path + ".txt";
+		}
+		
+		isTxt = (path.lastIndexOf(".txt") != 0);
+		type = path.substring(path.lastIndexOf(".") + 1, path.length());
+		
+		if (isTxt) {
+			filePathStep = path;
+		} else {
+			filePathStep = path.replaceAll(path.substring(path.lastIndexOf("."), path.length()), ".txt");
+		}
+		
+		filePath = Directories.getFilePath(filePathStep);
+		pathVariable = Paths.get(filePath);
+		
 		update();
 	}
 	public void setReader() {
@@ -140,7 +161,7 @@ public class Dissector extends MethodLibrary {
 	private void setTextBody() {
 		textBody.clear();
 		try {
-				file = new File(filePath);
+				file = pathVariable.toFile();
 				reader = new Scanner(file);
 				absPath = file.getAbsolutePath();
 				

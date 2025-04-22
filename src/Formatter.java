@@ -9,12 +9,15 @@ import java.util.List;
 // Import Custom Libraries
 import classes.libraries.MethodLibrary;
 import classes.libraries.ConstLibrary;
+import classes.tools.ColoringTools;
 
 public class Formatter extends MethodLibrary {
 	// Declarations
 	final public static Class<?> currentClass = Formatter.class;
 	private static int spaceTop = 0;
 	private static int spaceBottom = 0;
+
+	private static ColoringTools coloring = new ColoringTools();
 	
 	// Reset Variables
 	public void resetDefaults() {
@@ -63,6 +66,14 @@ public class Formatter extends MethodLibrary {
 			space(spaceTop);
 			for (int i = 1; i <= len; i++) {
 				System.out.print(lineChar);
+			}
+			System.out.println();
+			space(spaceBottom);
+		}
+		public static void makeLine(char lineChar, int len, int r, int g, int b) {
+			space(spaceTop);
+			for (int i = 1; i <= len; i++) {
+				System.out.print(coloring.recolorChar(lineChar, r, g, b));
 			}
 			System.out.println();
 			space(spaceBottom);

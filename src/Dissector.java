@@ -14,6 +14,7 @@ import java.util.Scanner;
 // Import Tool Classes
 import classes.tools.Formatter;
 import classes.tools.Directories;
+import classes.tools.ColoringTools;
 
 // Import Custom Libraries
 import classes.libraries.*;
@@ -24,6 +25,7 @@ public class Dissector extends MethodLibrary {
 		// Libraries
 		private static ConstLibrary conLib = new ConstLibrary();
 		private static Formatter format = new Formatter();
+		private static ColoringTools coloring = new ColoringTools();
 		// File handling
 		private static File file;
 		private static Path pathVariable;
@@ -57,14 +59,14 @@ public class Dissector extends MethodLibrary {
 		public void printInfo() {
 			String printAbsPath = "File path-absolute: " + absPath;
 			format.modSpace(2, 0);
-			format.makeLine('-', printAbsPath.length());
+			format.makeLine('-', printAbsPath.length(), 0, 143, 17);
 			
-			System.out.println("File path: " + filePath);
-			System.out.println("File path-absolute: " + absPath);
-			System.out.println("Lines in file: " + lines);
+			System.out.println(coloring.recolorText("File path: ", 0, 143, 17)  + filePath);
+			System.out.println(coloring.recolorText("File path-absolute: ", 0, 143, 17)  + absPath);
+			System.out.println(coloring.recolorText("Lines in file: ", 0, 143, 17)  + lines);
 			
 			format.modSpace(0, 2);
-			format.makeLine('-', printAbsPath.length());
+			format.makeLine('-', printAbsPath.length(), 0, 143, 17);
 			format.modSpace(0, 0);
 		}
 		public void printInfo(boolean hasFormat) {

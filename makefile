@@ -10,7 +10,7 @@ CLASS_DIRS = classes/libraries classes/tools core
 
 
 # Source files
-SOURCES = src/ConstLibrary.java src/MethodLibrary.java src/Formatter.java src/Dissector.java src/Main.java
+SOURCES = src/ConstLibrary.java src/MethodLibrary.java src/Directories.java src/Formatter.java src/Dissector.java src/Main.java
 MAIN = src.core.Main
 
 

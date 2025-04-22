@@ -4,6 +4,7 @@ package core;
 // Import custom tools
 import classes.tools.Formatter;
 import classes.tools.Dissector;
+import classes.tools.Directories;
 
 public class Main {
 	public static void main(String[] args) {

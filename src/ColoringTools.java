@@ -121,6 +121,69 @@ public class ColoringTools extends MethodLibrary
 		}
 	}
 
+	public static void rainbowTextDynamic(String text, int startR, int startG, int startB)
+	{
+		//Initialize ANSI_COLOR
+		String ANSI_COLOR;
+		
+		//Resets cmd color to default
+		String ANSI_RESET = "\033[0m";
+		
+        //Initialize rgb colors
+		int r = startR;
+		int g = startG;
+		int b = startB;
+		
+        //Determines amount of steps
+		int steps = 1000 / text.length();
+		
+		//Create and print Rainbow effect
+		for (int i = 0; i < text.length(); i++)
+		{
+			ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
+			System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+			
+			if (r >= 255 && g < 255 && b <= 0) {
+				g+= steps;
+			}
+			if (g >= 255 && r > 0 && b <= 0) {
+				r-= steps;
+			}
+			if (g >= 255 && b < 255 && r <= 0) {
+				b+= steps;
+			}
+			if (b >= 255 && g > 0 && r <= 0) {
+				g-= steps;
+			}
+			if (b >= 255 && r < 255 && g <= 0) {
+				r+= steps;
+			}
+			if (r >= 255 && b > 0 && g <= 0) {
+				b-= steps;
+			}
+			
+			if(r > 255) {
+				r = 255;
+			}
+			if(g > 255) {
+				g = 255;
+			}
+			if(b > 255) {
+				b = 255;
+			}
+			
+			if(r < 0) {
+				r = 0;
+			}
+			if(g < 0) {
+				g = 0;
+			}
+			if(b < 0) {
+				b = 0;
+			}
+		}
+	}
+
 	//Overoaded functions
     //================================================================
         //Changes text color with full spectrum of rainbow (For a very long rainbow effect)

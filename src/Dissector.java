@@ -14,6 +14,7 @@ import java.util.Scanner;
 // Import Tool Classes
 import classes.tools.Formatter;
 import classes.tools.Directories;
+import classes.tools.ColoringTools;
 
 // Import Custom Libraries
 import classes.libraries.*;

@@ -48,6 +48,7 @@ help:
 	@echo "Run 'make' to create all .class files"
 	@echo "Run 'make list_classes' to see all .class files"
 	@echo "Run 'make clean' to delete all .class files"
+	@echo "Run 'make run' to run the compiled program"
 	
 run:
 	@echo "Executing Main Program"

@@ -1,17 +1,17 @@
 // Package global constants file in custom library
 package classes.libraries;
 
-public class ConstLibrary {
+public interface ConstLibrary {
 	// Prompts
-	final public static String PROMPT_FILE_NAME = "Name of file to convert >> ";
+	public static final String PROMPT_FILE_NAME = "Name of file to convert >> ";
 	
 	// Formatting
-	final public static String FORMAT_DEFAULT_LINE = "----------------------------------------";
+	public static final String FORMAT_DEFAULT_LINE = "----------------------------------------";
 	
 	// Directory locations
-	final public static String DIR_USER_FILES_TXT = "user/files/txt/";
+	public static final String DIR_USER_FILES_TXT = "user/files/txt/";
 	
 	// Token keywords
-	final public static String TAB = "TAB ";
-	final public static String ENTER = " ENTER ";
+	public static final String TAB = "TAB ";
+	public static final String ENTER = " ENTER ";
 }

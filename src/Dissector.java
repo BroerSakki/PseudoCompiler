@@ -19,11 +19,10 @@ import classes.tools.ColoringTools;
 // Import Custom Libraries
 import classes.libraries.*;
 
-public class Dissector extends MethodLibrary {	
+public class Dissector implements ConstLibrary, MethodLibrary {	
 	// Create Objects
 	//================================================================
 		// Libraries
-		private static ConstLibrary conLib = new ConstLibrary();
 		private static Formatter format = new Formatter();
 		private static ColoringTools coloring = new ColoringTools();
 		// File handling
@@ -35,6 +34,7 @@ public class Dissector extends MethodLibrary {
 	// Variables
 	//================================================================
 		final public static Class<?> currentClass = Dissector.class;
+		public static ArrayList<String> methodIndex = new ArrayList<String>();
 		private String filePath;
 		private String absPath;
 		private int lines;
@@ -106,98 +106,88 @@ public class Dissector extends MethodLibrary {
 
 	// Getters
 	//================================================================
-	public String getInputPath() {
-		return filePath;
-	}
-	public String getAbsPath() {
-		return absPath;
-	}
-	public int getLen() {
-		return lines;
-	}
-	public ArrayList<String> getTextBody() {
-		return textBody;
-	}
-	public String getLine(int lineNum) {
-		try {
-			return textBody.get(lineNum-1);
-		} catch (ArrayIndexOutOfBoundsException e) {
-			System.out.println("Error: Index out of bounds");
-			return "";
+		public String getInputPath() {
+			return filePath;
 		}
-	}
+		public String getAbsPath() {
+			return absPath;
+		}
+		public int getLen() {
+			return lines;
+		}
+		public ArrayList<String> getTextBody() {
+			return textBody;
+		}
+		public String getLine(int lineNum) {
+			try {
+				return textBody.get(lineNum-1);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				System.out.println("Error: Index out of bounds");
+				return "";
+			}
+		}
 	//================================================================
 
 	// Setters
 	//================================================================
-	public void setPath(String path) {
-		// Declarations
-		boolean hasType, isTxt;
-		String type, filePathStep;
-		
-		// Verify file name and type
-		hasType = (path.lastIndexOf(".") != 0);
-		if (!hasType) {
-			filePathStep = path + ".txt";
+		public void setPath(String path) {
+			// Declarations
+			boolean hasType, isTxt;
+			String type, filePathStep;
+			
+			// Verify file name and type
+			hasType = (path.lastIndexOf(".") != 0);
+			if (!hasType) {
+				filePathStep = path + ".txt";
+			}
+			
+			isTxt = (path.lastIndexOf(".txt") != 0);
+			type = path.substring(path.lastIndexOf(".") + 1, path.length());
+			
+			if (isTxt) {
+				filePathStep = path;
+			} else {
+				filePathStep = path.replaceAll(path.substring(path.lastIndexOf("."), path.length()), ".txt");
+			}
+			
+			filePath = Directories.getFilePath(filePathStep);
+			pathVariable = Paths.get(filePath);
+			
+			update();
 		}
-		
-		isTxt = (path.lastIndexOf(".txt") != 0);
-		type = path.substring(path.lastIndexOf(".") + 1, path.length());
-		
-		if (isTxt) {
-			filePathStep = path;
-		} else {
-			filePathStep = path.replaceAll(path.substring(path.lastIndexOf("."), path.length()), ".txt");
+		public void setReader() {
+			reader.close();
+			reader = new Scanner(filePath);
 		}
-		
-		filePath = Directories.getFilePath(filePathStep);
-		pathVariable = Paths.get(filePath);
-		
-		update();
-	}
-	public void setReader() {
-		reader.close();
-		reader = new Scanner(filePath);
-	}
-	private void setTextBody() {
-		textBody.clear();
-		try {
-				file = pathVariable.toFile();
-				reader = new Scanner(file);
-				absPath = file.getAbsolutePath();
-				
-				// Extract textfile data to ArrayList
-				while (reader.hasNextLine()) {
-					String line = reader.nextLine();
-					textBody.add(line);
+		private void setTextBody() {
+			textBody.clear();
+			try {
+					file = pathVariable.toFile();
+					reader = new Scanner(file);
+					absPath = file.getAbsolutePath();
+					
+					// Extract textfile data to ArrayList
+					while (reader.hasNextLine()) {
+						String line = reader.nextLine();
+						textBody.add(line);
+					}
+					
+				} catch (FileNotFoundException e) {
+					System.out.println("Error: File not found");
+					e.printStackTrace();
 				}
-				
-			} catch (FileNotFoundException e) {
-				System.out.println("Error: File not found");
-				e.printStackTrace();
-			}
-	}
-	private void setTextBodyFormatted() {
-		ArrayList<String> textFormatStep = new ArrayList<String>();	
-		for (int i = 0; i < textBody.size(); i++) {
-			String line = textBody.get(i).replaceAll("\t", conLib.TAB);
-			System.out.println(line);
-			String[] words = line.split("\\s+");
-			for (int j = 0; j < words.length; j++) {
-				textFormatStep.add(words[j]);
-			}
-			textBodyFormatted.add(textFormatStep);
 		}
-	}
-	//================================================================
-	
-	// Method Index output
-	//================================================================
-		public ArrayList<String> getMethodIndex() {
-			return methodIndex;
-		}
-		public void printMethodIndex() {
-			displayMethodIndex(currentClass);
+		private void setTextBodyFormatted() {
+			ArrayList<String> textFormatStep = new ArrayList<String>();	
+			for (int i = 0; i < textBody.size(); i++) {
+				String line = textBody.get(i).replaceAll("\t", TAB);
+				System.out.println(line);
+				String[] words = line.split("\\s+");
+				for (int j = 0; j < words.length; j++) {
+					textFormatStep.add(words[j]);
+				}
+				textBodyFormatted.add(textFormatStep);
+			}
 		}
 	//================================================================
 	
@@ -214,4 +204,14 @@ public class Dissector extends MethodLibrary {
 	public void closeReader() {
 		reader.close();
 	}
+	
+	// Method Index output
+	//================================================================
+		public ArrayList<String> getMethodIndex() {
+			return methodIndex;
+		}
+		public void printMethodIndex() {
+			displayMethodIndex(currentClass);
+		}
+	//================================================================
 }

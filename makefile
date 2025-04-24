@@ -35,7 +35,7 @@ JC_FLAGS := -d $(SRC_DIR)/ -cp $(SRC_DIR)/
 .PHONY: all clean
 
 # Default targets
-all: libraries datatypes tools main
+all: libraries datatypes tools main clear run
 
 
 # Build Main Class
@@ -77,6 +77,10 @@ clean:
 	@echo "Removing all .class files..."
 	for /R %%d in (*.class) do del /Q "%%d"
 	
+
+clear:
+		@cls
+
 
 # Name and explain necessary commands
 help:

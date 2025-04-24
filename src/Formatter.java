@@ -11,20 +11,24 @@ import classes.libraries.MethodLibrary;
 import classes.libraries.ConstLibrary;
 import classes.tools.ColoringTools;
 
-public class Formatter extends MethodLibrary {
+public class Formatter implements ConstLibrary, MethodLibrary {
 	// Declarations
-	final public static Class<?> currentClass = Formatter.class;
-	private static int spaceTop = 0;
-	private static int spaceBottom = 0;
-
-	private static ColoringTools coloring = new ColoringTools();
+	//================================================================
+		final public static Class<?> currentClass = Formatter.class;
+		public static ArrayList<String> methodIndex = new ArrayList<String>();
+		private static int spaceTop = 0;
+		private static int spaceBottom = 0;
+		private static ColoringTools coloring = new ColoringTools();
+	//================================================================
 	
 	// Reset Variables
-	public void resetDefaults() {
-		spaceTop = 0;
-		spaceBottom = 0;
-		methodIndex.clear();
-	}
+	//================================================================
+		public void resetDefaults() {
+			spaceTop = 0;
+			spaceBottom = 0;
+			methodIndex.clear();
+		}
+	//================================================================
 	
 	// Spacing Modifiers
 	//================================================================
@@ -41,17 +45,19 @@ public class Formatter extends MethodLibrary {
 	//================================================================
 	
 	// Spacing Methods
-	public static void space(int lines) {
-		for (int i = 1; i <= lines; i++) {
-			System.out.println();
+	//================================================================
+		public static void space(int lines) {
+			for (int i = 1; i <= lines; i++) {
+				System.out.println();
+			}
 		}
-	}
-		
+	//================================================================
+	
 	// Overloaded makeLine Method
 	//================================================================
 		public static void makeLine() {
 			space(spaceTop);
-			System.out.println(ConstLibrary.FORMAT_DEFAULT_LINE);
+			System.out.println(FORMAT_DEFAULT_LINE);
 			space(spaceBottom);
 		}
 		public static void makeLine(char lineChar) {
@@ -80,6 +86,14 @@ public class Formatter extends MethodLibrary {
 		}
 	//================================================================
 	
+	// Constructor
+	//================================================================
+		public Formatter() {
+			List<String> list = Arrays.asList(returnMethodIndex(currentClass));
+			methodIndex = new ArrayList<>(list);
+		}
+	//================================================================
+	
 	// Method Index output
 	//================================================================
 		public ArrayList<String> getMethodIndex() {
@@ -87,14 +101,6 @@ public class Formatter extends MethodLibrary {
 		}
 		public void printMethodIndex() {
 			displayMethodIndex(currentClass);
-		}
-	//================================================================
-	
-	// Constructor
-	//================================================================
-		public Formatter() {
-			List<String> list = Arrays.asList(returnMethodIndex(currentClass));
-			methodIndex = new ArrayList<>(list);
 		}
 	//================================================================
 	

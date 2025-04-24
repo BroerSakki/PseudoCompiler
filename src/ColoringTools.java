@@ -10,7 +10,7 @@ import java.util.List;
 import classes.libraries.MethodLibrary;
 import classes.libraries.ConstLibrary;
 
-public class ColoringTools extends MethodLibrary
+public class ColoringTools implements MethodLibrary
 {
 	//Cool tests wat werk
 	//Gebruik recolorText om text enige rgb kleur te gee
@@ -19,6 +19,7 @@ public class ColoringTools extends MethodLibrary
 	//Gebruik rainbow met start rgb om die rainbow se begin kleur te specify
 	
     final public static Class<?> currentClass = ColoringTools.class;
+	public static ArrayList<String> methodIndex = new ArrayList<String>();
 
     // Reset Variables
     public void resetDefaults() {

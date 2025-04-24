@@ -8,8 +8,19 @@ import classes.tools.ColoringTools;
 import classes.tools.Dissector;
 import classes.tools.Directories;
 
+// Import custom datatypes
+import classes.datatypes.Num;
+
 public class Main {
 	public static void main(String[] args) {
+		// Declarations
+		Num num1;
+		Num num2 = new Num("num2", 35f);
+		num1 = new Num("num1");
+		System.out.println(num1.getDeclaration() + "\n" + num2.getDeclaration());
+		
+		System.out.println("\n\n\n\n\n\n");
+		
 		// Create MethodLibrary Object
 		Formatter format = new Formatter();
 

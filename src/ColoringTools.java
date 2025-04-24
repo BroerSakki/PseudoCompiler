@@ -21,11 +21,6 @@ public class ColoringTools implements MethodLibrary
     final public static Class<?> currentClass = ColoringTools.class;
 	public static ArrayList<String> methodIndex = new ArrayList<String>();
 
-    // Reset Variables
-    public void resetDefaults() {
-        methodIndex.clear();
-    }
-
 	//Changes and returns color of text string
 	public static String recolorText(String text, int R, int G, int B)
 	{

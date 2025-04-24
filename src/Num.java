@@ -89,9 +89,9 @@ public class Num implements MethodLibrary {
 		}
 	//================================================================
 	
-	// Print methods
+	// Get methods
 	//================================================================
-		public String printDeclaration() {
+		public String getDeclaration() {
 			String declaration = "";
 			if (hasValue) {
 				switch(type) {
@@ -116,8 +116,10 @@ public class Num implements MethodLibrary {
 					default:
 						declaration = "Error: Num not declared";
 				}
-			} else {
+			} else if (!type.isEmpty()) {
 				declaration = type + " " + name + ";";
+			} else {
+				declaration = "Error: Type not yet initialized";
 			}
 			
 			return declaration;

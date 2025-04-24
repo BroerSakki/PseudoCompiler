@@ -329,7 +329,141 @@ public class ColoringTools implements MethodLibrary
 	    		}
 	    	}
 	    }
-    //================================================================
+    //================================================================NaN
+	
+	public static void gradientText(String text, double firstR, double firstG, double firstB, double secondR, double secondG, double secondB)
+	{
+		//Initialize ANSI_COLOR
+		String ANSI_COLOR;
+        
+		//Resets cmd color to default
+		String ANSI_RESET = "\033[0m";
+
+		double value = 0;
+		double valueDouble;
+
+		double r;
+		double g;
+		double b;
+
+		double r1;
+		double g1;
+		double b1;
+
+		double r2;
+		double g2;
+		double b2;
+
+		int ir = 0;
+		int ig = 0;
+		int ib = 0;
+
+		r1 = firstR / 255;
+		g1 = firstG / 255;
+		b1 = firstB / 255;
+
+		r2 = secondR / 255;
+		g2 = secondG / 255;
+		b2 = secondB / 255;
+
+		for (int i = 0; i < text.length(); i++)
+		{
+			valueDouble = value / 100;
+
+			r = r1 + (r2 - r1) * valueDouble;
+			g = g1 + (g2 - g1) * valueDouble;
+			b = b1 + (b2 - b1) * valueDouble;
+
+			ir = (int)(r * 255);
+			ig = (int)(g * 255);
+			ib = (int)(b * 255);
+
+			ANSI_COLOR = "\033[38;2;" + ir + ";" + ig + ";" + ib + "m";
+	    	System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+
+			value++;
+		}
+	}
+
+	public static void dynamicGradientText(String text, double firstR, double firstG, double firstB, double secondR, double secondG, double secondB)
+	{
+		//Initialize ANSI_COLOR
+		String ANSI_COLOR;
+        
+		//Resets cmd color to default
+		String ANSI_RESET = "\033[0m";
+
+		double value = 0;
+		double valueDouble;
+
+		double r;
+		double g;
+		double b;
+
+		double r1;
+		double g1;
+		double b1;
+
+		double r2;
+		double g2;
+		double b2;
+
+		int ir = 0;
+		int ig = 0;
+		int ib = 0;
+
+		boolean direction = true;
+
+		int steps = 100 / (text.length() - 1);
+
+		if (steps < 1)
+		{
+			steps = 1;
+		}
+
+		r1 = firstR / 255;
+		g1 = firstG / 255;
+		b1 = firstB / 255;
+
+		r2 = secondR / 255;
+		g2 = secondG / 255;
+		b2 = secondB / 255;
+
+		for (int i = 0; i < text.length(); i++)
+		{
+			if (value >= 100)
+			{
+				direction = false;
+			}
+
+			if (value <= 0)
+			{
+				direction = true;
+			}
+			
+			valueDouble = value / 100;
+
+			r = r1 + (r2 - r1) * valueDouble;
+			g = g1 + (g2 - g1) * valueDouble;
+			b = b1 + (b2 - b1) * valueDouble;
+
+			ir = (int)(r * 255);
+			ig = (int)(g * 255);
+			ib = (int)(b * 255);
+
+			ANSI_COLOR = "\033[38;2;" + ir + ";" + ig + ";" + ib + "m";
+	    	System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+
+			if (direction)
+			{
+				value += steps;
+			}
+			else
+			{
+				value -= steps;
+			}
+		}
+	}
 
     // Method Index output
 	//================================================================

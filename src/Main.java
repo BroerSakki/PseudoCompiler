@@ -2,6 +2,7 @@
 package core;
 
 // Import custom tools
+import classes.libraries.ConstLibrary;
 import classes.tools.Formatter;
 import classes.tools.ColoringTools;
 import classes.tools.Dissector;
@@ -18,13 +19,11 @@ public class Main {
 		// Create Dissector Object
 		Dissector program = new Dissector("PseudoProgram.txt");
 
-		//Cool Art
-		coloring.rainbowText(" ____                     _        ____                      _ _           \r\n" + //
-							"|  _ \\ ___  ___ _   _  __| | ___  / ___|___  _ __ ___  _ __ (_) | ___ _ __ \r\n" + //
-							"| |_) / __|/ _ \\ | | |/ _` |/ _ \\| |   / _ \\| '_ ` _ \\| '_ \\| | |/ _ \\ '__|\r\n" + //
-							"|  __/\\__ \\  __/ |_| | (_| | (_) | |__| (_) | | | | | | |_) | | |  __/ |   \r\n" + //
-							"|_|   |___/\\___|\\__,_|\\__,_|\\___/ \\____\\___/|_| |_| |_| .__/|_|_|\\___|_|   \r\n" + //
-							"                                                      |_|                  ", 100);
+		coloring.rainbowText(ConstLibrary.LOGO_IMAGE, 50);
+
+		coloring.rainbowText(ConstLibrary.SAKKI_IMAGE, 50);
+
+		coloring.rainbowText(ConstLibrary.RASSIE_IMAGE, 50);
 
 		program.printInfo();
 		program.printTextBody();

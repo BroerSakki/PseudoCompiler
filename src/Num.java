@@ -25,7 +25,7 @@ public class Num implements MethodLibrary {
 		public String type = "";
 		public String name = "";
 		public boolean declaredAndUsed = false;
-		private hasValue = true;
+		private boolean hasValue = true;
 	//================================================================
 	
 	// Overloaded constructor to detirmine number datatype

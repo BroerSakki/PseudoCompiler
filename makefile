@@ -38,6 +38,14 @@ JC_FLAGS := -d $(SRC_DIR)/ -cp $(SRC_DIR)/
 all: libraries datatypes tools main clear run
 
 
+# Build all required .class files
+build: libraries datatypes tools main
+
+
+# Build all required .class files
+build-clear: libraries datatypes tools main clear
+
+
 # Build Main Class
 main: $(CLASS_MAIN)
 

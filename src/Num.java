@@ -25,6 +25,7 @@ public class Num implements MethodLibrary {
 		public String type = "";
 		public String name = "";
 		public boolean declaredAndUsed = false;
+		private hasValue = true;
 	//================================================================
 	
 	// Overloaded constructor to detirmine number datatype
@@ -61,6 +62,7 @@ public class Num implements MethodLibrary {
 		}
 		public Num(String varName) {
 			name = varName;
+			hasValue = false;
 		}
 	//================================================================
 	
@@ -91,27 +93,31 @@ public class Num implements MethodLibrary {
 	//================================================================
 		public String printDeclaration() {
 			String declaration = "";
-			switch(type) {
-				case "byte":
-					declaration = type + " " + name + " = " + numByte;
-					break;
-				case "short":
-					declaration = type + " " + name + " = " + numShort;
-					break;
-				case "int":
-					declaration = type + " " + name + " = " + numInt;
-					break;
-				case "long":
-					declaration = type + " " + name + " = " + numLong;
-					break;
-				case "float":
-					declaration = type + " " + name + " = " + numFloat;
-					break;
-				case "double":
-					declaration = type + " " + name + " = " + numDouble;
-					break;
-				default:
-					declaration = "Error: Num not declared";
+			if (hasValue) {
+				switch(type) {
+					case "byte":
+						declaration = type + " " + name + " = " + numByte + ";";
+						break;
+					case "short":
+						declaration = type + " " + name + " = " + numShort + ";";
+						break;
+					case "int":
+						declaration = type + " " + name + " = " + numInt + ";";
+						break;
+					case "long":
+						declaration = type + " " + name + " = " + numLong + ";";
+						break;
+					case "float":
+						declaration = type + " " + name + " = " + numFloat + ";";
+						break;
+					case "double":
+						declaration = type + " " + name + " = " + numDouble + ";";
+						break;
+					default:
+						declaration = "Error: Num not declared";
+				}
+			} else {
+				declaration = type + " " + name + ";";
 			}
 			
 			return declaration;

@@ -23,21 +23,36 @@ public class Formatter implements ConstLibrary, MethodLibrary {
 	
 	// Reset Variables
 	//================================================================
+		/**
+		 * Resets spacing variables to defaults
+		 */
 		public void resetDefaults() {
 			spaceTop = 0;
 			spaceBottom = 0;
-			methodIndex.clear();
 		}
 	//================================================================
 	
 	// Spacing Modifiers
 	//================================================================
+		/**
+		 * Sets top spacing variables to given value
+		 * @param size Top spacing
+		 */
 		public static void modSpaceTop(int size) {
 			spaceTop = size;
 		}
+		/**
+		 * Sets bottom spacing variables to given value
+		 * @param size Bottom spacing
+		 */
 		public static void modSpaceBottom(int size) {
 			spaceBottom = size;
 		}
+		/**
+		 * Sets top and bottom spacing variables to given values
+		 * @param top Top spacing
+		 * @param bottom Bottom spacing
+		 */
 		public static void modSpace(int top, int bottom) {
 			spaceTop = top;
 			spaceBottom = bottom;
@@ -46,6 +61,10 @@ public class Formatter implements ConstLibrary, MethodLibrary {
 	
 	// Spacing Methods
 	//================================================================
+		/**
+		 * Creates newline spaces
+		 * @param lines Amount of lines
+		 */
 		public static void space(int lines) {
 			for (int i = 1; i <= lines; i++) {
 				System.out.println();
@@ -55,11 +74,18 @@ public class Formatter implements ConstLibrary, MethodLibrary {
 	
 	// Overloaded makeLine Method
 	//================================================================
+		/**
+		 * Prints a default line
+		 */
 		public static void makeLine() {
 			space(spaceTop);
 			System.out.println(FORMAT_DEFAULT_LINE);
 			space(spaceBottom);
 		}
+		/**
+		 * Prints a line of given character
+		 * @param lineChar Character to use for the line
+		 */
 		public static void makeLine(char lineChar) {
 			space(spaceTop);
 			for (int i = 1; i <= 40; i++) {
@@ -68,6 +94,11 @@ public class Formatter implements ConstLibrary, MethodLibrary {
 			System.out.println();
 			space(spaceBottom);
 		}
+		/**
+		 * Prints a line of given character and length
+		 * @param lineChar Character to use for the line
+		 * @param len Length of line
+		 */
 		public static void makeLine(char lineChar, int len) {
 			space(spaceTop);
 			for (int i = 1; i <= len; i++) {
@@ -76,11 +107,49 @@ public class Formatter implements ConstLibrary, MethodLibrary {
 			System.out.println();
 			space(spaceBottom);
 		}
-		public static void makeLine(char lineChar, int len, int r, int g, int b) {
+		/**
+		 * Prints a colored line of given character, length and color
+		 * @param lineChar Character to use for the line
+		 * @param len Length of line
+		 * @param rgb Color of line
+		 */
+		public static void makeLine(char lineChar, int len, int[] rgb) {
 			space(spaceTop);
 			for (int i = 1; i <= len; i++) {
-				System.out.print(coloring.recolorChar(lineChar, r, g, b));
+				System.out.print(coloring.recolorChar(lineChar, rgb));
 			}
+			System.out.println();
+			space(spaceBottom);
+		}
+		/**
+		 * Prints a rainbow line of given character and length
+		 * @param lineChar Character to use for the line
+		 * @param len Length of line
+		 */
+		public static void makeRainbowLine(char lineChar, int len) {
+			space(spaceTop);
+			String line = "";
+			for (int i = 1; i <= len; i++) {
+				line += lineChar;
+			}
+			coloring.rainbowTextDynamic(line, false);
+			System.out.println();
+			space(spaceBottom);
+		}
+		/**
+		 * Prints a line of given character, length and start and end colors
+		 * @param lineChar Character to use for the line
+		 * @param len Length of line
+		 * @param rgb1 First rgb color
+		 * @param rgb2 Second rgb color
+		 */
+		public static void makeGradientLine(char lineChar, int len, int[] rgb1, int[] rgb2) {
+			space(spaceTop);
+			String line = "";
+			for (int i = 1; i <= len; i++) {
+				line += lineChar;
+			}
+			coloring.dynamicGradientText(line, rgb1, rgb2, false);
 			System.out.println();
 			space(spaceBottom);
 		}

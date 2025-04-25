@@ -21,11 +21,16 @@ public class ColoringTools implements MethodLibrary
     final public static Class<?> currentClass = ColoringTools.class;
 	public static ArrayList<String> methodIndex = new ArrayList<String>();
 
-	//Changes and returns color of text string
-	public static String recolorText(String text, int R, int G, int B)
+	/**
+	 * Changes and returns color of text string
+	 * @param text The text to recolor
+	 * @param rgb The rgb color to recolor to
+	 * @return Recolored text
+	 */
+	public String recolorText(String text, int[] rgb)
 	{
 		//Set rgb colors using R, G, B values
-		String ANSI_COLOR = "\033[38;2;" + R + ";" + G + ";" + B + "m";
+		String ANSI_COLOR = "\033[38;2;" + rgb[0] + ";" + rgb[1] + ";" + rgb[2] + "m";
 		
 		//Resets cmd color to default
 		String ANSI_RESET = "\033[0m";
@@ -37,11 +42,16 @@ public class ColoringTools implements MethodLibrary
 		return recoloredText;
 	}
 
-    //Changes and returns color of text character
-	public static String recolorChar(char text, int R, int G, int B)
+	/**
+	 * Changes and returns color of text character
+	 * @param text The character to recolor
+	 * @param rgb The rgb color to recolor to
+	 * @return Recolored character
+	 */
+	public String recolorChar(char text, int[] rgb)
 	{
 		//Set rgb colors using R, G, B values
-		String ANSI_COLOR = "\033[38;2;" + R + ";" + G + ";" + B + "m";
+		String ANSI_COLOR = "\033[38;2;" + rgb[0] + ";" + rgb[1] + ";" + rgb[2] + "m";
 		
 		//Resets cmd color to default
 		String ANSI_RESET = "\033[0m";
@@ -53,8 +63,13 @@ public class ColoringTools implements MethodLibrary
 		return recoloredText;
 	}
 	
-    //Prints rainbow text based on length of text inputted
-	public static void rainbowTextDynamic(String text)
+	/**
+	 * Changes text color with full spectrum of rainbow, dynamicaly (Meaning the step count is found dynamically)
+	 * @param text The text to recolor
+	 * @param ignoreSpaces Whether or not to ignore spaces
+	 * @return Nothing, because it prints directly in function
+	 */
+	public void rainbowTextDynamic(String text, boolean ignoreSpaces)
 	{
 		//Initialize ANSI_COLOR
 		String ANSI_COLOR;
@@ -66,58 +81,104 @@ public class ColoringTools implements MethodLibrary
 		int r = 255;
 		int g = 0;
 		int b = 0;
+
+		//Initialize boolean
+		boolean colorChar;
+
+		int characters;
+
+		//Determines if spaces should be included
+		if (ignoreSpaces)
+		{
+			characters = countCharacters(text, " ");
+		}
+		else
+		{
+			characters = text.length();
+		}
 		
         //Determines amount of steps
-		int steps = 1000 / text.length();
+		int steps = 1000 / characters;
 		
 		//Create and print Rainbow effect
 		for (int i = 0; i < text.length(); i++)
 		{
-			ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
-			System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
-			
-			if (r >= 255 && g < 255 && b <= 0) {
-				g+= steps;
+			//Determines if spaces should be included
+			if (ignoreSpaces)
+			{
+				if (text.charAt(i) != ' ')
+				{
+					colorChar = true;
+				}
+				else
+				{
+					colorChar = false;
+				}
 			}
-			if (g >= 255 && r > 0 && b <= 0) {
-				r-= steps;
+			else
+			{
+				colorChar = true;
 			}
-			if (g >= 255 && b < 255 && r <= 0) {
-				b+= steps;
+
+			if (colorChar)
+			{
+				ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
+				System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+				
+				if (r >= 255 && g < 255 && b <= 0) {
+					g+= steps;
+				}
+				if (g >= 255 && r > 0 && b <= 0) {
+					r-= steps;
+				}
+				if (g >= 255 && b < 255 && r <= 0) {
+					b+= steps;
+				}
+				if (b >= 255 && g > 0 && r <= 0) {
+					g-= steps;
+				}
+				if (b >= 255 && r < 255 && g <= 0) {
+					r+= steps;
+				}
+				if (r >= 255 && b > 0 && g <= 0) {
+					b-= steps;
+				}
+
+				if(r > 255) {
+					r = 255;
+				}
+				if(g > 255) {
+					g = 255;
+				}
+				if(b > 255) {
+					b = 255;
+				}
+				
+				if(r < 0) {
+					r = 0;
+				}
+				if(g < 0) {
+					g = 0;
+				}
+				if(b < 0) {
+					b = 0;
+				}
 			}
-			if (b >= 255 && g > 0 && r <= 0) {
-				g-= steps;
-			}
-			if (b >= 255 && r < 255 && g <= 0) {
-				r+= steps;
-			}
-			if (r >= 255 && b > 0 && g <= 0) {
-				b-= steps;
-			}
-			
-			if(r > 255) {
-				r = 255;
-			}
-			if(g > 255) {
-				g = 255;
-			}
-			if(b > 255) {
-				b = 255;
-			}
-			
-			if(r < 0) {
-				r = 0;
-			}
-			if(g < 0) {
-				g = 0;
-			}
-			if(b < 0) {
-				b = 0;
+			else
+			{
+				System.out.print(text.charAt(i));
 			}
 		}
 	}
 
-	public static void rainbowTextDynamic(String text, int startR, int startG, int startB)
+	/**
+	 * Changes text color with full spectrum of rainbow with a start rgb color, dynamicaly (Meaning the step count is found dynamically)
+	 * @param text The text to recolor
+	 * @param rgb The start rgb color to use in the rainbow
+	 * @param ignoreSpaces Whether or not to ignore spaces
+	 * @return Nothing, because it prints directly in function
+	 */
+	public void rainbowTextDynamic(String text, int[] rgb, boolean ignoreSpaces)
 	{
 		//Initialize ANSI_COLOR
 		String ANSI_COLOR;
@@ -126,207 +187,351 @@ public class ColoringTools implements MethodLibrary
 		String ANSI_RESET = "\033[0m";
 		
         //Initialize rgb colors
-		int r = startR;
-		int g = startG;
-		int b = startB;
+		int r = rgb[0];
+		int g = rgb[1];
+		int b = rgb[2];
+
+		//Initialize boolean
+		boolean colorChar;
+
+		int characters;
+
+		//Determines if spaces should be included
+		if (ignoreSpaces)
+		{
+			characters = countCharacters(text, " ");
+		}
+		else
+		{
+			characters = text.length();
+		}
 		
         //Determines amount of steps
-		int steps = 1000 / text.length();
+		int steps = 1000 / characters;
+
+		if (steps < 1)
+		{
+			steps = 1;
+		}
 		
 		//Create and print Rainbow effect
 		for (int i = 0; i < text.length(); i++)
 		{
-			ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
-			System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
-			
-			if (r >= 255 && g < 255 && b <= 0) {
-				g+= steps;
+			//Determines if spaces should be included
+			if (ignoreSpaces)
+			{
+				if (text.charAt(i) != ' ')
+				{
+					colorChar = true;
+				}
+				else
+				{
+					colorChar = false;
+				}
 			}
-			if (g >= 255 && r > 0 && b <= 0) {
-				r-= steps;
+			else
+			{
+				colorChar = true;
 			}
-			if (g >= 255 && b < 255 && r <= 0) {
-				b+= steps;
+
+			if (colorChar)
+			{
+				ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
+				System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+				
+				if (r >= 255 && g < 255 && b <= 0) {
+					g+= steps;
+				}
+				if (g >= 255 && r > 0 && b <= 0) {
+					r-= steps;
+				}
+				if (g >= 255 && b < 255 && r <= 0) {
+					b+= steps;
+				}
+				if (b >= 255 && g > 0 && r <= 0) {
+					g-= steps;
+				}
+				if (b >= 255 && r < 255 && g <= 0) {
+					r+= steps;
+				}
+				if (r >= 255 && b > 0 && g <= 0) {
+					b-= steps;
+				}
+
+				if(r > 255) {
+					r = 255;
+				}
+				if(g > 255) {
+					g = 255;
+				}
+				if(b > 255) {
+					b = 255;
+				}
+
+				if(r < 0) {
+					r = 0;
+				}
+				if(g < 0) {
+					g = 0;
+				}
+				if(b < 0) {
+					b = 0;
+				}
 			}
-			if (b >= 255 && g > 0 && r <= 0) {
-				g-= steps;
-			}
-			if (b >= 255 && r < 255 && g <= 0) {
-				r+= steps;
-			}
-			if (r >= 255 && b > 0 && g <= 0) {
-				b-= steps;
-			}
-			
-			if(r > 255) {
-				r = 255;
-			}
-			if(g > 255) {
-				g = 255;
-			}
-			if(b > 255) {
-				b = 255;
-			}
-			
-			if(r < 0) {
-				r = 0;
-			}
-			if(g < 0) {
-				g = 0;
-			}
-			if(b < 0) {
-				b = 0;
+			else
+			{
+				System.out.print(text.charAt(i));
 			}
 		}
 	}
 
-	//Overoaded functions
-    //================================================================
-        //Changes text color with full spectrum of rainbow (For a very long rainbow effect)
-	    public void rainbowText(String text)
-	    {
-	    	//Initialize ANSI_COLOR
-	    	String ANSI_COLOR;
-        
-	    	//Resets cmd color to default
-	    	String ANSI_RESET = "\033[0m";
-        
-            //Initialize rgb colors
-	    	int r = 255;
-	    	int g = 0;
-	    	int b = 0;
-        
-	    	//Create Rainbow effect
-	    	for (int i = 0; i < text.length(); i++)
-	    	{
-	    		ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
-	    		System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
-            
-	    		if (r == 255 && g < 255 && b == 0) {
-	    			g++;
-	    		}
-	    		if (g == 255 && r > 0 && b == 0) {
-	    			r--;
-	    		}
-	    		if (g == 255 && b < 255 && r == 0) {
-	    			b++;
-	    		}
-	    		if (b == 255 && g > 0 && r == 0) {
-	    			g--;
-	    		}
-	    		if (b == 255 && r < 255 && g == 0) {
-	    			r++;
-	    		}
-	    		if (r == 255 && b > 0 && g == 0) {
-	    			b--;
-	    		}
-	    	}
-	    }
+	/**
+	 * Changes text color with full spectrum of rainbow (For a very long rainbow effect)
+	 * @param text The text to recolor
+	 * @param ignoreSpaces Whether or not to ignore spaces
+	 * @return Nothing, because it prints directly in function
+	 */
+	public void rainbowText(String text, boolean ignoreSpaces)
+	{
+		//Initialize ANSI_COLOR
+		String ANSI_COLOR;
     
-        //Changes text color with rainbow of given steps (Used for shorter rainbows)
-	    public void rainbowText(String text, int steps)
-	    {
-	    	//Initialize ANSI_COLOR
-	    	String ANSI_COLOR;
-        
-	    	//Resets cmd color to default
-	    	String ANSI_RESET = "\033[0m";
-        
-            //Initialize rgb colors
-	    	int r = 255;
-	    	int g = 0;
-	    	int b = 0;
-        
-	    	//Create Rainbow effect
-	    	for (int i = 0; i < text.length(); i++)
-	    	{
-	    		ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
-	    		System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
-            
-	    		if (r >= 255 && g < 255 && b <= 0) {
-	    			g+= steps;
-	    		}
-	    		if (g >= 255 && r > 0 && b <= 0) {
-	    			r-= steps;
-	    		}
-	    		if (g >= 255 && b < 255 && r <= 0) {
-	    			b+= steps;
-	    		}
-	    		if (b >= 255 && g > 0 && r <= 0) {
-	    			g-= steps;
-	    		}
-	    		if (b >= 255 && r < 255 && g <= 0) {
-	    			r+= steps;
-	    		}
-	    		if (r >= 255 && b > 0 && g <= 0) {
-	    			b-= steps;
-	    		}
-            
-	    		if(r > 255) {
-	    			r = 255;
-	    		}
-	    		if(g > 255) {
-	    			g = 255;
-	    		}
-	    		if(b > 255) {
-	    			b = 255;
-	    		}
-            
-	    		if(r < 0) {
-	    			r = 0;
-	    		}
-	    		if(g < 0) {
-	    			g = 0;
-	    		}
-	    		if(b < 0) {
-	    			b = 0;
-	    		}
-	    	}
-	    }
+		//Resets cmd color to default
+		String ANSI_RESET = "\033[0m";
     
-        //Changes text color with rainbow of given start rgb values (Used to specify where rainbow should start)
-	    public static void rainbowText(String text, int startR, int startG, int startB)
-	    {
-	    	//Initialize ANSI_COLOR
-	    	String ANSI_COLOR;
-        
-	    	//Resets cmd color to default
-	    	String ANSI_RESET = "\033[0m";
-        
-            //Initialize rgb colors
-	    	int r = startR;
-	    	int g = startG;
-	    	int b = startB;
-        
-	    	//Create Rainbow effect
-	    	for (int i = 0; i < text.length(); i++)
-	    	{
-	    		ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
-	    		System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
-            
-	    		if (r == 255 && g < 255 && b == 0) {
-	    			g++;
-	    		}
-	    		if (g == 255 && r > 0 && b == 0) {
-	    			r--;
-	    		}
-	    		if (g == 255 && b < 255 && r == 0) {
-	    			b++;
-	    		}
-	    		if (b == 255 && g > 0 && r == 0) {
-	    			g--;
-	    		}
-	    		if (b == 255 && r < 255 && g == 0) {
-	    			r++;
-	    		}
-	    		if (r == 255 && b > 0 && g == 0) {
-	    			b--;
-	    		}
-	    	}
-	    }
-    //================================================================NaN
-	
-	public static void gradientText(String text, double firstR, double firstG, double firstB, double secondR, double secondG, double secondB)
+        //Initialize rgb colors
+		int r = 255;
+		int g = 0;
+		int b = 0;
+
+		//Initialize boolean
+		boolean colorChar;
+    
+		//Create Rainbow effect
+		for (int i = 0; i < text.length(); i++)
+		{
+			//Determines if spaces should be included
+			if (ignoreSpaces)
+			{
+				if (text.charAt(i) != ' ')
+				{
+					colorChar = true;
+				}
+				else
+				{
+					colorChar = false;
+				}
+			}
+			else
+			{
+				colorChar = true;
+			}
+			if (colorChar)
+			{
+				ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
+				System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+				
+				if (r == 255 && g < 255 && b == 0) {
+					g++;
+				}
+				if (g == 255 && r > 0 && b == 0) {
+					r--;
+				}
+				if (g == 255 && b < 255 && r == 0) {
+					b++;
+				}
+				if (b == 255 && g > 0 && r == 0) {
+					g--;
+				}
+				if (b == 255 && r < 255 && g == 0) {
+					r++;
+				}
+				if (r == 255 && b > 0 && g == 0) {
+					b--;
+				}
+			}
+			else
+			{
+				System.out.print(text.charAt(i));
+			}
+		}
+	}
+
+	/**
+	 * Changes text color with rainbow of given steps (Used for shorter rainbows)
+	 * @param text The text to recolor
+	 * @param steps The rate at which the rainbow increases (1 for slow increase and larger for larger increase)
+	 * @param ignoreSpaces Whether or not to ignore spaces
+	 * @return Nothing, because it prints directly in function
+	 */
+	public void rainbowText(String text, int steps, boolean ignoreSpaces)
+	{
+		//Initialize ANSI_COLOR
+		String ANSI_COLOR;
+    
+		//Resets cmd color to default
+		String ANSI_RESET = "\033[0m";
+    
+        //Initialize rgb colors
+		int r = 255;
+		int g = 0;
+		int b = 0;
+
+		//Initialize boolean
+		boolean colorChar;
+    
+		//Create Rainbow effect
+		for (int i = 0; i < text.length(); i++)
+		{
+			//Determines if spaces should be included
+			if (ignoreSpaces)
+			{
+				if (text.charAt(i) != ' ')
+				{
+					colorChar = true;
+				}
+				else
+				{
+					colorChar = false;
+				}
+			}
+			else
+			{
+				colorChar = true;
+			}
+			if (colorChar)
+			{
+				ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
+				System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+				
+				if (r >= 255 && g < 255 && b <= 0) {
+					g+= steps;
+				}
+				if (g >= 255 && r > 0 && b <= 0) {
+					r-= steps;
+				}
+				if (g >= 255 && b < 255 && r <= 0) {
+					b+= steps;
+				}
+				if (b >= 255 && g > 0 && r <= 0) {
+					g-= steps;
+				}
+				if (b >= 255 && r < 255 && g <= 0) {
+					r+= steps;
+				}
+				if (r >= 255 && b > 0 && g <= 0) {
+					b-= steps;
+				}
+			
+				if(r > 255) {
+					r = 255;
+				}
+				if(g > 255) {
+					g = 255;
+				}
+				if(b > 255) {
+					b = 255;
+				}
+			
+				if(r < 0) {
+					r = 0;
+				}
+				if(g < 0) {
+					g = 0;
+				}
+				if(b < 0) {
+					b = 0;
+				}
+			}
+			else
+			{
+				System.out.print(text.charAt(i));
+			}
+		}
+	}
+
+	/**
+	 * Changes text color with rainbow of given start rgb values (Used to specify where rainbow should start)
+	 * @param text The text to recolor
+	 * @param rgb The start rgb color to use in the rainbow
+	 * @param ignoreSpaces Whether or not to ignore spaces
+	 * @return Nothing, because it prints directly in function
+	 */
+	public void rainbowText(String text, int[] rgb, boolean ignoreSpaces)
+	{
+		//Initialize ANSI_COLOR
+		String ANSI_COLOR;
+    
+		//Resets cmd color to default
+		String ANSI_RESET = "\033[0m";
+    
+        //Initialize rgb colors
+		int r = rgb[0];
+		int g = rgb[1];
+		int b = rgb[2];
+
+		//Initialize boolean
+		boolean colorChar;
+    
+		//Create Rainbow effect
+		for (int i = 0; i < text.length(); i++)
+		{
+			//Determines if spaces should be included
+			if (ignoreSpaces)
+			{
+				if (text.charAt(i) != ' ')
+				{
+					colorChar = true;
+				}
+				else
+				{
+					colorChar = false;
+				}
+			}
+			else
+			{
+				colorChar = true;
+			}
+			if (colorChar)
+			{
+				ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
+				System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+				
+				if (r == 255 && g < 255 && b == 0) {
+					g++;
+				}
+				if (g == 255 && r > 0 && b == 0) {
+					r--;
+				}
+				if (g == 255 && b < 255 && r == 0) {
+					b++;
+				}
+				if (b == 255 && g > 0 && r == 0) {
+					g--;
+				}
+				if (b == 255 && r < 255 && g == 0) {
+					r++;
+				}
+				if (r == 255 && b > 0 && g == 0) {
+					b--;
+				}
+			}
+			else
+			{
+				System.out.print(text.charAt(i));
+			}
+		}
+	}
+
+	/**
+	 * Recolors text according to a gradient of two specified colors, with default step of 1
+	 * @param text The text to recolor
+	 * @param rgb1 The first rgb color to use in the gradient
+	 * @param rgb2 The second rgb color to use in the gradient
+	 * @param ignoreSpaces Whether or not to ignore spaces
+	 * @return Nothing, because it prints directly in function
+	 */
+	public void gradientText(String text, int[] rgb1, int[] rgb2, boolean ignoreSpaces)
 	{
 		//Initialize ANSI_COLOR
 		String ANSI_COLOR;
@@ -334,53 +539,85 @@ public class ColoringTools implements MethodLibrary
 		//Resets cmd color to default
 		String ANSI_RESET = "\033[0m";
 
+		//Initialize doubles
 		double value = 0;
 		double valueDouble;
 
-		double r;
-		double g;
-		double b;
+		//Initialize rgb variables
+		int r;
+		int g;
+		int b;
 
-		double r1;
-		double g1;
-		double b1;
-
-		double r2;
-		double g2;
-		double b2;
-
-		int ir = 0;
-		int ig = 0;
-		int ib = 0;
-
-		r1 = firstR / 255;
-		g1 = firstG / 255;
-		b1 = firstB / 255;
-
-		r2 = secondR / 255;
-		g2 = secondG / 255;
-		b2 = secondB / 255;
+		//Initialize booleans
+		boolean direction = true;
+		boolean colorChar;
 
 		for (int i = 0; i < text.length(); i++)
 		{
-			valueDouble = value / 100;
+			//Determines if spaces should be included
+			if (ignoreSpaces)
+			{
+				if (text.charAt(i) != ' ')
+				{
+					colorChar = true;
+				}
+				else
+				{
+					colorChar = false;
+				}
+			}
+			else
+			{
+				colorChar = true;
+			}
 
-			r = r1 + (r2 - r1) * valueDouble;
-			g = g1 + (g2 - g1) * valueDouble;
-			b = b1 + (b2 - b1) * valueDouble;
+			if (colorChar)
+			{
+				if (value >= 100)
+				{
+					direction = false;
+				}
 
-			ir = (int)(r * 255);
-			ig = (int)(g * 255);
-			ib = (int)(b * 255);
+				if (value <= 0)
+				{
+					direction = true;
+				}
 
-			ANSI_COLOR = "\033[38;2;" + ir + ";" + ig + ";" + ib + "m";
-	    	System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+				valueDouble = value / 100;
 
-			value++;
+				r = (int)(rgb1[0] + ((rgb2[0] - rgb1[0]) * valueDouble));
+				g = (int)(rgb1[1] + ((rgb2[1] - rgb1[1]) * valueDouble));
+				b = (int)(rgb1[2] + ((rgb2[2] - rgb1[2]) * valueDouble));
+
+				ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
+	    		System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+
+				if (direction)
+				{
+					value ++;
+				}
+				else
+				{
+					value --;
+				}
+			}
+			else
+			{
+				System.out.print(text.charAt(i));
+			}
 		}
 	}
 
-	public static void dynamicGradientText(String text, double firstR, double firstG, double firstB, double secondR, double secondG, double secondB)
+	/**
+	 * Recolors text according to a gradient of two specified colors, with steps specified
+	 * @param text The text to recolor
+	 * @param rgb1 The first rgb color to use in the gradient
+	 * @param rgb2 The second rgb color to use in the gradient
+	 * @param steps The rate at which the gradient increases (1 for slow increase and larger for larger increase)
+	 * @param ignoreSpaces Whether or not to ignore spaces
+	 * @returns Nothing, because it prints directly in function
+	 */
+	public void gradientText(String text, int[] rgb1, int[] rgb2, int steps, boolean ignoreSpaces)
 	{
 		//Initialize ANSI_COLOR
 		String ANSI_COLOR;
@@ -388,76 +625,189 @@ public class ColoringTools implements MethodLibrary
 		//Resets cmd color to default
 		String ANSI_RESET = "\033[0m";
 
+		//Initialize doubles
 		double value = 0;
 		double valueDouble;
 
-		double r;
-		double g;
-		double b;
+		//Initialize rgb variables
+		int r;
+		int g;
+		int b;
 
-		double r1;
-		double g1;
-		double b1;
-
-		double r2;
-		double g2;
-		double b2;
-
-		int ir = 0;
-		int ig = 0;
-		int ib = 0;
-
+		//Initialize booleans
 		boolean direction = true;
+		boolean colorChar;
 
-		int steps = 100 / (text.length() - 1);
+		for (int i = 0; i < text.length(); i++)
+		{
+			//Determines if spaces should be included
+			if (ignoreSpaces)
+			{
+				if (text.charAt(i) != ' ')
+				{
+					colorChar = true;
+				}
+				else
+				{
+					colorChar = false;
+				}
+			}
+			else
+			{
+				colorChar = true;
+			}
+
+			if (colorChar)
+			{
+				if (value >= 100)
+				{
+					direction = false;
+				}
+
+				if (value <= 0)
+				{
+					direction = true;
+				}
+
+				valueDouble = value / 100;
+
+				r = (int)(rgb1[0] + ((rgb2[0] - rgb1[0]) * valueDouble));
+				g = (int)(rgb1[1] + ((rgb2[1] - rgb1[1]) * valueDouble));
+				b = (int)(rgb1[2] + ((rgb2[2] - rgb1[2]) * valueDouble));
+
+				ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
+	    		System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+
+				if (direction)
+				{
+					value += steps;
+				}
+				else
+				{
+					value -= steps;
+				}
+			}
+			else
+			{
+				System.out.print(text.charAt(i));
+			}
+		}
+	}
+
+	/**
+	 * Recolors text according to a gradient of two specified colors, dynamically (Meaning the step count is found dynamically)
+	 * @param text The text to recolor
+	 * @param rgb1 The first rgb color to use in the gradient
+	 * @param rgb2 The second rgb color to use in the gradient
+	 * @param ignoreSpaces Whether or not to ignore spaces
+	 * @return Nothing, because it prints directly in function
+	 */
+	public void dynamicGradientText(String text, int[] rgb1, int[] rgb2, boolean ignoreSpaces)
+	{
+		//Initialize ANSI_COLOR
+		String ANSI_COLOR;
+        
+		//Resets cmd color to default
+		String ANSI_RESET = "\033[0m";
+
+		//Initialize doubles
+		double value = 0;
+		double valueDouble;
+
+		//Initialize rgb variables
+		int r;
+		int g;
+		int b;
+
+		//Initialize booleans
+		boolean direction = true;
+		boolean colorChar;
+
+		int characters;
+
+		//Determines if spaces should be included
+		if (ignoreSpaces)
+		{
+			characters = countCharacters(text, " ");
+		}
+		else
+		{
+			characters = text.length();
+		}
+
+		double steps = 100.0 / (characters - 1);
 
 		if (steps < 1)
 		{
 			steps = 1;
 		}
 
-		r1 = firstR / 255;
-		g1 = firstG / 255;
-		b1 = firstB / 255;
-
-		r2 = secondR / 255;
-		g2 = secondG / 255;
-		b2 = secondB / 255;
-
 		for (int i = 0; i < text.length(); i++)
 		{
-			if (value >= 100)
+			//Determines if spaces should be included
+			if (ignoreSpaces)
 			{
-				direction = false;
-			}
-
-			if (value <= 0)
-			{
-				direction = true;
-			}
-			
-			valueDouble = value / 100;
-
-			r = r1 + (r2 - r1) * valueDouble;
-			g = g1 + (g2 - g1) * valueDouble;
-			b = b1 + (b2 - b1) * valueDouble;
-
-			ir = (int)(r * 255);
-			ig = (int)(g * 255);
-			ib = (int)(b * 255);
-
-			ANSI_COLOR = "\033[38;2;" + ir + ";" + ig + ";" + ib + "m";
-	    	System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
-
-			if (direction)
-			{
-				value += steps;
+				if (text.charAt(i) != ' ')
+				{
+					colorChar = true;
+				}
+				else
+				{
+					colorChar = false;
+				}
 			}
 			else
 			{
-				value -= steps;
+				colorChar = true;
+			}
+
+			if (colorChar)
+			{
+				if (value >= 100)
+				{
+					direction = false;
+				}
+
+				if (value <= 0)
+				{
+					direction = true;
+				}
+
+				valueDouble = value / 100;
+
+				r = (int)(rgb1[0] + ((rgb2[0] - rgb1[0]) * valueDouble));
+				g = (int)(rgb1[1] + ((rgb2[1] - rgb1[1]) * valueDouble));
+				b = (int)(rgb1[2] + ((rgb2[2] - rgb1[2]) * valueDouble));
+
+				ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
+	    		System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+
+				if (direction)
+				{
+					value += steps;
+				}
+				else
+				{
+					value -= steps;
+				}
+			}
+			else
+			{
+				System.out.print(text.charAt(i));
 			}
 		}
+	}
+
+	/**
+	 * Counts all characters in string excluding given character
+	 * @param text  String to count characters of
+	 * @param charToExclude  The character to exclude when counting
+	 * @return Integer of the count of the characters
+	 */
+	private static int countCharacters(String text, String charToExclude)
+	{
+		int count = text.replaceAll(charToExclude, "").length();
+		return count;
 	}
 
     // Method Index output
@@ -472,13 +822,12 @@ public class ColoringTools implements MethodLibrary
     
     // Constructor
 	//================================================================
+		/**
+		 * Constructor for ColoringTools class
+		 */
 		public ColoringTools() {
 			List<String> list = Arrays.asList(returnMethodIndex(currentClass));
 			methodIndex = new ArrayList<>(list);
 		}
 	//================================================================
-
-    public static void main(String[] args) {
-		ColoringTools coloring = new ColoringTools();
-	}
 }

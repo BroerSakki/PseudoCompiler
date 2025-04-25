@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Scanner;
 
 // Import Tool Classes
+import classes.libraries.ColorLibrary;
 import classes.tools.Formatter;
 import classes.tools.Directories;
 import classes.tools.ColoringTools;
@@ -59,14 +60,14 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 		public void printInfo() {
 			String printAbsPath = "File path-absolute: " + absPath;
 			format.modSpace(2, 0);
-			format.makeLine('-', printAbsPath.length(), 0, 143, 17);
+			format.makeGradientLine('-', printAbsPath.length(), ColorLibrary.MATRIX_GREEN_START, ColorLibrary.MATRIX_GREEN_STOP);
 			
-			System.out.println(coloring.recolorText("File path: ", 0, 143, 17)  + filePath);
-			System.out.println(coloring.recolorText("File path-absolute: ", 0, 143, 17)  + absPath);
-			System.out.println(coloring.recolorText("Lines in file: ", 0, 143, 17)  + lines);
+			System.out.println(coloring.recolorText("File path: ", ColorLibrary.MATRIX_GREEN_STOP)  + filePath);
+			System.out.println(coloring.recolorText("File path-absolute: ", ColorLibrary.MATRIX_GREEN_STOP)  + absPath);
+			System.out.println(coloring.recolorText("Lines in file: ", ColorLibrary.MATRIX_GREEN_STOP)  + lines);
 			
 			format.modSpace(0, 2);
-			format.makeLine('-', printAbsPath.length(), 0, 143, 17);
+			format.makeGradientLine('-', printAbsPath.length(), ColorLibrary.MATRIX_GREEN_STOP, ColorLibrary.MATRIX_GREEN_START);
 			format.modSpace(0, 0);
 		}
 		public void printInfo(boolean hasFormat) {

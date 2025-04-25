@@ -12,7 +12,7 @@ CLASS_DIRS = classes/libraries classes/tools core
 # Source files
 SOURCES_LIBRARIES = src/ConstLibrary.java src/ColorLibrary.java src/MethodLibrary.java
 SOURCES_DATATYPES = src/Num.java
-SOURCES_TOOLS = src/Directories.java src/ColoringTools.java src/Formatter.java src/Dissector.java
+SOURCES_TOOLS = src/Directories.java src/ColoringTools.java src/StartupTools.java src/Formatter.java src/Dissector.java
 SOURCE_MAIN = src/Main.java
 
 

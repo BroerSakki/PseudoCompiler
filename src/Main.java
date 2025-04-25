@@ -3,6 +3,7 @@ package core;
 
 // Import custom tools
 import classes.libraries.ConstLibrary;
+import classes.libraries.ColorLibrary;
 import classes.tools.Formatter;
 import classes.tools.ColoringTools;
 import classes.tools.Dissector;
@@ -30,17 +31,26 @@ public class Main {
 		// Create Dissector Object
 		Dissector program = new Dissector("PseudoProgram.txt");
 
-		coloring.rainbowText(ConstLibrary.LOGO_IMAGE, 50);
+		ConstLibrary.displayLogoRainbow();
 
-		coloring.rainbowText(ConstLibrary.SAKKI_IMAGE, 50);
+		ConstLibrary.displayLogoGradient();
 
-		coloring.rainbowText(ConstLibrary.RASSIE_IMAGE, 50);
+		ConstLibrary.displayCreditsRainbow();
+
+		ConstLibrary.displayCreditsGradient();
+
+		int[] rgb1 = {0, 59, 0};
+		int[] rgb2 = {0, 255, 65};
+
+		System.out.println();
+
+		coloring.gradientText(ConstLibrary.JEAN_IMAGE, rgb1, rgb2, 20, false);
 
 		program.printInfo();
 		program.printTextBody();
 		
 		format.modSpaceTop(1);
-		format.makeLine('-', 40, 0, 143, 17);
+		format.makeRainbowLine('-', 40);
 		
 		program.printMethodIndex();
 	}

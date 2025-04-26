@@ -42,8 +42,8 @@ public interface ConstLibrary {
 	public static final String DIR_USER_FILES_TXT = "user/files/txt/";
 	
 	// Token keywords
-	public static final String TAB = "TAB ";
-	public static final String ENTER = " ENTER ";
+	public static final String[] TOKEN_FORMAT_TAB = {"TAB ", "\t"};
+	public static final String[] TOKEN_FORMAT_ENTER = {" ENTER ", "\n"};
 
 	//Steps
 		//Logo

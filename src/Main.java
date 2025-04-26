@@ -48,7 +48,7 @@ public class Main {
 		coloring.gradientText(ConstLibrary.JEAN_IMAGE, rgb1, rgb2, 20, false);
 
 		program.printInfo();
-		program.printTextBody();
+		program.printTextBodyFormatted();
 		
 		format.modSpaceTop(1);
 		format.makeRainbowLine('-', 40);

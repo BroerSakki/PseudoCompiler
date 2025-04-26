@@ -92,11 +92,14 @@ clear:
 
 # Name and explain necessary commands
 help:
-	@echo "Run 'make' to create all .class files"
-	@echo "Run 'make list_classes' to see all .class files"
-	@echo "Run 'make clean' to delete all .class files"
-	@echo "Run 'make run' to run the compiled program"
-	@echo "Run 'make <directory name> to compile all files from a directory"
+	@echo "Run 'make':			Creates then runs all .class files"
+	@echo "Run 'make list_classes':	Print all .class files"
+	@echo "Run 'make clean':		Deletes all .class files"
+	@echo "Run 'make run':		Run the compiled program"
+	@echo "Run 'make <directory name>':	Compile all files from <directory name>"
+	@echo "Run 'make  build':		Compile all java code"
+	@echo "Run 'make build-clear':	Compile all java code then clear the terminal"
+	@echo "Run 'make clear':		Clear the terminal"
 	
 	
 run:

@@ -26,7 +26,7 @@ public class Formatter implements ConstLibrary, MethodLibrary {
 		/**
 		 * Resets spacing variables to defaults
 		 */
-		public void resetDefaults() {
+		public static void resetDefaults() {
 			spaceTop = 0;
 			spaceBottom = 0;
 		}

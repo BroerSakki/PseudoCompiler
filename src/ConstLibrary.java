@@ -1,5 +1,6 @@
 // Package global constants file in custom library
 package classes.libraries;
+
 public interface ConstLibrary {
 	//Logos
 	final public static String LOGO_IMAGE = " _____                    _             _____                      _ _           \r\n" + //
@@ -41,9 +42,27 @@ public interface ConstLibrary {
 	// Directory locations
 	public static final String DIR_USER_FILES_TXT = "user/files/txt/";
 	
-	// Token keywords
-	public static final String[] TOKEN_FORMAT_TAB = {"TAB ", "\t"};
-	public static final String[] TOKEN_FORMAT_ENTER = {" ENTER ", "\n"};
+	//Tokens
+		//Formatting
+		public static final String[] TOKEN_FORMAT_TAB = {" TAB ", "\t"};
+		public static final String[] TOKEN_FORMAT_ENTER = {" ENTER ", "\n"};
+		
+		//Keywords
+		public static final String KEY_START = "start";
+		public static final String KEY_STOP = "stop";
+		public static final String KEY_RETURN = "return";
+		public static final String KEY_TRUE = "true";
+		public static final String KEY_FALSE = "false";
+		public static final String KEY_WHILE = "while";
+		public static final String KEY_ENDWHILE = "endwhile";
+		public static final String KEY_FOR = "for";
+		public static final String KEY_ENDFOR = "endfor";
+		public static final String KEY_ELSE = "else";
+		public static final String KEY_IF = "if";
+		public static final String KEY_ENDIF = "endif";
+
+		//Operators
+		public static final String[] TOKEN_OPERATORS = {"\"", "(", ")", "NOT", "*", "/", "%", "+", "-", "<", "<=", ">", ">=", "==", "!=", "AND", "OR", "=", "+=", "-=", "++", "--", ","};
 
 	//Steps
 		//Logo

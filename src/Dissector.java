@@ -2,30 +2,30 @@
 package classes.tools;
 
 // Import Java Classes
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.io.FileNotFoundException;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
-// Import Tool Classes
-import classes.libraries.ColorLibrary;
-import classes.tools.Formatter;
-import classes.tools.Directories;
-import classes.tools.ColoringTools;
+import java.lang.StringBuilder;
 
 // Import Custom Libraries
-import classes.libraries.*;
+import classes.libraries.ColorLibrary;
+import classes.libraries.ConstLibrary;
+import classes.libraries.MethodLibrary;
+
+// Import Tool Classes
+import classes.tools.Directories;
 
 public class Dissector implements ConstLibrary, MethodLibrary {	
 	//Cool tests wat werk
 	//Gebruik printInfo om inligting oor die invoer file te wys
 	//Gebruik die getters om inligting oor die file apart op te roep
 	//Meeste setters word in die constructor gebruik, maar kan ook later aparte aspekte verander
-	// Gebruik update om te verseker dat alle inliging oor die file nog op datum is
+	//Gebruik update om te verseker dat alle inliging oor die file nog op datum is
 
 	final public static Class<?> currentClass = Dissector.class;
 	public static ArrayList<String> methodIndex = new ArrayList<String>();
@@ -46,11 +46,16 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 		private String filePath;
 		private String absPath;
 		private int lines;
+		private int numberOfFunctions;
+		private int[] mainIndexes = new int[2];
+		private int[][] functionIndexes;
 	//================================================================
 	
 	// Create textBody Object
-	ArrayList<String> textBody = new ArrayList<String>();
-	ArrayList<ArrayList<String>> textBodyFormatted = new ArrayList<>();
+	//================================================================
+		ArrayList<String> textBody = new ArrayList<String>();
+		ArrayList<String> textBodyFormatted = new ArrayList<String>();
+	//================================================================
 	
 	// Constructor
 	//================================================================
@@ -74,16 +79,14 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 		 */
 		public void printInfo() {
 			String printAbsPath = "File path-absolute: " + absPath;
-			format.modSpace(2, 0);
+			Formatter.modSpace(2, 0);
 			format.makeGradientLine('-', printAbsPath.length(), ColorLibrary.MATRIX_GREEN_START, ColorLibrary.MATRIX_GREEN_STOP);
 			
-			System.out.println(coloring.recolorText("File path: ", ColorLibrary.MATRIX_GREEN_STOP)  + filePath);
-			System.out.println(coloring.recolorText("File path-absolute: ", ColorLibrary.MATRIX_GREEN_STOP)  + absPath);
-			System.out.println(coloring.recolorText("Lines in file: ", ColorLibrary.MATRIX_GREEN_STOP)  + lines);
+			printInfo(false);
 			
-			format.modSpace(0, 2);
-			format.makeGradientLine('-', printAbsPath.length(), ColorLibrary.MATRIX_GREEN_STOP, ColorLibrary.MATRIX_GREEN_START);
-			format.modSpace(0, 0);
+			Formatter.modSpace(0, 2);
+			Formatter.makeGradientLine('-', printAbsPath.length(), ColorLibrary.MATRIX_GREEN_STOP, ColorLibrary.MATRIX_GREEN_START);
+			Formatter.modSpace(0, 0);
 		}
 		public void printInfo(boolean hasFormat) {
 			if (hasFormat) {
@@ -92,13 +95,15 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 				System.out.println("File path: " + filePath);
 				System.out.println("File path-absolute: " + absPath);
 				System.out.println("Lines in file: " + lines);
+				System.out.println("Number of functions: " + numberOfFunctions);
+				System.out.println("");
 			}
 		}
 		
 		// Overloaded printTextBody
 		/**
 		 * Prints the body of the file being dissected to the screen
-		 * (optional) @param hasIndex Boolean value to determine if output has an index
+		 * @param hasIndex Boolean value to determine if output has an index
 		 * @return Nothing, is a print function
 		 */
 		public void printTextBody() {
@@ -122,11 +127,8 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 		 * @return Nothing, is a print function
 		 */
 		public void printTextBodyFormatted() {
-			for (ArrayList<String> line : textBodyFormatted) {
-				for (String word : line) {
-					System.out.print(word + "|");
-				}
-				System.out.println("\n" + line.size());
+			for (String method : textBodyFormatted) {
+				System.out.println(method + "\n===============================================");
 			}
 		}
 	//================================================================
@@ -261,17 +263,62 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 		 * @return Nothing, is a set function
 		 */
 		private void setTextBodyFormatted() {
-			ArrayList<String> textFormatStep = new ArrayList<String>();	
-			for (String line : textBody) {
-				line = line.replaceAll("\t", TOKEN_FORMAT_TAB[0]);
-				System.out.println(line);
+			//Declarations
+			String textFormatStep = "";
+
+			//Seperate text, then functions
+			for (int i = mainIndexes[0]; i <= mainIndexes[1]; i++) {
+				String line = textBody.get(i);
+				line = line.replaceAll(TOKEN_FORMAT_TAB[1], TOKEN_FORMAT_TAB[0]);
+			
 				line = line.concat(TOKEN_FORMAT_ENTER[0]);
-				String[] words = line.split("\\s+");
-				for (String word : words) {
-					textFormatStep.add(word);
+				List<String> words = splitKeepingQuotes(line);
+				if (i == mainIndexes[1]) {
+					textFormatStep = textFormatStep.concat("|");
+				}
+				textFormatStep = textFormatStep.concat(String.join("|", words));
+			}
+
+			textBodyFormatted.add(textFormatStep);
+
+			for (int i = 0; i < numberOfFunctions; i++) {
+				textFormatStep = "";
+
+				for (int j = functionIndexes[i][0]; j <= functionIndexes[i][1]; j++) {
+					String line = textBody.get(j);
+					line = line.replaceAll(TOKEN_FORMAT_TAB[1], TOKEN_FORMAT_TAB[0]);
+				
+					line = line.concat(TOKEN_FORMAT_ENTER[0]);
+					List<String> words = splitKeepingQuotes(line);
+					if (j == functionIndexes[i][1]) {
+						textFormatStep = textFormatStep.concat("|");
+					}
+					textFormatStep = textFormatStep.concat(String.join("|", words));
+				}
+
+				textBodyFormatted.add(textFormatStep);
+			}
+		}
+
+		private void setFunctionNumbers() {
+			numberOfFunctions = countOccurrences(textBody, KEY_RETURN);
+			functionIndexes = new int[numberOfFunctions][2];
+			mainIndexes[0] = textBody.indexOf(KEY_START);
+			mainIndexes[1] = textBody.indexOf(KEY_STOP);
+
+			int count = 0;
+
+			for (int i = 0; i < textBody.size(); i++) {
+				if (i < mainIndexes[0] || i > mainIndexes[1]) {
+					if (textBody.get(i).equals(KEY_RETURN)) {
+						functionIndexes[count][1] = i;
+						count++;
+					} else if (!textBody.get(i).contains(TOKEN_FORMAT_TAB[1])) {
+						functionIndexes[count][0] = i;
+					}
 				}
 			}
-			textBodyFormatted.add(textFormatStep);
+
 		}
 	//================================================================
 	
@@ -283,10 +330,46 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 	public void update() {
 		// Reset file data
 		setTextBody();
+		setFunctionNumbers();
 		setTextBodyFormatted();
 		absPath = file.getAbsolutePath();
 		lines = textBody.size();
 	}
+
+	public static List<String> splitKeepingQuotes(String input) {
+        List<String> result = new ArrayList<>();
+        StringBuilder current = new StringBuilder();
+        boolean inQuotes = false;
+        char quoteChar = '\0'; // To track which quote character is being used
+
+        for (char c : input.toCharArray()) {
+            if (c == '\'' || c == '\"') {
+                // Toggle the inQuotes flag
+                if (!inQuotes) {
+                    inQuotes = true;
+                    quoteChar = c; // Set the quote character
+                } else if (c == quoteChar) {
+                    inQuotes = false; // Close the quote
+                }
+
+                current.append(c); // Add the quote character to the current substring
+
+            } else if (c == ' ' && !inQuotes) {
+                // Finalize the current substring
+                result.add(current.toString().trim());
+                current.setLength(0); // Clear the StringBuilder for the next substring
+            } else {
+                current.append(c); // Add the character to the current substring
+            }
+        }
+
+        // Add the last substring if there's any content left
+        if (current.length() > 0) {
+            result.add(current.toString().trim());
+        }
+
+        return result;
+    }
 
 	// Close Scanners
 	public void closeReader() {

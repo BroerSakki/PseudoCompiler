@@ -5,6 +5,7 @@ package classes.libraries;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface MethodLibrary {
 	// Output data
@@ -31,5 +32,20 @@ public interface MethodLibrary {
 				System.out.println("\t- " + methodIndex[i] + "()");
 			}
 		}
+	//================================================================
+	
+	// General Methods
+	//================================================================
+	default <T> int countOccurrences(Iterable<T> collection, T value) {
+        int count = 0;
+
+        for (T item : collection) {
+            if ((value == null && item == null) || (value != null && value.equals(item))) {
+                count++;
+            }
+        }
+
+        return count;
+    }
 	//================================================================
 }

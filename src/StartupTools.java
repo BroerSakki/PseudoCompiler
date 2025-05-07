@@ -135,8 +135,8 @@ public interface StartupTools {
 	 */
 	public static void displayCreditsGradient()
 	{
-		coloring.gradientText(ConstLibrary.SAKKI_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_RIGHT_BIG_STEPS, false);
-		coloring.gradientText(ConstLibrary.RASSIE_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_RIGHT_BIG_STEPS, false);
+		coloring.gradientText(ConstLibrary.SAKKI_IMAGE, ColorLibrary.RED, ColorLibrary.PURPLE, ConstLibrary.CREDITS_GRADIENT_RIGHT_BIG_STEPS, false);
+		coloring.gradientText(ConstLibrary.RASSIE_IMAGE, ColorLibrary.RED, ColorLibrary.PURPLE, ConstLibrary.CREDITS_GRADIENT_RIGHT_BIG_STEPS, false);
 	}
 
 	/**

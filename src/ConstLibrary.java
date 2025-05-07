@@ -61,8 +61,15 @@ public interface ConstLibrary {
 		public static final String KEY_IF = "if";
 		public static final String KEY_ENDIF = "endif";
 
+		//Grouping operators
+		public static final char QUOTE_SINGLE = '\'';
+		public static final char QUOTE_DOUBLE = '\"';
+
 		//Operators
-		public static final String[] TOKEN_OPERATORS = {"\"", "(", ")", "NOT", "*", "/", "%", "+", "-", "<", "<=", ">", ">=", "==", "!=", "AND", "OR", "=", "+=", "-=", "++", "--", ","};
+		public static final char TOKEN_OPERATOR_COMMA = ',';
+		public static final char[] TOKEN_OPERATORS_SINGLE = {'*', '/', '%', '+', '-', '<', '>', '='};
+		public static final char[][] TOKEN_OPERATORS_MULTI = {{'<', '='}, {'>', '='}, {'=', '='}, {'!', '='}};
+		public static final char[][] TOKEN_OPERATORS_WORDS = {{'N', 'O', 'T'}, {'A', 'N', 'D'}, {'O', 'R'}};
 
 	//Steps
 		//Logo

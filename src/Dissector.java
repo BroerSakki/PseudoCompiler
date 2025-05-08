@@ -32,9 +32,6 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 
 	// Create Objects
 	//================================================================
-		// Libraries
-		private static Formatter format = new Formatter();
-		private static ColoringTools coloring = new ColoringTools();
 		// File handling
 		private static File file;
 		private static Path pathVariable;
@@ -80,9 +77,9 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 		public void printInfo() {
 			String printAbsPath = "File path-absolute: " + absPath;
 			Formatter.modSpace(2, 0);
-			format.makeGradientLine('-', printAbsPath.length(), ColorLibrary.MATRIX_GREEN_START, ColorLibrary.MATRIX_GREEN_STOP);
+			Formatter.makeGradientLine('-', printAbsPath.length(), ColorLibrary.MATRIX_GREEN_START, ColorLibrary.MATRIX_GREEN_STOP);
 			
-			printInfo(false);
+			info();
 			
 			Formatter.modSpace(0, 2);
 			Formatter.makeGradientLine('-', printAbsPath.length(), ColorLibrary.MATRIX_GREEN_STOP, ColorLibrary.MATRIX_GREEN_START);
@@ -92,12 +89,15 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 			if (hasFormat) {
 				printInfo();
 			} else {
-				System.out.println("File path: " + filePath);
-				System.out.println("File path-absolute: " + absPath);
-				System.out.println("Lines in file: " + lines);
-				System.out.println("Number of functions: " + numberOfFunctions);
-				System.out.println("");
+				info();
+				System.out.println();
 			}
+		}
+		private void info() {
+			System.out.println("File path: " + filePath);
+			System.out.println("File path-absolute: " + absPath);
+			System.out.println("Lines in file: " + lines);
+			System.out.println("Number of functions: " + numberOfFunctions);
 		}
 		
 		// Overloaded printTextBody
@@ -340,27 +340,56 @@ public class Dissector implements ConstLibrary, MethodLibrary {
         List<String> result = new ArrayList<>();
         StringBuilder current = new StringBuilder();
         boolean inQuotes = false;
+		int[] bracketDepth = {0, 0};
         char quoteChar = '\0'; // To track which quote character is being used
+		char bracketChar = '\0';
 
         for (char c : input.toCharArray()) {
-            if (c == '\'' || c == '\"') {
+            if (c == QUOTE_SINGLE || c == QUOTE_DOUBLE) {
                 // Toggle the inQuotes flag
                 if (!inQuotes) {
                     inQuotes = true;
                     quoteChar = c; // Set the quote character
                 } else if (c == quoteChar) {
                     inQuotes = false; // Close the quote
-                }
+				}
 
                 current.append(c); // Add the quote character to the current substring
 
-            } else if (c == ' ' && !inQuotes) {
+            } else if ((c == '(' || c == '[')) {
+				// Toggle the inBrackets flag
+				switch (c) {
+					case '(':
+						bracketDepth[0]++;
+						bracketChar = ')';
+						break;
+					case '[':
+						bracketDepth[1]++;
+						bracketChar = ']';
+						break;
+				}
+
+				current.append(c);
+
+			} else if (c == bracketChar) {
+				switch (c) {
+					case ')':
+						bracketDepth[0]--;;
+						break;
+					case ']':
+						bracketDepth[1]--;
+						break;
+				}
+
+				current.append(c);
+
+			} else if (c == ' ' && !inQuotes && bracketDepth[0] == 0 && bracketDepth[1] == 0) {
                 // Finalize the current substring
                 result.add(current.toString().trim());
                 current.setLength(0); // Clear the StringBuilder for the next substring
-            } else {
-                current.append(c); // Add the character to the current substring
-            }
+			} else {
+				current.append(c);
+			}
         }
 
         // Add the last substring if there's any content left

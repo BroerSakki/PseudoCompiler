@@ -25,9 +25,9 @@ public class ColoringTools implements MethodLibrary
 	 * Changes and returns color of text string
 	 * @param text The text to recolor
 	 * @param rgb The rgb color to recolor to
-	 * @return Recolored text
+	 * @return Recolored text when print is false else prints recolored text and returns empty string
 	 */
-	public String recolorText(String text, int[] rgb)
+	public String recolorText(String text, int[] rgb, boolean print)
 	{
 		//Set rgb colors using R, G, B values
 		String ANSI_COLOR = "\033[38;2;" + rgb[0] + ";" + rgb[1] + ";" + rgb[2] + "m";
@@ -38,17 +38,22 @@ public class ColoringTools implements MethodLibrary
 		//Creates colored text
 		String recoloredText = ANSI_COLOR + text + ANSI_RESET;
 		
-		//Returns colored text
-		return recoloredText;
+		if (print) {
+			System.out.print(recoloredText);
+			return "";
+		} else {
+			//Returns colored text
+			return recoloredText;
+		}
 	}
 
 	/**
 	 * Changes and returns color of text character
-	 * @param text The character to recolor
+	 * @param character The character to recolor
 	 * @param rgb The rgb color to recolor to
-	 * @return Recolored character
+	 * @return Recolored character when print is false else prints recolored character and returns empty string
 	 */
-	public String recolorChar(char text, int[] rgb)
+	public String recolorChar(char character, int[] rgb, boolean print)
 	{
 		//Set rgb colors using R, G, B values
 		String ANSI_COLOR = "\033[38;2;" + rgb[0] + ";" + rgb[1] + ";" + rgb[2] + "m";
@@ -57,25 +62,32 @@ public class ColoringTools implements MethodLibrary
 		String ANSI_RESET = "\033[0m";
 		
 		//Creates colored text
-		String recoloredText = ANSI_COLOR + text + ANSI_RESET;
+		String recoloredCharacter = ANSI_COLOR + character + ANSI_RESET;
 		
-		//Returns colored text
-		return recoloredText;
+		if (print) {
+			System.out.print(recoloredCharacter);
+			return "";
+		} else {
+			//Returns colored text
+			return recoloredCharacter;
+		}
 	}
 	
 	/**
 	 * Changes text color with full spectrum of rainbow, dynamicaly (Meaning the step count is found dynamically)
 	 * @param text The text to recolor
 	 * @param ignoreSpaces Whether or not to ignore spaces
-	 * @return Nothing, because it prints directly in function
+	 * @return String when print is false else prints text and returns empty string
 	 */
-	public void rainbowTextDynamic(String text, boolean ignoreSpaces)
+	public String dynamicRainbowText(String text, boolean ignoreSpaces, boolean print)
 	{
 		//Initialize ANSI_COLOR
 		String ANSI_COLOR;
 		
 		//Resets cmd color to default
 		String ANSI_RESET = "\033[0m";
+
+		StringBuilder outputText = new StringBuilder("");
 		
         //Initialize rgb colors
 		int r = 255;
@@ -123,7 +135,8 @@ public class ColoringTools implements MethodLibrary
 			if (colorChar)
 			{
 				ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
-				System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+				
+				outputText.append(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
 				
 				if (r >= 255 && g < 255 && b <= 0) {
 					g+= steps;
@@ -166,8 +179,16 @@ public class ColoringTools implements MethodLibrary
 			}
 			else
 			{
-				System.out.print(text.charAt(i));
+				outputText.append(text.charAt(i));
 			}
+		}
+
+		if (print) {
+			System.out.print(outputText);
+			return "";
+		} else {
+			String outputStringText = outputText.toString();
+			return outputStringText;
 		}
 	}
 
@@ -176,15 +197,17 @@ public class ColoringTools implements MethodLibrary
 	 * @param text The text to recolor
 	 * @param rgb The start rgb color to use in the rainbow
 	 * @param ignoreSpaces Whether or not to ignore spaces
-	 * @return Nothing, because it prints directly in function
+	 * @return String when print is false else prints text and returns empty string
 	 */
-	public void rainbowTextDynamic(String text, int[] rgb, boolean ignoreSpaces)
+	public String dynamicRainbowText(String text, int[] rgb, boolean ignoreSpaces, boolean print)
 	{
 		//Initialize ANSI_COLOR
 		String ANSI_COLOR;
 		
 		//Resets cmd color to default
 		String ANSI_RESET = "\033[0m";
+
+		StringBuilder outputText = new StringBuilder("");
 		
         //Initialize rgb colors
 		int r = rgb[0];
@@ -237,7 +260,8 @@ public class ColoringTools implements MethodLibrary
 			if (colorChar)
 			{
 				ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
-				System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+				
+				outputText.append(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
 				
 				if (r >= 255 && g < 255 && b <= 0) {
 					g+= steps;
@@ -280,8 +304,16 @@ public class ColoringTools implements MethodLibrary
 			}
 			else
 			{
-				System.out.print(text.charAt(i));
+				outputText.append(text.charAt(i));
 			}
+		}
+
+		if (print) {
+			System.out.print(outputText);
+			return "";
+		} else {
+			String outputStringText = outputText.toString();
+			return outputStringText;
 		}
 	}
 
@@ -289,15 +321,17 @@ public class ColoringTools implements MethodLibrary
 	 * Changes text color with full spectrum of rainbow (For a very long rainbow effect)
 	 * @param text The text to recolor
 	 * @param ignoreSpaces Whether or not to ignore spaces
-	 * @return Nothing, because it prints directly in function
+	 * @return String when print is false else prints text and returns empty string
 	 */
-	public void rainbowText(String text, boolean ignoreSpaces)
+	public String rainbowText(String text, boolean ignoreSpaces, boolean print)
 	{
 		//Initialize ANSI_COLOR
 		String ANSI_COLOR;
     
 		//Resets cmd color to default
 		String ANSI_RESET = "\033[0m";
+
+		StringBuilder outputText = new StringBuilder("");
     
         //Initialize rgb colors
 		int r = 255;
@@ -329,7 +363,8 @@ public class ColoringTools implements MethodLibrary
 			if (colorChar)
 			{
 				ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
-				System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+				
+				outputText.append(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
 				
 				if (r == 255 && g < 255 && b == 0) {
 					g++;
@@ -352,8 +387,16 @@ public class ColoringTools implements MethodLibrary
 			}
 			else
 			{
-				System.out.print(text.charAt(i));
+				outputText.append(text.charAt(i));
 			}
+		}
+
+		if (print) {
+			System.out.print(outputText);
+			return "";
+		} else {
+			String outputStringText = outputText.toString();
+			return outputStringText;
 		}
 	}
 
@@ -362,15 +405,17 @@ public class ColoringTools implements MethodLibrary
 	 * @param text The text to recolor
 	 * @param steps The rate at which the rainbow increases (1 for slow increase and larger for larger increase)
 	 * @param ignoreSpaces Whether or not to ignore spaces
-	 * @return Nothing, because it prints directly in function
+	 * @return String when print is false else prints text and returns empty string
 	 */
-	public void rainbowText(String text, int steps, boolean ignoreSpaces)
+	public String rainbowText(String text, int steps, boolean ignoreSpaces, boolean print)
 	{
 		//Initialize ANSI_COLOR
 		String ANSI_COLOR;
     
 		//Resets cmd color to default
 		String ANSI_RESET = "\033[0m";
+
+		StringBuilder outputText = new StringBuilder("");
     
         //Initialize rgb colors
 		int r = 255;
@@ -402,7 +447,8 @@ public class ColoringTools implements MethodLibrary
 			if (colorChar)
 			{
 				ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
-				System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+				
+				outputText.append(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
 				
 				if (r >= 255 && g < 255 && b <= 0) {
 					g+= steps;
@@ -445,8 +491,16 @@ public class ColoringTools implements MethodLibrary
 			}
 			else
 			{
-				System.out.print(text.charAt(i));
+				outputText.append(text.charAt(i));
 			}
+		}
+
+		if (print) {
+			System.out.print(outputText);
+			return "";
+		} else {
+			String outputStringText = outputText.toString();
+			return outputStringText;
 		}
 	}
 
@@ -455,15 +509,17 @@ public class ColoringTools implements MethodLibrary
 	 * @param text The text to recolor
 	 * @param rgb The start rgb color to use in the rainbow
 	 * @param ignoreSpaces Whether or not to ignore spaces
-	 * @return Nothing, because it prints directly in function
+	 * @return String when print is false else prints text and returns empty string
 	 */
-	public void rainbowText(String text, int[] rgb, boolean ignoreSpaces)
+	public String rainbowText(String text, int[] rgb, boolean ignoreSpaces, boolean print)
 	{
 		//Initialize ANSI_COLOR
 		String ANSI_COLOR;
     
 		//Resets cmd color to default
 		String ANSI_RESET = "\033[0m";
+
+		StringBuilder outputText = new StringBuilder("");
     
         //Initialize rgb colors
 		int r = rgb[0];
@@ -495,7 +551,8 @@ public class ColoringTools implements MethodLibrary
 			if (colorChar)
 			{
 				ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
-				System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+				
+				outputText.append(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
 				
 				if (r == 255 && g < 255 && b == 0) {
 					g++;
@@ -518,8 +575,16 @@ public class ColoringTools implements MethodLibrary
 			}
 			else
 			{
-				System.out.print(text.charAt(i));
+				outputText.append(text.charAt(i));
 			}
+		}
+
+		if (print) {
+			System.out.print(outputText);
+			return "";
+		} else {
+			String outputStringText = outputText.toString();
+			return outputStringText;
 		}
 	}
 
@@ -529,15 +594,18 @@ public class ColoringTools implements MethodLibrary
 	 * @param rgb1 The first rgb color to use in the gradient
 	 * @param rgb2 The second rgb color to use in the gradient
 	 * @param ignoreSpaces Whether or not to ignore spaces
-	 * @return Nothing, because it prints directly in function
+	 * @param print Whether to print or return text
+	 * @return String when print is false else prints text and returns empty string
 	 */
-	public void gradientText(String text, int[] rgb1, int[] rgb2, boolean ignoreSpaces)
+	public String gradientText(String text, int[] rgb1, int[] rgb2, boolean ignoreSpaces, boolean print)
 	{
 		//Initialize ANSI_COLOR
 		String ANSI_COLOR;
         
 		//Resets cmd color to default
 		String ANSI_RESET = "\033[0m";
+
+		StringBuilder outputText = new StringBuilder("");
 
 		//Initialize doubles
 		double value = 0;
@@ -590,7 +658,8 @@ public class ColoringTools implements MethodLibrary
 				b = (int)(rgb1[2] + ((rgb2[2] - rgb1[2]) * valueDouble));
 
 				ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
-	    		System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+
+				outputText.append(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
 
 				if (direction)
 				{
@@ -603,8 +672,16 @@ public class ColoringTools implements MethodLibrary
 			}
 			else
 			{
-				System.out.print(text.charAt(i));
+				outputText.append(text.charAt(i));
 			}
+		}
+
+		if (print) {
+			System.out.print(outputText);
+			return "";
+		} else {
+			String outputStringText = outputText.toString();
+			return outputStringText;
 		}
 	}
 
@@ -615,15 +692,17 @@ public class ColoringTools implements MethodLibrary
 	 * @param rgb2 The second rgb color to use in the gradient
 	 * @param steps The rate at which the gradient increases (1 for slow increase and larger for larger increase)
 	 * @param ignoreSpaces Whether or not to ignore spaces
-	 * @returns Nothing, because it prints directly in function
+	 * @returns String when print is false else prints text and returns empty string
 	 */
-	public void gradientText(String text, int[] rgb1, int[] rgb2, int steps, boolean ignoreSpaces)
+	public String gradientText(String text, int[] rgb1, int[] rgb2, int steps, boolean ignoreSpaces, boolean print)
 	{
 		//Initialize ANSI_COLOR
 		String ANSI_COLOR;
         
 		//Resets cmd color to default
 		String ANSI_RESET = "\033[0m";
+
+		StringBuilder outputText = new StringBuilder("");
 
 		//Initialize doubles
 		double value = 0;
@@ -676,7 +755,8 @@ public class ColoringTools implements MethodLibrary
 				b = (int)(rgb1[2] + ((rgb2[2] - rgb1[2]) * valueDouble));
 
 				ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
-	    		System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+	    		
+				outputText.append(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
 
 				if (direction)
 				{
@@ -689,8 +769,16 @@ public class ColoringTools implements MethodLibrary
 			}
 			else
 			{
-				System.out.print(text.charAt(i));
+				outputText.append(text.charAt(i));
 			}
+		}
+
+		if (print) {
+			System.out.print(outputText);
+			return "";
+		} else {
+			String outputStringText = outputText.toString();
+			return outputStringText;
 		}
 	}
 
@@ -700,15 +788,17 @@ public class ColoringTools implements MethodLibrary
 	 * @param rgb1 The first rgb color to use in the gradient
 	 * @param rgb2 The second rgb color to use in the gradient
 	 * @param ignoreSpaces Whether or not to ignore spaces
-	 * @return Nothing, because it prints directly in function
+	 * @return String when print is false else prints text and returns empty string
 	 */
-	public void dynamicGradientText(String text, int[] rgb1, int[] rgb2, boolean ignoreSpaces)
+	public String dynamicGradientText(String text, int[] rgb1, int[] rgb2, boolean ignoreSpaces, boolean print)
 	{
 		//Initialize ANSI_COLOR
 		String ANSI_COLOR;
         
 		//Resets cmd color to default
 		String ANSI_RESET = "\033[0m";
+
+		StringBuilder outputText = new StringBuilder("");
 
 		//Initialize doubles
 		double value = 0;
@@ -780,7 +870,7 @@ public class ColoringTools implements MethodLibrary
 				b = (int)(rgb1[2] + ((rgb2[2] - rgb1[2]) * valueDouble));
 
 				ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
-	    		System.out.print(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
+	    		outputText.append(ANSI_COLOR + text.charAt(i) + ANSI_RESET);
 
 				if (direction)
 				{
@@ -793,8 +883,16 @@ public class ColoringTools implements MethodLibrary
 			}
 			else
 			{
-				System.out.print(text.charAt(i));
+				outputText.append(text.charAt(i));
 			}
+		}
+
+		if (print) {
+			System.out.print(outputText);
+			return "";
+		} else {
+			String outputStringText = outputText.toString();
+			return outputStringText;
 		}
 	}
 

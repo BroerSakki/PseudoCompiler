@@ -16,7 +16,7 @@ public interface StartupTools {
 	 */
 	public static void displayLogoRainbow()
 	{
-		coloring.rainbowText(ConstLibrary.LOGO_IMAGE, ConstLibrary.LOGO_RAINBOW_LEFT_SMALL_STEPS, false);
+		coloring.rainbowText(ConstLibrary.LOGO_IMAGE, ConstLibrary.LOGO_RAINBOW_LEFT_SMALL_STEPS, false, true);
 	}
 
 	/**
@@ -30,22 +30,22 @@ public interface StartupTools {
 		{
 			if (big)
 			{
-				coloring.rainbowText(ConstLibrary.LOGO_IMAGE, ConstLibrary.LOGO_RAINBOW_LEFT_BIG_STEPS, false);
+				coloring.rainbowText(ConstLibrary.LOGO_IMAGE, ConstLibrary.LOGO_RAINBOW_LEFT_BIG_STEPS, false, true);
 			}
 			else
 			{
-				coloring.rainbowText(ConstLibrary.LOGO_IMAGE, ConstLibrary.LOGO_RAINBOW_LEFT_SMALL_STEPS, false);
+				coloring.rainbowText(ConstLibrary.LOGO_IMAGE, ConstLibrary.LOGO_RAINBOW_LEFT_SMALL_STEPS, false, true);
 			}
 		}
 		else
 		{
 			if (big)
 			{
-				coloring.rainbowText(ConstLibrary.LOGO_IMAGE, ConstLibrary.LOGO_RAINBOW_RIGHT_BIG_STEPS, false);
+				coloring.rainbowText(ConstLibrary.LOGO_IMAGE, ConstLibrary.LOGO_RAINBOW_RIGHT_BIG_STEPS, false, true);
 			}
 			else
 			{
-				coloring.rainbowText(ConstLibrary.LOGO_IMAGE, ConstLibrary.LOGO_RAINBOW_RIGHT_SMALL_STEPS, false);
+				coloring.rainbowText(ConstLibrary.LOGO_IMAGE, ConstLibrary.LOGO_RAINBOW_RIGHT_SMALL_STEPS, false, true);
 			}
 		}
 	}
@@ -55,7 +55,7 @@ public interface StartupTools {
 	 */
 	public static void displayLogoGradient()
 	{
-		coloring.gradientText(ConstLibrary.LOGO_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.LOGO_GRADIENT_BIG_STEPS, false);
+		coloring.gradientText(ConstLibrary.LOGO_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.LOGO_GRADIENT_BIG_STEPS, false, true);
 	}
 
 	/**
@@ -67,15 +67,15 @@ public interface StartupTools {
 	{
 		if (big)
 		{
-			coloring.gradientText(ConstLibrary.LOGO_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.LOGO_GRADIENT_BIG_STEPS, false);
+			coloring.gradientText(ConstLibrary.LOGO_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.LOGO_GRADIENT_BIG_STEPS, false, true);
 		}
 		else if (left)
 		{
-			coloring.gradientText(ConstLibrary.LOGO_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.LOGO_GRADIENT_LEFT_STEPS, false);
+			coloring.gradientText(ConstLibrary.LOGO_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.LOGO_GRADIENT_LEFT_STEPS, false, true);
 		}
 		else
 		{
-			coloring.gradientText(ConstLibrary.LOGO_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.LOGO_GRADIENT_RIGHT_STEPS, false);
+			coloring.gradientText(ConstLibrary.LOGO_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.LOGO_GRADIENT_RIGHT_STEPS, false, true);
 		}
 	}
 
@@ -90,15 +90,15 @@ public interface StartupTools {
 	{
 		if (big)
 		{
-			coloring.gradientText(ConstLibrary.LOGO_IMAGE, rgb1, rgb2, ConstLibrary.LOGO_GRADIENT_BIG_STEPS, false);
+			coloring.gradientText(ConstLibrary.LOGO_IMAGE, rgb1, rgb2, ConstLibrary.LOGO_GRADIENT_BIG_STEPS, false, true);
 		}
 		else if (left)
 		{
-			coloring.gradientText(ConstLibrary.LOGO_IMAGE, rgb1, rgb2, ConstLibrary.LOGO_GRADIENT_LEFT_STEPS, false);
+			coloring.gradientText(ConstLibrary.LOGO_IMAGE, rgb1, rgb2, ConstLibrary.LOGO_GRADIENT_LEFT_STEPS, false, true);
 		}
 		else
 		{
-			coloring.gradientText(ConstLibrary.LOGO_IMAGE, rgb1, rgb2, ConstLibrary.LOGO_GRADIENT_RIGHT_STEPS, false);
+			coloring.gradientText(ConstLibrary.LOGO_IMAGE, rgb1, rgb2, ConstLibrary.LOGO_GRADIENT_RIGHT_STEPS, false, true);
 		}
 	}
 
@@ -108,8 +108,8 @@ public interface StartupTools {
 	 */
 	public static void displayCreditsRainbow()
 	{
-		coloring.rainbowText(ConstLibrary.SAKKI_IMAGE, ConstLibrary.CREDITS_RAINBOW_LEFT_STEPS, false);
-		coloring.rainbowText(ConstLibrary.RASSIE_IMAGE, ConstLibrary.CREDITS_RAINBOW_LEFT_STEPS, false);
+		coloring.rainbowText(ConstLibrary.SAKKI_IMAGE, ConstLibrary.CREDITS_RAINBOW_LEFT_STEPS, false, true);
+		coloring.rainbowText(ConstLibrary.RASSIE_IMAGE, ConstLibrary.CREDITS_RAINBOW_LEFT_STEPS, false, true);
 	}
 
 	/**
@@ -120,13 +120,13 @@ public interface StartupTools {
 	{
 		if (left)
 		{
-			coloring.rainbowText(ConstLibrary.SAKKI_IMAGE, ConstLibrary.CREDITS_RAINBOW_LEFT_STEPS, false);
-			coloring.rainbowText(ConstLibrary.RASSIE_IMAGE, ConstLibrary.CREDITS_RAINBOW_LEFT_STEPS, false);
+			coloring.rainbowText(ConstLibrary.SAKKI_IMAGE, ConstLibrary.CREDITS_RAINBOW_LEFT_STEPS, false, true);
+			coloring.rainbowText(ConstLibrary.RASSIE_IMAGE, ConstLibrary.CREDITS_RAINBOW_LEFT_STEPS, false, true);
 		}
 		else
 		{
-			coloring.rainbowText(ConstLibrary.SAKKI_IMAGE, ConstLibrary.CREDITS_RAINBOW_RIGHT_STEPS, false);
-			coloring.rainbowText(ConstLibrary.RASSIE_IMAGE, ConstLibrary.CREDITS_RAINBOW_RIGHT_STEPS, false);
+			coloring.rainbowText(ConstLibrary.SAKKI_IMAGE, ConstLibrary.CREDITS_RAINBOW_RIGHT_STEPS, false, true);
+			coloring.rainbowText(ConstLibrary.RASSIE_IMAGE, ConstLibrary.CREDITS_RAINBOW_RIGHT_STEPS, false, true);
 		}
 	}
 
@@ -135,8 +135,8 @@ public interface StartupTools {
 	 */
 	public static void displayCreditsGradient()
 	{
-		coloring.gradientText(ConstLibrary.SAKKI_IMAGE, ColorLibrary.RED, ColorLibrary.PURPLE, ConstLibrary.CREDITS_GRADIENT_RIGHT_BIG_STEPS, false);
-		coloring.gradientText(ConstLibrary.RASSIE_IMAGE, ColorLibrary.RED, ColorLibrary.PURPLE, ConstLibrary.CREDITS_GRADIENT_RIGHT_BIG_STEPS, false);
+		coloring.gradientText(ConstLibrary.SAKKI_IMAGE, ColorLibrary.RED, ColorLibrary.PURPLE, ConstLibrary.CREDITS_GRADIENT_RIGHT_BIG_STEPS, false, true);
+		coloring.gradientText(ConstLibrary.RASSIE_IMAGE, ColorLibrary.RED, ColorLibrary.PURPLE, ConstLibrary.CREDITS_GRADIENT_RIGHT_BIG_STEPS, false, true);
 	}
 
 	/**
@@ -150,26 +150,26 @@ public interface StartupTools {
 		{
 			if (big)
 			{
-				coloring.gradientText(ConstLibrary.SAKKI_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_LEFT_BIG_STEPS, false);
-				coloring.gradientText(ConstLibrary.RASSIE_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_LEFT_BIG_STEPS, false);
+				coloring.gradientText(ConstLibrary.SAKKI_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_LEFT_BIG_STEPS, false, true);
+				coloring.gradientText(ConstLibrary.RASSIE_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_LEFT_BIG_STEPS, false, true);
 			}
 			else
 			{
-				coloring.gradientText(ConstLibrary.SAKKI_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_LEFT_SMALL_STEPS, false);
-				coloring.gradientText(ConstLibrary.RASSIE_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_LEFT_SMALL_STEPS, false);
+				coloring.gradientText(ConstLibrary.SAKKI_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_LEFT_SMALL_STEPS, false, true);
+				coloring.gradientText(ConstLibrary.RASSIE_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_LEFT_SMALL_STEPS, false, true);
 			}
 		}
 		else
 		{
 			if (big)
 			{
-				coloring.gradientText(ConstLibrary.SAKKI_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_RIGHT_BIG_STEPS, false);
-				coloring.gradientText(ConstLibrary.RASSIE_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_RIGHT_BIG_STEPS, false);
+				coloring.gradientText(ConstLibrary.SAKKI_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_RIGHT_BIG_STEPS, false, true);
+				coloring.gradientText(ConstLibrary.RASSIE_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_RIGHT_BIG_STEPS, false, true);
 			}
 			else
 			{
-				coloring.gradientText(ConstLibrary.SAKKI_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_RIGHT_SMALL_STEPS, false);
-				coloring.gradientText(ConstLibrary.RASSIE_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_RIGHT_SMALL_STEPS, false);
+				coloring.gradientText(ConstLibrary.SAKKI_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_RIGHT_SMALL_STEPS, false, true);
+				coloring.gradientText(ConstLibrary.RASSIE_IMAGE, ColorLibrary.RED, ColorLibrary.AQAU, ConstLibrary.CREDITS_GRADIENT_RIGHT_SMALL_STEPS, false, true);
 			}
 		}
 	}
@@ -187,26 +187,26 @@ public interface StartupTools {
 		{
 			if (big)
 			{
-				coloring.gradientText(ConstLibrary.SAKKI_IMAGE, rgb1, rgb2, ConstLibrary.CREDITS_GRADIENT_LEFT_BIG_STEPS, false);
-				coloring.gradientText(ConstLibrary.RASSIE_IMAGE, rgb1, rgb2, ConstLibrary.CREDITS_GRADIENT_LEFT_BIG_STEPS, false);
+				coloring.gradientText(ConstLibrary.SAKKI_IMAGE, rgb1, rgb2, ConstLibrary.CREDITS_GRADIENT_LEFT_BIG_STEPS, false, true);
+				coloring.gradientText(ConstLibrary.RASSIE_IMAGE, rgb1, rgb2, ConstLibrary.CREDITS_GRADIENT_LEFT_BIG_STEPS, false, true);
 			}
 			else
 			{
-				coloring.gradientText(ConstLibrary.SAKKI_IMAGE, rgb1, rgb2, ConstLibrary.CREDITS_GRADIENT_LEFT_SMALL_STEPS, false);
-				coloring.gradientText(ConstLibrary.RASSIE_IMAGE, rgb1, rgb2, ConstLibrary.CREDITS_GRADIENT_LEFT_SMALL_STEPS, false);
+				coloring.gradientText(ConstLibrary.SAKKI_IMAGE, rgb1, rgb2, ConstLibrary.CREDITS_GRADIENT_LEFT_SMALL_STEPS, false, true);
+				coloring.gradientText(ConstLibrary.RASSIE_IMAGE, rgb1, rgb2, ConstLibrary.CREDITS_GRADIENT_LEFT_SMALL_STEPS, false, true);
 			}
 		}
 		else
 		{
 			if (big)
 			{
-				coloring.gradientText(ConstLibrary.SAKKI_IMAGE, rgb1, rgb2, ConstLibrary.CREDITS_GRADIENT_RIGHT_BIG_STEPS, false);
-				coloring.gradientText(ConstLibrary.RASSIE_IMAGE, rgb1, rgb2, ConstLibrary.CREDITS_GRADIENT_RIGHT_BIG_STEPS, false);
+				coloring.gradientText(ConstLibrary.SAKKI_IMAGE, rgb1, rgb2, ConstLibrary.CREDITS_GRADIENT_RIGHT_BIG_STEPS, false, true);
+				coloring.gradientText(ConstLibrary.RASSIE_IMAGE, rgb1, rgb2, ConstLibrary.CREDITS_GRADIENT_RIGHT_BIG_STEPS, false, true);
 			}
 			else
 			{
-				coloring.gradientText(ConstLibrary.SAKKI_IMAGE, rgb1, rgb2, ConstLibrary.CREDITS_GRADIENT_RIGHT_SMALL_STEPS, false);
-				coloring.gradientText(ConstLibrary.RASSIE_IMAGE, rgb1, rgb2, ConstLibrary.CREDITS_GRADIENT_RIGHT_SMALL_STEPS, false);
+				coloring.gradientText(ConstLibrary.SAKKI_IMAGE, rgb1, rgb2, ConstLibrary.CREDITS_GRADIENT_RIGHT_SMALL_STEPS, false, true);
+				coloring.gradientText(ConstLibrary.RASSIE_IMAGE, rgb1, rgb2, ConstLibrary.CREDITS_GRADIENT_RIGHT_SMALL_STEPS, false, true);
 			}
 		}
 		

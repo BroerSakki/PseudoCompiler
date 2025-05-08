@@ -116,7 +116,7 @@ public class Formatter implements ConstLibrary, MethodLibrary {
 		public static void makeLine(char lineChar, int len, int[] rgb) {
 			space(spaceTop);
 			for (int i = 1; i <= len; i++) {
-				System.out.print(coloring.recolorChar(lineChar, rgb));
+				coloring.recolorChar(lineChar, rgb, true);
 			}
 			System.out.println();
 			space(spaceBottom);
@@ -132,7 +132,7 @@ public class Formatter implements ConstLibrary, MethodLibrary {
 			for (int i = 1; i <= len; i++) {
 				line += lineChar;
 			}
-			coloring.rainbowTextDynamic(line, false);
+			coloring.dynamicRainbowText(line, false, true);
 			System.out.println();
 			space(spaceBottom);
 		}
@@ -149,7 +149,7 @@ public class Formatter implements ConstLibrary, MethodLibrary {
 			for (int i = 1; i <= len; i++) {
 				line += lineChar;
 			}
-			coloring.dynamicGradientText(line, rgb1, rgb2, false);
+			coloring.dynamicGradientText(line, rgb1, rgb2, false, true);
 			System.out.println();
 			space(spaceBottom);
 		}

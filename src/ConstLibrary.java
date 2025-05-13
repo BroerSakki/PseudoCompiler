@@ -62,8 +62,10 @@ public interface ConstLibrary {
 		public static final String KEY_ENDIF = "endif";
 
 		//Grouping operators
-		public static final char QUOTE_SINGLE = '\'';
-		public static final char QUOTE_DOUBLE = '\"';
+		public static final char[] TOKEN_OPERATORS_QUOTES = {'\'', '\"'};
+		public static final char[] TOKEN_OPERATORS_BRACKETS = {'(', ')', '[', ']'};
+		public static final char[] TOKEN_OPERATORS_GROUPING = {'\'', '\"', '(', ')', '[', ']'};
+		public static final char[] TOKEN_OPERATORS_SPLITTERS = {' ', ','};
 
 		//Operators
 		public static final char TOKEN_OPERATOR_COMMA = ',';

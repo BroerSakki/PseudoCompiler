@@ -19,6 +19,7 @@ import classes.libraries.MethodLibrary;
 
 // Import Tool Classes
 import classes.tools.Directories;
+import classes.tools.Grouper;
 
 public class Dissector implements ConstLibrary, MethodLibrary {	
 	//Cool tests wat werk
@@ -71,7 +72,7 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 		// Overloaded printInfo
 		/**
 		 * Prints information about file to screen
-		 * (optional) @param hasFormat Boolean value to determine if output will be formatted
+		 * @param hasFormat Boolean value to determine if output will be formatted
 		 * @return Nothing, is a print function
 		 */
 		public void printInfo() {
@@ -265,6 +266,7 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 		private void setTextBodyFormatted() {
 			//Declarations
 			String textFormatStep = "";
+			Grouper lineGroup;
 
 			//Seperate text, then functions
 			for (int i = mainIndexes[0]; i <= mainIndexes[1]; i++) {
@@ -272,7 +274,8 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 				line = line.replaceAll(TOKEN_FORMAT_TAB[1], TOKEN_FORMAT_TAB[0]);
 			
 				line = line.concat(TOKEN_FORMAT_ENTER[0]);
-				List<String> words = splitKeepingQuotes(line);
+				lineGroup = new Grouper(line);
+				List<String> words = lineGroup.getFinalText();
 				if (i == mainIndexes[1]) {
 					textFormatStep = textFormatStep.concat("|");
 				}
@@ -289,7 +292,8 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 					line = line.replaceAll(TOKEN_FORMAT_TAB[1], TOKEN_FORMAT_TAB[0]);
 				
 					line = line.concat(TOKEN_FORMAT_ENTER[0]);
-					List<String> words = splitKeepingQuotes(line);
+					lineGroup = new Grouper(line);
+					List<String> words = lineGroup.getFinalText();
 					if (j == functionIndexes[i][1]) {
 						textFormatStep = textFormatStep.concat("|");
 					}
@@ -335,70 +339,6 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 		absPath = file.getAbsolutePath();
 		lines = textBody.size();
 	}
-
-	public static List<String> splitKeepingQuotes(String input) {
-        List<String> result = new ArrayList<>();
-        StringBuilder current = new StringBuilder();
-        boolean inQuotes = false;
-		int[] bracketDepth = {0, 0};
-        char quoteChar = '\0'; // To track which quote character is being used
-		char bracketChar = '\0';
-
-        for (char c : input.toCharArray()) {
-            if (c == QUOTE_SINGLE || c == QUOTE_DOUBLE) {
-                // Toggle the inQuotes flag
-                if (!inQuotes) {
-                    inQuotes = true;
-                    quoteChar = c; // Set the quote character
-                } else if (c == quoteChar) {
-                    inQuotes = false; // Close the quote
-				}
-
-                current.append(c); // Add the quote character to the current substring
-
-            } else if ((c == '(' || c == '[')) {
-				// Toggle the inBrackets flag
-				switch (c) {
-					case '(':
-						bracketDepth[0]++;
-						bracketChar = ')';
-						break;
-					case '[':
-						bracketDepth[1]++;
-						bracketChar = ']';
-						break;
-				}
-
-				current.append(c);
-
-			} else if (c == bracketChar) {
-				switch (c) {
-					case ')':
-						bracketDepth[0]--;;
-						break;
-					case ']':
-						bracketDepth[1]--;
-						break;
-				}
-
-				current.append(c);
-
-			} else if (c == ' ' && !inQuotes && bracketDepth[0] == 0 && bracketDepth[1] == 0) {
-                // Finalize the current substring
-                result.add(current.toString().trim());
-                current.setLength(0); // Clear the StringBuilder for the next substring
-			} else {
-				current.append(c);
-			}
-        }
-
-        // Add the last substring if there's any content left
-        if (current.length() > 0) {
-            result.add(current.toString().trim());
-        }
-
-        return result;
-    }
 
 	// Close Scanners
 	public void closeReader() {

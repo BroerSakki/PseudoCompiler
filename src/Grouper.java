@@ -13,220 +13,66 @@ import classes.libraries.MethodLibrary;
 public class Grouper implements ConstLibrary, MethodLibrary {
     // Global variables
     //================================================================
-        private String baseText;
-        private List<String> finalText = new ArrayList<>();
-        private StringBuilder current = new StringBuilder();
+        private List<String> finalText  = new ArrayList<>();
         private List<String> result = new ArrayList<>();
-        private boolean inQuotes = false;
-	    private int[] bracketDepth = {0, 0};
-        private char quoteChar = '\0';
-	    private char bracketChar = '\0';
+        private StringBuilder current = new StringBuilder();
+        private String baseText;
+        private boolean inQuotes;
+        private boolean inBrackets;
+        private char quoteChar;
+        private int bracketDepth[] = {0, 0};
     //================================================================
 
     // Constructor
-    /**
-     * Constructor for Grouper Class
-     * @param input String that will be grouped acccording to the rules
-     */
     //================================================================
+        /**
+         * Constructor for Grouper a Grouper Object
+         * @param input String value to be formatted
+         */
         public Grouper(String input) {
-            baseText = input.replaceAll("\\s+", " ");
+            setBaseText(input.replaceAll("\\s+", " "));
+            setDefaults();
             group();
         }
     //================================================================
 
-    // Reset
-    /**
-     * Resets all variables
-     */
+    // Auxillary methods
     //================================================================
-        public void reset() {
-            baseText = "";
-            finalText.clear();
+        /**
+         * Resets the current and result variables
+         */
+        private void makeReady() {
             current.setLength(0);
             result.clear();
-            inQuotes = false;
-            Arrays.fill(bracketDepth, 0);
+        }
+    //================================================================
+
+    // Setters
+    //================================================================
+        /**
+         * Set all relevant variables to default values
+         */
+        public void setDefaults() {
+            finalText.clear();
+            result.clear();
+            current.setLength(0);
+            setInBrackets(false);
+            setInQuotes(false);
             quoteChar = '\0';
-            bracketChar = '\0';
-        }
-        public void reset(boolean keepBaseText) {
-            if (keepBaseText) {
-                finalText.clear();
-                current.setLength(0);
-                result.clear();
-                inQuotes = false;
-                Arrays.fill(bracketDepth, 0);
-                quoteChar = '\0';
-                bracketChar = '\0';
-            } else {
-                reset();
-            }
-        }
-    //================================================================
-
-    // Group methods
-    //================================================================
-        //General grouping method
-        public List<String> group() {
-            //Reset finalText variable
-            if (finalText != null) {
-                finalText.clear();
-            }
-
-            //Reset current and result
-            makeReady();
-
-            for (char c : baseText.toCharArray()) {
-                if (findCriteriaQuote(c)) {
-                    if (findCriteriaBrackets(c)) {
-                        current.append(c);
-                    }
-                }
-            }
-
-            // Add the last substring if there's any content left
-            if (current.length() > 0) {
-                result.add(current.toString().trim());
-            }
-
-            finalText = result;
-
-            return finalText;
+            Arrays.fill(bracketDepth, 0);
         }
 
-        //Overloaded groupQuote Method
-        public List<String> groupQuote() {
-            return groupQuote(false);
+        private void setBaseText(String baseText) {
+            this.baseText = baseText;
         }
-        public List<String> groupQuote(boolean runMakeReady) {
-            if (runMakeReady) {
-                //Reset current and result
-                makeReady();
-            }
-
-            for (char c : baseText.toCharArray()) {
-                if (findCriteriaQuote(c)) {
-                    current.append(c);
-                }
-            }
-            // Add the last substring if there's any content left
-            if (current.length() > 0) {
-                result.add(current.toString().trim());
-            }
-
-            finalText = result;
-
-            return finalText;
+        private void setInBrackets(boolean inBrackets) {
+            this.inBrackets = inBrackets;
         }
-        public List<String> groupQuote(char quoteType) {
-            return groupQuote(false, quoteType);
+        private void setInQuotes(boolean inQuotes) {
+            this.inQuotes = inQuotes;
         }
-        public List<String> groupQuote(boolean runMakeReady, char quoteType) {
-            if (runMakeReady) {
-                //Reset current and result
-                makeReady();
-            }
-
-            for (char c : baseText.toCharArray()) {
-                if (findCriteriaQuote(c, quoteType)) {
-                    current.append(c);
-                }
-            }
-
-            // Add the last substring if there's any content left
-            if (current.length() > 0) {
-                result.add(current.toString().trim());
-            }
-
-            finalText = result;
-
-            return finalText;
-        }
-
-        //Overloaded groupBrackets Method
-        public List<String> groupBrackets() {
-            return groupBrackets(false);
-        }
-        public List<String> groupBrackets(boolean runMakeReady) {
-            if (runMakeReady) {
-                //Reset current and result
-                makeReady();
-            }
-
-            for (char c : baseText.toCharArray()) {
-                if (findCriteriaBrackets(c)) {
-                    current.append(c);
-                }
-            }
-
-            // Add the last substring if there's any content left
-            if (current.length() > 0) {
-                result.add(current.toString().trim());
-            }
-
-            finalText = result;
-
-            return finalText;
-        }
-    //================================================================
-
-    // Condition mutating methods
-    //================================================================
-        //General boolean swapper
-        private boolean boolSwap(boolean b) {
-            return !b;
-        }
-
-        //Overloaded quoteSwapper
-        private void quoteSwapper() {
-            boolSwap(inQuotes);
-        }
-        private char quoteSwapper(char c) {
-            quoteSwapper();
-
-            return c;
-        }
-    
-        //Mutate Bracket Depth
-        private boolean mutateBracketDepth(char c) {
-            // All possible bracket inputs
-            switch (c) {
-                case '(':
-                    bracketDepth[0]++;
-                    bracketChar = ')';
-                    break;
-                case '[':
-                    bracketDepth[1]++;
-                    bracketChar = ']';
-                    break;
-                case ')':
-                    bracketDepth[0]--;
-                    break;
-                case ']':
-                    bracketDepth[1]--;
-                    break;
-            
-                default:
-                    System.out.println("Error mutating bracket depth: character is not a valid bracket type");
-                    break;
-            }
-
-            return inBrackets();
-        }
-        private boolean inBrackets() {
-            return (bracketDepth[0] > 0 || bracketDepth[1] > 0);            
-        }
-    //================================================================
-
-    // Split conditions
-    //================================================================
-        private boolean isNonLiteralSplit(char c) {
-            //Local Variables
-            boolean check;
-            check = ((c == ' ') && (!inQuotes) && (!inBrackets()));
-
-            return check;
+        private void setQuoteChar(char quoteChar) {
+            this.quoteChar = quoteChar;
         }
     //================================================================
 
@@ -235,87 +81,122 @@ public class Grouper implements ConstLibrary, MethodLibrary {
         public String getBaseText() {
             return baseText;
         }
-        public int[] getBracketDepth() {
-            return bracketDepth;
-        }
-        public char getBracketChar() {
-            return bracketChar;
-        }
         public List<String> getFinalText() {
             return finalText;
         }
-        public char getQuoteChar() {
-            return quoteChar;
+    //================================================================
+
+        // Mutators
+    //================================================================
+        /**
+         * <h4>Condition 1</h4>
+         * Sets the inBrackets variable to false if both of the bracketDepth elements are equal to 0
+         * <h4>Condition 2</h4>
+         * Sets the inBrackets variable to true if either bracketDepth elements are greater than 0
+         * <h4>Exeption</h4>
+         * Prints an error message and resets all bracketDepth elements to 0 if conditions 1 and 2 are both false
+         */
+        public void mutateInBrackets() {
+            if (bracketDepth[0] == 0 && bracketDepth[1] == 0) {
+                setInBrackets(false);;
+            } else if (bracketDepth[0] > 0 || bracketDepth[1] > 0) {
+                setInBrackets(true);
+            } else {
+                System.out.println("Error: bracketDepth not valid. Resetting bracketDepth values...");
+                bracketDepth[0] = 0;
+                bracketDepth[1] = 0;
+            }
         }
-        public List<String> getResult() {
-            return result;
+
+        /**
+         * Increase or decrease the correct bracketDepth element based on opening or closing respective brackets
+         * @param c Char variable to test and compare to cases
+         */
+        public void mutateBracketDepth(char c) {
+            switch (c) {
+                case '(':
+                    bracketDepth[0]++;
+                    break;
+                case '[':
+                    bracketDepth[1]++;
+                    break;
+                case ')':
+                    bracketDepth[0]--;
+                    break;
+                case ']':
+                    bracketDepth[1]--;
+                    break;
+            }
         }
     //================================================================
 
-    // findCriteria Methods
+    // Work methods
     //================================================================
-        //Add the quote as its own element
-        private boolean findCriteriaQuote(char c) {
-            //Local Variables
-            boolean checkNextCategory = false;
-
-            if (containsElement(TOKEN_OPERATORS_QUOTES, c)) {             
-                    current.append(quoteSwapper(c));
-
-                } else if (isNonLiteralSplit(c)) {
-                    //Finalize current substring
-                    result.add(current.toString().trim());
-                    current.setLength(0);
-                } else {
-                    checkNextCategory = true;
+        /**
+         * Determine the charicaristics of the chosen character and assign it accordingly
+         * @param c Char to be analized and possibly added to current and or result
+         */
+        private void findCriteria(char c) {
+            if (containsElement(TOKEN_OPERATORS_QUOTES, c)) {
+                if (!inQuotes) {
+                    setInQuotes(true);
+                    setQuoteChar(c);
+                } else if (quoteChar == c) {
+                    setInQuotes(false);
                 }
 
-            return checkNextCategory;
+                current.append(c);
+            } else if (!inQuotes) {
+                mutateBracketDepth(c);
+                current.append(c);
+
+                if (willSplitAtChar(c)) {
+                    result.add(current.toString().trim());
+                    current.setLength(0);
+                }
+
+            } else {
+                current.append(c);
+            }
         }
-        private boolean findCriteriaQuote(char c, char match) {
-            //Local Variables
-            boolean checkNextCategory = false;
 
-            if (c == match) {
-                current.append(quoteSwapper(c));
+        /**
+         * Determine if  a character is of the type that splits, and is not in quotes or brackets
+         * @param c Char to be analized
+         * @return true if splitting character is not bound by quotes or brackets, and false otherwise
+         */
+        private boolean willSplitAtChar(char c) {
+            //Local variables
+            boolean check = false;
 
-                } else if (isNonLiteralSplit(c)) {
-                    //Finalize current substring
-                    result.add(current.toString().trim());
-                    current.setLength(0);
-                } else {
-                    checkNextCategory = true;
-                }
-
-            return checkNextCategory;
+            if (c == ' ' && !inBrackets && !inQuotes) {
+                check = true;
+            }
+            return check;
         }
-    
-        private boolean findCriteriaBrackets(char c) {
-            //Local Variables
-            boolean checkNextCategory = false;
 
-            if (!inQuotes) {
-                if (mutateBracketDepth(c)) {
-                    current.append(c);
-                } else if (isNonLiteralSplit(c)) {
-                    //Finalize current substring
-                    result.add(current.toString().trim());
-                    current.setLength(0);
-                } else {
-                    checkNextCategory = true;
-                }
+        /**
+         * Groups the data form the baseText variable per character and saves it to the finalText variable
+         * @return finalText
+         */
+        public List<String> group() {
+            if (finalText != null) {
+                finalText.clear();
             }
 
-            return checkNextCategory;
-        }
-    //================================================================
+            makeReady();
 
-    // Auxillary methods
-    //================================================================
-        //Reset necessary variables
-        private void makeReady() {
-            current.setLength(0);
-            result.clear();
-        }   
+            for (char c : baseText.toCharArray()) {
+                findCriteria(c);
+            }
+
+            if (current.length() > 0) {
+                result.add(current.toString().trim());
+            }
+
+            finalText = result;
+
+            return finalText;
+        }
     //================================================================
 }

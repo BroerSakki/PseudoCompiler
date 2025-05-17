@@ -44,8 +44,8 @@ public interface ConstLibrary {
 	
 	//Tokens
 		//Formatting
-		public static final String[] TOKEN_FORMAT_TAB = {" TAB ", "\t"};
-		public static final String[] TOKEN_FORMAT_ENTER = {" ENTER ", "\n"};
+		public static final String[] TOKEN_FORMAT_TAB = {" 0_TAB ", "\t"};
+		public static final String[] TOKEN_FORMAT_ENTER = {" 0_ENTER ", "\n"};
 		
 		//Keywords
 		public static final String KEY_START = "start";

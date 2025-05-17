@@ -129,7 +129,7 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 		 */
 		public void printTextBodyFormatted() {
 			for (String method : textBodyFormatted) {
-				System.out.println(method + "\n===============================================");
+				System.out.println(method + "\n");
 			}
 		}
 	//================================================================

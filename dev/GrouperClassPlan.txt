@@ -1,0 +1,118 @@
+class Grouper inheritsFrom ConstLibrary, MethodLibrary
+	Declarations
+		private List finalText[type : string]
+		private List result[type : string]
+		private StringBuilder current
+		private string baseText
+		private boolean inQuotes
+		private boolean inBrackets
+		private char quoteChar
+		private num bracketDepth[2]
+		
+	public Grouper(string input)
+		setBaseText(input.replaceAll("\\s+", " "))
+		setDefaults()
+		group()
+	return
+	
+	private makeReady()
+		current.setLength(0)
+		result.clear()
+	return
+	
+	public setDefaults()
+		finalText.clear()
+		result.clear()
+		current.setLength(0)
+		setInQuotes(false)
+		setInBrackets(false)
+		quoteChar = '\0'
+		Arrays.fill(bracketDepth, 0)
+	return
+	
+	private setBaseText(string baseText)
+		this.baseText = baseText
+	return
+	
+	private setInBrackets(boolean : inBrackets)
+		this.inBrackets = inBrackets
+	return
+	
+	private setInQuotes(boolean : inQuotes)
+		this.inQuotes = inQuotes
+	return
+	
+	private setQuoteChar(char : quoteChar)
+		this.quoteChar = quoteChar
+	return
+	
+	public mutateInBrackets()
+		if bracketDepth[0] = 0 AND bracketDepth[1] = 0 is true then
+			setInBrackets(false)
+		else if bracketDepth[0] > 0 AND bracketDepth[1] > 0 is true then
+			setInBrackets(true)
+		else
+			output "Error: bracketDepth not valid. Resetting bracketDepth values..."
+			bracketDepth[0] = 0
+			bracketDepth[1] = 0
+		endif
+	return
+	
+	public mutateBracketDepth(char c)
+		case c
+			'(': bracketDepth[0]++
+			'[': bracketDepth[1]++
+			')': bracketDepth[0]--
+			']': bracketDepth[1]--
+		endcase
+	return
+	
+	public getFinalText()
+	return finalText
+	
+	public getBaseText()
+	return baseText
+	
+	private findCriteria(char c)
+		if containsElement(TOKEN_OPERATORS_QUOTES, c) is true then
+			if NOT inQuotes is true then
+				setInQuotes(true)
+				setQuoteChar(c)
+			else if quoteChar = c is true then
+				setInQuotes(false)
+			endif
+			current.append(c)
+		else if NOT inQuotes is true then
+			mutateBracketDepth(c)
+			current.append(c)
+			if willSplitAtChar(c) is true then
+				result.add(current.toString().trim())
+				current.setLength(0)
+			endif
+		else
+			current.append(c)
+		endif
+	return
+	
+	private willSplitAtChar(char c)
+		Declarations
+			boolean check = false
+		if c = ' ' AND NOT inQuotes AND NOT inBrackets is true then
+			check = true
+		endif
+	return check
+	
+	public group()
+		if finalText <> null is true then
+			finalText.clear()
+		endif
+		makeReady()
+		for c : baseText.toCharArray()
+			findCriteria(c)
+		endfor
+		if current.length() > 0 is true then
+			result.add(current.toString().trim())
+		endif
+		finalText = result
+	return finalText
+endclass

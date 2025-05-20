@@ -132,7 +132,7 @@ public class Num implements MethodLibrary {
 			return methodIndex;
 		}
 		public void printMethodIndex() {
-			displayMethodIndex(currentClass);
+			MethodLibrary.displayMethodIndex(currentClass);
 		}
 	//================================================================
 }

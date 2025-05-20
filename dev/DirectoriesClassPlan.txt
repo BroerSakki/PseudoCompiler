@@ -1,0 +1,55 @@
+class Directories inheritsFrom ConstLibrary, MethodLibrary
+	public static methodIndex()
+	return MethodLibrary.returnMethodIndex(Directories.class)
+	
+	private static fileName(string filePath)
+		Declarations
+			ArrayList<string> path = splitPath(filePath)
+	return path(path.size()-1)
+	
+	public static currentDir()
+	return System.getProperty("user.dir")
+	
+	private static targetDir(string dirPath)
+		Declarations
+			ArrayList<string> path = splitPath(currentDir())
+			int rootDir = path.indexOf("PseudoCompiler")
+			int dirDepth = (path.size() - 1) - rootDir
+			StringBuilder targetPath = new StringBuilder()
+		for i = 0 to dirDepth step 1
+			targetPath.append("../")
+		endfor
+		targetPath.append(dirPath)
+	return targetPath.toString()
+	
+	private static splitPath(string filePath)
+		Declarations
+			string arrPath[] = filePath.split("\\\\")
+			ArrayList<string> path = new ArrayList<String>(Arrays.asList(arrPath))
+	return path
+	
+	private static buildPath(string dirPath, string fileName)
+		Declarations
+			string dir = targetDir(dirPath)
+	return dir + fileName(fileName)
+	
+	public static toReadFile(string target, string filePath)
+		Declarations
+			string lowercaseTarget = target.toLowerCase()
+			string dirPath = ""
+		case lowercaseTarget
+			"user": dirPath = DIR_USER_READ_TXT
+			"dev": dirPath = DIR_DEV_READ_TXT
+		endcase
+	return buildPath(targetDir(dirPath), filePath)
+	
+	public static toWriteFile(string target, string filePath)
+		Declarations
+			string lowercaseTarget = target.toLowerCase()
+			string dirPath = ""
+		case lowercaseTarget
+			"user": dirPath = DIR_USER_WRITE_TXT
+			"dev": dirPath = DIR_DEV_WRITE_TXT
+		endcase
+	return
+endclass

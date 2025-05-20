@@ -4,105 +4,138 @@ package classes.tools;
 // Import Java Classes
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.io.File;
+import java.lang.reflect.Array;
 
 // Import Custom Libraries
 import classes.libraries.*;
 
 public class Directories implements ConstLibrary, MethodLibrary {
-	// Declarations
 	//================================================================
-		final public static Class<?> currentClass = Directories.class;
-		public static ArrayList<String> methodIndex = new ArrayList<String>();
-	//================================================================
-	
-	// Utility funtions
-	//================================================================
-		private static ArrayList<String> splitPath(String filePath) {
-			// Declarations
-			String[] arrPath = filePath.split("\\\\");
-			ArrayList<String> path = new ArrayList<String>(Arrays.asList(arrPath));
-			
-			return path;
-		}
-		private static boolean testPathParent(String targetParent, String filePath) {
-			// Declarations
-			boolean isCorrectParent = targetParent.equals(getFirstParent(filePath));
-			
-			return isCorrectParent;
-		}
-		private static String customPath(String targetPath, String fileName) {
-			return targetPath + getFileName(fileName);
-		}
-		private static String userTextFilePath() {
-			// Declarations
-			ArrayList<String> path = splitPath(currentDirectory());
-			int rootDir = path.indexOf("PseudoCompiler");
-			int dirDepth = (path.size() - 1) - rootDir;
-			String targetPath = "";
-			
-			// Navigate to root folder
-			for (int i = 0; i < dirDepth; i++) {
-				targetPath = targetPath + "../";
-			}
-			
-			targetPath = targetPath + DIR_USER_FILES_TXT;
-			
-			return targetPath;
-		}
-		private static String joinPath(String parents, String filePath) {
-			// Declarations
-			ArrayList<String> path = splitPath(filePath);
-			String pathString = "";
-			
-			for (int i = 0; i < path.size() - 1; i++) {
-				pathString = pathString + path.get(i) + "/";
-			}
-			
-			pathString = pathString + getFileName(filePath);
-			
-			return pathString;
-		}
-		public static String currentDirectory() {
-			return System.getProperty("user.dir");
-		}
-	//================================================================
-	
-	// Getters
-	//================================================================
-		public static String getFileName(String filePath) {
-			// Declarations
-			ArrayList<String> path = splitPath(filePath);
-			
-			return path.get(path.size()-1);
-		}
-		public static String getFirstParent(String filePath) {
-			return splitPath(filePath).get(0);
-		}
-		public static String getFilePath(String filePath) {
-			String fileName = getFileName(filePath);
-			
-			return customPath(userTextFilePath(), fileName);
+		public static String[] methodIndex() {
+			return MethodLibrary.returnMethodIndex(Directories.class);
 		}
 	//================================================================
 
-	// Print Current Directory
+	// Path details
 	//================================================================
-		public static void printCurrentDirectory() {
-			ArrayList<String> path = splitPath(currentDirectory());
-			for (int i = 0; i < path.size(); i++) {
-				System.out.println(path.get(i));
-			}
+		/**
+		 * @return Current working directory
+		 */
+		public static String currentDir() {
+			return System.getProperty("user.dir");
 		}
-	//================================================================
 	
-	// Method Index output
-	//================================================================
-		public ArrayList<String> getMethodIndex() {
-			return methodIndex;
+		/**
+		 * Seperate parts of a path and identify the file name
+		 * @param filePath String variable that includes the path (complete or incomplete) to a desired file
+		 * @return String variable representing only the file name (includes possible file extension)
+		 */
+		private static String fileName(String filePath) {
+			//Local variables
+			ArrayList<String> path = splitPath(filePath);
+			return path.get(path.size()-1);
 		}
-		public void printMethodIndex() {
-			displayMethodIndex(currentClass);
+
+		/**
+		 * Create a String that represents the path from the working directory, up to the "Pseudocompiler" directory, then down to the desired position
+		 * @param dirPath String variable representing path starting from "PseudoCompiler"
+		 * @return String variable representing the final path
+		 */
+		private static String targetDir(String dirPath) {
+			//Local variables
+			ArrayList<String> path = splitPath(currentDir());
+			int rootDir = path.indexOf("PseudoCompiler");
+			int dirDepth = (path.size()-1) - rootDir;
+			StringBuilder targetPath = new StringBuilder();
+
+			for (int i = 0; i < dirDepth; i++) {
+				targetPath.append("../");
+			}
+			targetPath.append(dirPath);
+
+			return targetPath.toString();
+		}
+	//================================================================
+
+	// Work methods
+	//================================================================
+		/**
+		 * Splits a String by the '\' character
+		 * @param filePath String variable representing the path to a file
+		 * @return ArrayList<String> Object where each element is the name of a directory, and the final element being the file name
+		 */
+		private static ArrayList<String> splitPath(String filePath) {
+			//Local variables
+			String[] arrPath = filePath.split("\\\\");
+			ArrayList<String> path = new ArrayList<String>(Arrays.asList(arrPath));
+
+			return path;
+		}
+
+		/**
+		 * Seperately build the directory to be used and find the name of the file before concatinating into 1 final path
+		 * @param dirPath String variable representing the path starting from the "Pseudocompiler" directory
+		 * @param fileName String variable representing the file name (can also be a path)
+		 * @return String variable representing the concatinated path
+		 */
+		private static String buildPath(String dirPath, String fileName) {
+			//Local variables
+			String dir = targetDir(dirPath);
+			
+			return dir + fileName(fileName);
+		}
+	//================================================================
+
+	// Use methods
+	//================================================================
+		/**
+		 * Builds and returns a custom path to one of the predefined read destinations as documented in ConstLibrary
+		 * @param target String variable (User or Dev) that stipulates the location of the target directory
+		 * @param filePath String variable of the path including the filename (or only the filename)
+		 * @return String variable representing a path from the current woring directory to the relevant read file
+		 */
+		public static String toReadFile(String target, String filePath) {
+			//Local variables
+			String lowercaseTarget = target.toLowerCase();
+			String dirPath = "";
+
+			//Determine path to directory
+			switch (lowercaseTarget) {
+				case "user":
+					dirPath = DIR_USER_READ_TXT;
+					break;
+				case "dev":
+					dirPath = DIR_DEV_READ_TXT;
+					break;
+			}
+
+			return buildPath(targetDir(dirPath), filePath);
+		}
+
+		/**
+		 * Builds and returns a custom path to one of the predefined write destinations as documented in ConstLibrary
+		 * @param target String variable (User or Dev) that stipulates the location of the target directory
+		 * @param filePath String variable of the path including the filename (or only the filename)
+		 * @return String variable representing a path from the current woring directory to the relevant write file
+		 */
+		public static String toWriteFile(String target, String filePath) {
+			//Local variables
+			String lowercaseTarget = target.toLowerCase();
+			String dirPath = "";
+
+			//Determine path to directory
+			switch (lowercaseTarget) {
+				case "user":
+					dirPath = DIR_USER_WRITE_TXT;
+					break;
+				case "dev":
+					dirPath = DIR_DEV_WRITE_TXT;
+					break;
+			}
+
+			return buildPath(targetDir(dirPath), filePath);
 		}
 	//================================================================
 }

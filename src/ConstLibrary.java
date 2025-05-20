@@ -39,8 +39,15 @@ public interface ConstLibrary {
 	// Formatting
 	public static final String FORMAT_DEFAULT_LINE = "----------------------------------------";
 	
+	// Profile use
+	public static final String USER = "user";
+	public static final String DEV = "dev";
+
 	// Directory locations
-	public static final String DIR_USER_FILES_TXT = "user/files/txt/";
+	public static final String DIR_USER_READ_TXT = "user/read/txt/";
+	public static final String DIR_USER_WRITE_TXT = "user/write/txt";
+	public static final String DIR_DEV_READ_TXT = "dev/read/txt";
+	public static final String DIR_DEV_WRITE_TXT = "dev/write/txt";
 	
 	//Tokens
 		//Formatting

@@ -15,6 +15,9 @@ class Grouper inheritsFrom ConstLibrary, MethodLibrary
 		group()
 	return
 	
+	public methodIndex()
+	return MethodLibrary.returnMethodIndex(Grouper.class)
+	
 	private makeReady()
 		current.setLength(0)
 		result.clear()

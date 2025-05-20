@@ -9,7 +9,6 @@ import classes.tools.Formatter;
 import classes.tools.ColoringTools;
 import classes.tools.Dissector;
 import classes.tools.Directories;
-import classes.tools.Translator;
 
 // Import custom datatypes
 import classes.datatypes.Num;

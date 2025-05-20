@@ -28,28 +28,36 @@ class Directories inheritsFrom ConstLibrary, MethodLibrary
 			ArrayList<string> path = new ArrayList<String>(Arrays.asList(arrPath))
 	return path
 	
-	private static buildPath(string dirPath, string fileName)
+	private static buildPath(string dirPath, string fileNameOrPath)
 		Declarations
 			string dir = targetDir(dirPath)
-	return dir + fileName(fileName)
+	return dir + fileName(fileNameOrPath)
 	
-	public static toReadFile(string target, string filePath)
-		Declarations
-			string lowercaseTarget = target.toLowerCase()
-			string dirPath = ""
-		case lowercaseTarget
-			"user": dirPath = DIR_USER_READ_TXT
-			"dev": dirPath = DIR_DEV_READ_TXT
-		endcase
-	return buildPath(targetDir(dirPath), filePath)
+	public static readPath(string fileNameOrPath)
+	return Paths.get(buildPath(targetDir(DIR_USER_READ_TXT), fileNameOrPath))
+
+	public static writePath(string fileNameOrPath)
+	return Paths.get(buildPath(targetDir(DIR_USER_WRITE_TXT), fileNameOrPath))
 	
-	public static toWriteFile(string target, string filePath)
+	public static readFile(string fileNameOrPath)
 		Declarations
-			string lowercaseTarget = target.toLowerCase()
-			string dirPath = ""
-		case lowercaseTarget
-			"user": dirPath = DIR_USER_WRITE_TXT
-			"dev": dirPath = DIR_DEV_WRITE_TXT
-		endcase
-	return
+			File attemptFile = null
+		try
+			attemptFile = readPath(fileNameOrPath).toFile()
+		catch Exception e
+			output "Error: File not found"
+			e.printStackTrace()
+		endtry
+	return attemptFile
+	
+	public static writeFile(string fileNameOrPath)
+		Declarations
+			File attemptFile = null
+		try
+			attemptFile = writePath(fileNameOrPath).toFile()
+		catch Exception e
+			output "Error: File not found"
+			e.printStackTrace()
+		endtry
+	return attemptFile
 endclass

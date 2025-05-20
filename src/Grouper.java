@@ -86,14 +86,14 @@ public class Grouper implements ConstLibrary, MethodLibrary {
         }
     //================================================================
 
-        // Mutators
+    // Mutators
     //================================================================
         /**
          * <h4>Condition 1</h4>
          * Sets the inBrackets variable to false if both of the bracketDepth elements are equal to 0
          * <h4>Condition 2</h4>
          * Sets the inBrackets variable to true if either bracketDepth elements are greater than 0
-         * <h4>Exeption</h4>
+         * <h4>Exception</h4>
          * Prints an error message and resets all bracketDepth elements to 0 if conditions 1 and 2 are both false
          */
         public void mutateInBrackets() {

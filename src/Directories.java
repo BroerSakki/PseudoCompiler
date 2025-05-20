@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.lang.reflect.Array;
 
 // Import Custom Libraries
@@ -77,65 +81,71 @@ public class Directories implements ConstLibrary, MethodLibrary {
 		/**
 		 * Seperately build the directory to be used and find the name of the file before concatinating into 1 final path
 		 * @param dirPath String variable representing the path starting from the "Pseudocompiler" directory
-		 * @param fileName String variable representing the file name (can also be a path)
+		 * @param fileNameOrPath String variable representing the file name (can also be a path)
 		 * @return String variable representing the concatinated path
 		 */
-		private static String buildPath(String dirPath, String fileName) {
+		private static String buildPath(String dirPath, String fileNameOrPath) {
 			//Local variables
 			String dir = targetDir(dirPath);
 			
-			return dir + fileName(fileName);
+			return dir + fileName(fileNameOrPath);
 		}
 	//================================================================
 
 	// Use methods
 	//================================================================
 		/**
-		 * Builds and returns a custom path to one of the predefined read destinations as documented in ConstLibrary
-		 * @param target String variable (User or Dev) that stipulates the location of the target directory
-		 * @param filePath String variable of the path including the filename (or only the filename)
-		 * @return String variable representing a path from the current woring directory to the relevant read file
+		 * Builds and returns a custom path to the predefined read destination as documented in ConstLibrary
+		 * @param fileNameOrPath String variable of the path including the filename (or only the filename)
+		 * @return Path variable of the current working directory to the target read file
 		 */
-		public static String toReadFile(String target, String filePath) {
-			//Local variables
-			String lowercaseTarget = target.toLowerCase();
-			String dirPath = "";
-
-			//Determine path to directory
-			switch (lowercaseTarget) {
-				case "user":
-					dirPath = DIR_USER_READ_TXT;
-					break;
-				case "dev":
-					dirPath = DIR_DEV_READ_TXT;
-					break;
-			}
-
-			return buildPath(targetDir(dirPath), filePath);
+		public static Path readPath(String fileNameOrPath) {
+			return Paths.get(buildPath(targetDir(DIR_USER_READ_TXT), fileNameOrPath));
 		}
-
 		/**
-		 * Builds and returns a custom path to one of the predefined write destinations as documented in ConstLibrary
-		 * @param target String variable (User or Dev) that stipulates the location of the target directory
-		 * @param filePath String variable of the path including the filename (or only the filename)
-		 * @return String variable representing a path from the current woring directory to the relevant write file
+		 * Builds and returns a custom path to the predefined write destination as documented in ConstLibrary
+		 * @param fileNameOrPath String variable of the path including the filename (or only the filename)
+		 * @return Path variable of the current working directory to the target write file
 		 */
-		public static String toWriteFile(String target, String filePath) {
+		public static Path writePath(String fileNameOrPath) {
+			return Paths.get(buildPath(targetDir(DIR_USER_WRITE_TXT), fileNameOrPath));
+		}
+	
+		/**
+		 * Find a read file from a String either written as a path or simply a file name
+		 * @param fileNameOrPath String variable of either the file name or path
+		 * @return File variable from read folder
+		 */
+		public static File readFile(String fileNameOrPath) {
 			//Local variables
-			String lowercaseTarget = target.toLowerCase();
-			String dirPath = "";
+			File attemptFile = null;
 
-			//Determine path to directory
-			switch (lowercaseTarget) {
-				case "user":
-					dirPath = DIR_USER_WRITE_TXT;
-					break;
-				case "dev":
-					dirPath = DIR_DEV_WRITE_TXT;
-					break;
+			try {
+				attemptFile = readPath(fileNameOrPath).toFile();
+			} catch (Exception e) {
+				System.out.println("Error: File not found");
+				e.printStackTrace();
 			}
 
-			return buildPath(targetDir(dirPath), filePath);
+			return attemptFile;
+		}
+		/**
+		 * Find a write file from a String either written as a path or simply a file name
+		 * @param fileNameOrPath String variable of either the file name or path
+		 * @return File variable from write folder
+		 */
+		public static File writeFile(String fileNameOrPath) {
+			//Local variables
+			File attemptFile = null;
+
+			try {
+				attemptFile = writePath(fileNameOrPath).toFile();
+			} catch (Exception e) {
+				System.out.println("Error: File not found");
+				e.printStackTrace();
+			}
+
+			return attemptFile;
 		}
 	//================================================================
 }

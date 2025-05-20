@@ -14,7 +14,7 @@ import classes.libraries.ConstLibrary;
 public interface MethodLibrary extends ConstLibrary{
 	// Output data
 	//================================================================
-		default String[] returnMethodIndex(Class<?> clazz) {
+		static String[] returnMethodIndex(Class<?> clazz) {
 			Method[] methods = clazz.getDeclaredMethods();
 			String[] allMethods = new String[methods.length];
 			
@@ -27,7 +27,7 @@ public interface MethodLibrary extends ConstLibrary{
 			
 			return methodNames;
 		}
-		default void displayMethodIndex(Class<?> clazz) {
+		static void displayMethodIndex(Class<?> clazz) {
 			String[] methodIndex = returnMethodIndex(clazz);
 			String className = clazz.getName();
 			int lastSeparator = className.lastIndexOf(".");
@@ -103,70 +103,4 @@ public interface MethodLibrary extends ConstLibrary{
 
 		return isEqual;
 	}
-
-	// default List<String> splitKeepingQuotes(String input) {
-	// 	String reduced = input.replaceAll("\\s+", " ");
-    //     List<String> result = new ArrayList<>();
-    //     StringBuilder quoteMaker = new StringBuilder();
-	// 	StringBuilder bracketMaker = new StringBuilder();
-    //     boolean inQuotes = false;
-	// 	int[] bracketDepth = {0, 0};
-    //     char quoteChar = '\0'; // To track which quote character is being used
-	// 	char bracketChar = '\0';
-
-    //     for (char c : reduced.toCharArray()) {
-    //         if (containsElement(TOKEN_OPERATORS_GROUPING, c)) {
-	// 			if (!inQuotes) {
-	// 			// Toggle the inBrackets flag
-	// 				switch (c) {
-	// 					case '\'':
-	// 						inQuotes = true;
-	// 						quoteChar = c;
-	// 						break;
-	// 					case '\"':
-	// 						inQuotes = true;
-	// 						quoteChar = c;
-	// 						break;
-	// 					case '(':
-	// 						bracketDepth[0]++;
-	// 						bracketChar = ')';
-	// 						break;
-	// 					case '[':
-	// 						bracketDepth[1]++;
-	// 						bracketChar = ']';
-	// 						break;
-	// 					case ')':
-	// 						bracketDepth[0]--;
-	// 						break;
-	// 					case ']':
-	// 						bracketDepth[1]--;
-	// 						break;
-	// 					case ',' :
-	// 						result.add(String.valueOf(c));
-	// 						break;
-	// 				}
-	// 			} else if (quoteChar == c) {
-	// 				inQuotes = false;
-	// 			}
-
-	// 			quoteMaker.append(c);
-
-
-	// 		} else if (c == ' ' && !inQuotes && bracketDepth[0] == 0 && bracketDepth[1] == 0) {
-    //             // Finalize the current substring
-    //             result.add(quoteMaker.toString().trim());
-    //             quoteMaker.setLength(0); // Clear the StringBuilder for the next substring
-	// 		} else {
-	// 			quoteMaker.append(c);
-	// 		}
-    //     }
-
-    //     // Add the last substring if there's any content left
-    //     if (quoteMaker.length() > 0) {
-    //         result.add(current.toString().trim());
-    //     }
-
-    //     return result;
-    // }
-	//================================================================
 }

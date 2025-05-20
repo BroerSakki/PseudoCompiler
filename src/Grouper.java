@@ -36,7 +36,7 @@ public class Grouper implements ConstLibrary, MethodLibrary {
         }
     //================================================================
 
-    // Auxillary methods
+    // Auxillary method
     //================================================================
         /**
          * Resets the current and result variables

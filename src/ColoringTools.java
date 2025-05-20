@@ -914,7 +914,7 @@ public class ColoringTools implements MethodLibrary
 			return methodIndex;
 		}
 		public void printMethodIndex() {
-			displayMethodIndex(currentClass);
+			MethodLibrary.displayMethodIndex(currentClass);
 		}
 	//================================================================NaN
     
@@ -924,7 +924,7 @@ public class ColoringTools implements MethodLibrary
 		 * Constructor for ColoringTools class
 		 */
 		public ColoringTools() {
-			List<String> list = Arrays.asList(returnMethodIndex(currentClass));
+			List<String> list = Arrays.asList(MethodLibrary.returnMethodIndex(currentClass));
 			methodIndex = new ArrayList<>(list);
 		}
 	//================================================================

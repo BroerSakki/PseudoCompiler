@@ -158,7 +158,7 @@ public class Formatter implements ConstLibrary, MethodLibrary {
 	// Constructor
 	//================================================================
 		public Formatter() {
-			List<String> list = Arrays.asList(returnMethodIndex(currentClass));
+			List<String> list = Arrays.asList(MethodLibrary.returnMethodIndex(currentClass));
 			methodIndex = new ArrayList<>(list);
 		}
 	//================================================================
@@ -169,7 +169,7 @@ public class Formatter implements ConstLibrary, MethodLibrary {
 			return methodIndex;
 		}
 		public void printMethodIndex() {
-			displayMethodIndex(currentClass);
+			MethodLibrary.displayMethodIndex(currentClass);
 		}
 	//================================================================
 	

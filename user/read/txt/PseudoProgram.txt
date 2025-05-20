@@ -25,7 +25,7 @@ detail()
 	for count = 0 to SIZE - 1 step 1
 		output username[count], ":"
 		if (age >= 18) is true then
-			output "You are an adult"
+			output "You are an adult (barely)"
 		else
 			output "You are a minor"
 		endif

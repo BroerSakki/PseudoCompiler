@@ -62,7 +62,7 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 		 */
 		public Dissector(String fileName) {
 			setPath(fileName);
-			List<String> list = Arrays.asList(returnMethodIndex(currentClass));
+			List<String> list = Arrays.asList(MethodLibrary.returnMethodIndex(currentClass));
 			methodIndex = new ArrayList<>(list);
 		}
 	//================================================================
@@ -218,7 +218,7 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 				filePathStep = fileName.replaceAll(fileName.substring(fileName.lastIndexOf("."), fileName.length()), ".txt");
 			}
 			
-			filePath = Directories.getFilePath(filePathStep);
+			filePath = Directories.toReadFile(USER, filePathStep);
 			pathVariable = Paths.get(filePath);
 			
 			update();
@@ -351,7 +351,7 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 			return methodIndex;
 		}
 		public void printMethodIndex() {
-			displayMethodIndex(currentClass);
+			MethodLibrary.displayMethodIndex(currentClass);
 		}
 	//================================================================
 }

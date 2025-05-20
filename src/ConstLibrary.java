@@ -46,8 +46,6 @@ public interface ConstLibrary {
 	// Directory locations
 	public static final String DIR_USER_READ_TXT = "user/read/txt/";
 	public static final String DIR_USER_WRITE_TXT = "user/write/txt";
-	public static final String DIR_DEV_READ_TXT = "dev/read/txt";
-	public static final String DIR_DEV_WRITE_TXT = "dev/write/txt";
 	
 	//Tokens
 		//Formatting

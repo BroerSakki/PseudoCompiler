@@ -218,7 +218,7 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 				filePathStep = fileName.replaceAll(fileName.substring(fileName.lastIndexOf("."), fileName.length()), ".txt");
 			}
 			
-			filePath = Directories.toReadFile(USER, filePathStep);
+			filePath = Directories.readPath(filePathStep).toString();
 			pathVariable = Paths.get(filePath);
 			
 			update();

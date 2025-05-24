@@ -172,8 +172,4 @@ public class Formatter implements ConstLibrary, MethodLibrary {
 			MethodLibrary.displayMethodIndex(currentClass);
 		}
 	//================================================================
-	
-	public static void main(String[] args) {
-		Formatter format = new Formatter();
-	}
 }

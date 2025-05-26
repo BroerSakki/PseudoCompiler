@@ -27,7 +27,7 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 	//Gebruik update om te verseker dat alle inliging oor die file nog op datum is
 
 	final public static Class<?> currentClass = Dissector.class;
-	public static ArrayList<String> methodIndex = new ArrayList<String>();
+	public static ArrayList<String> methodIndex = new ArrayList<>();
 
 	// Create Objects
 	//================================================================
@@ -49,8 +49,8 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 	
 	// Create textBody Object
 	//================================================================
-		ArrayList<String> textBody = new ArrayList<String>();
-		ArrayList<String> textBodyFormatted = new ArrayList<String>();
+		ArrayList<String> textBody = new ArrayList<>();
+		ArrayList<String> textBodyFormatted = new ArrayList<>();
 	//================================================================
 	
 	// Constructor
@@ -70,9 +70,7 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 		// Overloaded printInfo
 		/**
 		 * Prints information about file to screen
-		 * @param hasFormat Boolean value to determine if output will be formatted
-		 * @return Nothing, is a print function
-		 */
+         */
 		public void printInfo() {
 			String printAbsPath = "File path-absolute: " + absPath;
 			Formatter.modSpace(2, 0);
@@ -102,9 +100,7 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 		// Overloaded printTextBody
 		/**
 		 * Prints the body of the file being dissected to the screen
-		 * @param hasIndex Boolean value to determine if output has an index
-		 * @return Nothing, is a print function
-		 */
+         */
 		public void printTextBody() {
 			for (int i = 0; i < textBody.size(); i++) {
 				System.out.println((i+1) + ":\t" + textBody.get(i));
@@ -114,17 +110,16 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 			if (hasIndex) {
 				printTextBody();
 			} else {
-				for (int i = 0; i < textBody.size(); i++) {
-					System.out.println(textBody.get(i));
-				}
+                for (String s : textBody) {
+                    System.out.println(s);
+                }
 			}
 		}
 		
-		// Overlaoded printTextBodyFormatted
+		// Overloaded printTextBodyFormatted
 		/**
 		 * Prints the body of text as formatted closer to tokens
-		 * @return Nothing, is a print function
-		 */
+         */
 		public void printTextBodyFormatted() {
 			for (String method : textBodyFormatted) {
 				System.out.println(method + "\n");
@@ -193,9 +188,8 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 		// Set filePath
 		/**
 		 * Sets the filePath String variable, as well as the pathVariable for the target file
-		 * @param fileName String variable to be converted to path 
-		 * @return Nothing, is a set function
-		 */
+		 * @param fileName String variable to be converted to path
+         */
 		public void setPath(String fileName) {
 			// Declarations
 			boolean hasType, isTxt;
@@ -225,8 +219,7 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 		// Set reader
 		/**
 		 * Sets and links the reader Scanner object to the target file
-		 * @return Nothing, is a set function
-		 */
+         */
 		public void setReader() {
 			reader.close();
 			reader = new Scanner(filePath);
@@ -235,8 +228,7 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 		// Set textBody
 		/**
 		 * Extracts, then sets the contents of the target file to the textBody ArrayList
-		 * @return Nothing, is a set function
-		 */
+         */
 		private void setTextBody() {
 			textBody.clear();
 			try {
@@ -252,21 +244,19 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 					
 				} catch (FileNotFoundException e) {
 					System.out.println("Error: File not found");
-					e.printStackTrace();
 				}
 		}
 		
 		// Set textBodyFormatted
 		/**
-		 * Convert textbody into tokens
-		 * @return Nothing, is a set function
-		 */
+		 * Convert text-body into tokens
+         */
 		private void setTextBodyFormatted() {
 			//Declarations
 			String textFormatStep = "";
 			Grouper lineGroup;
 
-			//Seperate text, then functions
+			//Separate text, then functions
 			for (int i = mainIndexes[0]; i <= mainIndexes[1]; i++) {
 				String line = textBody.get(i);
 				line = line.replaceAll(TOKEN_FORMAT_TAB[1], TOKEN_FORMAT_TAB[0]);
@@ -327,8 +317,7 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 	// Update data
 	/**
 	 * Runs methods to set al default information of the program
-	 * @return Nothing, merely calls other functions
-	 */
+     */
 	public void update() {
 		// Reset file data
 		setTextBody();

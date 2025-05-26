@@ -29,9 +29,9 @@ public interface MethodLibrary extends ConstLibrary{
 			String className = clazz.getName();
 			int lastSeparator = className.lastIndexOf(".");
 			System.out.println("Method index of the " + className.substring(lastSeparator+1, className.length()) +  " class:");
-			for (int i = 0; i < methodIndex.length; i++) {
-				System.out.println("\t- " + methodIndex[i] + "()");
-			}
+            for (String index : methodIndex) {
+                System.out.println("\t- " + index + "()");
+            }
 		}
 	//================================================================
 	
@@ -54,9 +54,10 @@ public interface MethodLibrary extends ConstLibrary{
 
 		// Check for match
 		for (String element : arr) {
-			if (element.equals(match)) {
-				isEqual = true;
-			}
+            if (element.equals(match)) {
+                isEqual = true;
+                break;
+            }
 		}
 
 		return isEqual;
@@ -80,9 +81,10 @@ public interface MethodLibrary extends ConstLibrary{
 
 		// Check for match
 		for (int element : arr) {
-			if (element == match) {
-				isEqual = true;
-			}
+            if (element == match) {
+                isEqual = true;
+                break;
+            }
 		}
 
 		return isEqual;
@@ -93,9 +95,10 @@ public interface MethodLibrary extends ConstLibrary{
 
 		// Check for match
 		for (double element : arr) {
-			if (element == match) {
-				isEqual = true;
-			}
+            if (element == match) {
+                isEqual = true;
+                break;
+            }
 		}
 
 		return isEqual;

@@ -1,0 +1,73 @@
+class Statement inheretsFrom ConstLibrary, MethodLibrary, StatementLibrary
+	Declarations
+		private Array text[type : string]
+		private List keywords[type : string]
+		private num depth
+		private num textPos
+		private num codePos
+	
+	public Statement(Array<string> text, num textPos)
+		mutateBase(text)
+		setTextPos(textPos)
+		setCodePos(-1)
+	return
+	
+	public methodIndex()
+	return MethodLibrary.returnMethodIndex(Statement.class)
+	
+	private setText(Array<string> text)
+		this.text = text
+	return
+	
+	private addKeyword(string keyword)
+		this.keywords.add(keyword)
+	return
+	
+	private remKeywords()
+		this.keywords.clear()
+	return
+	
+	private setDepth()
+		this.depth = Collections.frequency(text, "0_TAB")
+	return
+	
+	private setTextPos(num textPos)
+		this.textPos = textPos
+	return
+	
+	public setCodePos(num codePos)
+		this.codePos = codePos
+	return
+	
+	public mutateBase(Array<string> text)
+		setText(text)
+		findKeywords()
+		setDepth()
+	return
+	
+	public getText()
+	return text
+	
+	public getKeywords()
+	return keywords
+	
+	public getKeyword(num index)
+	return keywords.get(index)
+	
+	public getDepth()
+	return depth
+	
+	public getTextPos()
+	return textPos
+	
+	public getCodePos()
+	return codePos
+	
+	private findKeywords()
+		for string match : text
+			if containsElement(KEYS_STATEMENT_TYPE, match) is true then
+				addKeyword(match)
+			endif
+		endfor
+	return
+endclass

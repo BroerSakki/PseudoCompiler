@@ -14,10 +14,10 @@ public class Formatter implements ConstLibrary, MethodLibrary {
 	// Declarations
 	//================================================================
 		final public static Class<?> currentClass = Formatter.class;
-		public static ArrayList<String> methodIndex = new ArrayList<String>();
+		public static ArrayList<String> methodIndex = new ArrayList<>();
 		private static int spaceTop = 0;
 		private static int spaceBottom = 0;
-		private static ColoringTools coloring = new ColoringTools();
+		private static final ColoringTools coloring = new ColoringTools();
 	//================================================================
 	
 	// Reset Variables

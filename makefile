@@ -6,13 +6,15 @@ SRC_DIR := src
 
 
 # Output Directories
-CLASS_DIRS = classes/libraries classes/tools core
+DIR_LIB = src/classes/libraries/
+DIR_DATATYPES = src/classes/datatypes/
+DIR_TOOLS = src/classes/tools/
 
 
 # Source files
-SOURCES_LIBRARIES = src/classes/libraries/ConstLibrary.java src/classes/libraries/ColorLibrary.java src/classes/libraries/MethodLibrary.java
-SOURCES_DATATYPES = src/classes/datatypes/Num.java
-SOURCES_TOOLS = src/classes/tools/Directories.java src/classes/tools/ColoringTools.java src/classes/tools/StartupTools.java src/classes/tools/Grouper.java src/classes/tools/Formatter.java src/classes/tools/Dissector.java
+SOURCES_LIBRARIES = $(DIR_LIB)ConstLibrary.java $(DIR_LIB)ColorLibrary.java $(DIR_LIB)MethodLibrary.java $(DIR_LIB)StatementLibrary.java
+SOURCES_DATATYPES = $(DIR_DATATYPES)Num.java $(DIR_DATATYPES)Statement.java
+SOURCES_TOOLS = $(DIR_TOOLS)Directories.java $(DIR_TOOLS)ColoringTools.java $(DIR_TOOLS)StartupTools.java $(DIR_TOOLS)Grouper.java $(DIR_TOOLS)Formatter.java $(DIR_TOOLS)Dissector.java
 SOURCE_MAIN = src/Main.java
 
 

@@ -4,7 +4,6 @@ package classes.tools;
 // Import custom tools
 import classes.libraries.ConstLibrary;
 import classes.libraries.ColorLibrary;
-import classes.tools.ColoringTools;
 
 public interface StartupTools {
     // Create MethodLibrary Object

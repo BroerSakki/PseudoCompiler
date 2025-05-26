@@ -4,16 +4,13 @@ package classes.tools;
 // Import Java Classes
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.lang.reflect.Array;
 
 // Import Custom Libraries
-import classes.libraries.*;
+import classes.libraries.ConstLibrary;
+import classes.libraries.MethodLibrary;
 
 public class Directories implements ConstLibrary, MethodLibrary {
 	//================================================================
@@ -100,7 +97,7 @@ public class Directories implements ConstLibrary, MethodLibrary {
 		 * @return Path variable of the current working directory to the target read file
 		 */
 		public static Path readPath(String fileNameOrPath) {
-			return Paths.get(buildPath(targetDir(DIR_USER_READ_TXT), fileNameOrPath));
+			return Paths.get(buildPath(targetDir(ConstLibrary.DIR_USER_READ_TXT), fileNameOrPath));
 		}
 		/**
 		 * Builds and returns a custom path to the predefined write destination as documented in ConstLibrary

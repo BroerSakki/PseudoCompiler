@@ -10,9 +10,9 @@ CLASS_DIRS = classes/libraries classes/tools core
 
 
 # Source files
-SOURCES_LIBRARIES = src/ConstLibrary.java src/ColorLibrary.java src/MethodLibrary.java
-SOURCES_DATATYPES = src/Num.java
-SOURCES_TOOLS = src/Directories.java src/ColoringTools.java src/StartupTools.java src/Grouper.java src/Formatter.java src/Dissector.java
+SOURCES_LIBRARIES = src/classes/libraries/ConstLibrary.java src/classes/libraries/ColorLibrary.java src/classes/libraries/MethodLibrary.java
+SOURCES_DATATYPES = src/classes/datatypes/Num.java
+SOURCES_TOOLS = src/classes/tools/Directories.java src/classes/tools/ColoringTools.java src/classes/tools/StartupTools.java src/classes/tools/Grouper.java src/classes/tools/Formatter.java src/classes/tools/Dissector.java
 SOURCE_MAIN = src/Main.java
 
 
@@ -39,12 +39,14 @@ all: libraries datatypes tools main clear run
 
 
 # Build all required .class files
-build: libraries datatypes tools main
+build: print_new libraries datatypes tools main
 
 
 # Build all required .class files
-build-clear: libraries datatypes tools main clear
+build-clear: print_new libraries datatypes tools main clear
 
+# Rebuild program
+new: clear clean run_clear print_new build
 
 # Build Main Class
 main: $(CLASS_MAIN)
@@ -84,10 +86,18 @@ list_classes:
 clean:
 	@echo "Removing all .class files..."
 	for /R %%d in (*.class) do del /Q "%%d"
+	@timeout /t 1 >nul
 	
 
 clear:
-		@cls
+	@cls
+
+run_clear:
+	@cls
+
+# Print echo statement
+print_new:
+	@echo "Building new files..."
 
 
 # Name and explain necessary commands
@@ -104,4 +114,4 @@ help:
 	
 run:
 	@echo "Executing Main Program"
-	java -cp src core.Main
+	java -cp src Main

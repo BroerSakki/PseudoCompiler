@@ -1,6 +1,3 @@
-// Package Main to core folder
-package core;
-
 // Import custom tools
 import classes.libraries.ConstLibrary;
 import classes.libraries.ColorLibrary;
@@ -37,7 +34,7 @@ public class Main {
 
 		System.out.println();
 
-		coloring.gradientText(ConstLibrary.JEAN_IMAGE, rgb1, rgb2, 20, false);
+		coloring.gradientText(ConstLibrary.JEAN_IMAGE, rgb1, rgb2, true, true);
 
 		program.printInfo();
 		program.printTextBodyFormatted();

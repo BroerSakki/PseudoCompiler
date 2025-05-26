@@ -29,14 +29,14 @@ public class Directories implements ConstLibrary, MethodLibrary {
 		}
 	
 		/**
-		 * Seperate parts of a path and identify the file name
+		 * Separate parts of a path and identify the file name
 		 * @param filePath String variable that includes the path (complete or incomplete) to a desired file
 		 * @return String variable representing only the file name (includes possible file extension)
 		 */
 		private static String fileName(String filePath) {
 			//Local variables
 			ArrayList<String> path = splitPath(filePath);
-			return path.get(path.size()-1);
+			return path.getLast();
 		}
 
 		/**
@@ -51,9 +51,7 @@ public class Directories implements ConstLibrary, MethodLibrary {
 			int dirDepth = (path.size()-1) - rootDir;
 			StringBuilder targetPath = new StringBuilder();
 
-			for (int i = 0; i < dirDepth; i++) {
-				targetPath.append("../");
-			}
+            targetPath.append("../".repeat(Math.max(0, dirDepth)));
 			targetPath.append(dirPath);
 
 			return targetPath.toString();
@@ -70,16 +68,15 @@ public class Directories implements ConstLibrary, MethodLibrary {
 		private static ArrayList<String> splitPath(String filePath) {
 			//Local variables
 			String[] arrPath = filePath.split("\\\\");
-			ArrayList<String> path = new ArrayList<String>(Arrays.asList(arrPath));
 
-			return path;
+            return new ArrayList<>(Arrays.asList(arrPath));
 		}
 
 		/**
-		 * Seperately build the directory to be used and find the name of the file before concatinating into 1 final path
+		 * Separately build the directory to be used and find the name of the file before concatenating into 1 final path
 		 * @param dirPath String variable representing the path starting from the "Pseudocompiler" directory
 		 * @param fileNameOrPath String variable representing the file name (can also be a path)
-		 * @return String variable representing the concatinated path
+		 * @return String variable representing the concatenated path
 		 */
 		private static String buildPath(String dirPath, String fileNameOrPath) {
 			//Local variables
@@ -121,7 +118,6 @@ public class Directories implements ConstLibrary, MethodLibrary {
 				attemptFile = readPath(fileNameOrPath).toFile();
 			} catch (Exception e) {
 				System.out.println("Error: File not found");
-				e.printStackTrace();
 			}
 
 			return attemptFile;
@@ -139,7 +135,6 @@ public class Directories implements ConstLibrary, MethodLibrary {
 				attemptFile = writePath(fileNameOrPath).toFile();
 			} catch (Exception e) {
 				System.out.println("Error: File not found");
-				e.printStackTrace();
 			}
 
 			return attemptFile;

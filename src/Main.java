@@ -42,8 +42,8 @@ public class Main {
 		program.printInfo();
 		program.printTextBodyFormatted();
 		
-		format.modSpaceTop(1);
-		format.makeRainbowLine('-', 40);
+		Formatter.modSpaceTop(1);
+		Formatter.makeRainbowLine('-', 40);
 		
 		program.printMethodIndex();
 	}

@@ -1,18 +1,17 @@
 // Import custom tools
 import classes.libraries.ConstLibrary;
 import classes.libraries.ColorLibrary;
-import classes.tools.StartupTools;
-import classes.tools.Formatter;
-import classes.tools.ColoringTools;
-import classes.tools.Dissector;
-import classes.tools.Directories;
+import classes.tools.*;
 
 // Import custom datatypes
 import classes.datatypes.Num;
+import classes.datatypes.Statement;
+
+import java.util.Arrays;
 
 public class Main {
 	public static void main(String[] args) {
-		// Create MethodLibrary Object
+		// Create Objects
 		Formatter format = new Formatter();
 
 		// Create MethodLibrary Object
@@ -38,10 +37,19 @@ public class Main {
 
 		program.printInfo();
 		program.printTextBodyFormatted();
+
+
 		
 		Formatter.modSpaceTop(1);
 		Formatter.makeRainbowLine('-', 40);
 		
 		program.printMethodIndex();
+
+		Grouper thingemeBob = new Grouper("string PROMPT_USER_NAME = \"Enter username >> \"");
+		Statement thingy = new Statement(thingemeBob.getFinalText().toArray(new String[0]), 5);
+
+		System.out.println();
+		System.out.println(thingy.getKeywords().toString());
+		System.out.println(Arrays.toString(thingy.getText()));
 	}
 }

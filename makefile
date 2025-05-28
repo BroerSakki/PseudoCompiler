@@ -37,18 +37,18 @@ JC_FLAGS := -d $(SRC_DIR)/ -cp $(SRC_DIR)/
 .PHONY: all clean
 
 # Default targets
-all: libraries datatypes tools main clear run
+all: new run_clear2 run
 
 
 # Build all required .class files
-build: print_new libraries datatypes tools main
+build: print_new libraries datatypes tools main run_clear3 print_compile_success wait
 
 
 # Build all required .class files
-build-clear: print_new libraries datatypes tools main clear
+build-clear: build clear
 
 # Rebuild program
-new: clear clean run_clear print_new build
+new: clear clean run_clear1 print_new build
 
 # Build Main Class
 main: $(CLASS_MAIN)
@@ -94,13 +94,25 @@ clean:
 clear:
 	@cls
 
-run_clear:
+run_clear1:
+	@cls
+	
+run_clear2:
 	@cls
 
-# Print echo statement
+run_clear3:
+	@cls
+
+# Print echo statements
 print_new:
 	@echo "Building new files..."
 
+print_compile_success:
+	@echo "Compiled successfully"
+	
+# Wait 1 second
+wait:
+	@timeout /t 1 >nul
 
 # Name and explain necessary commands
 help:
@@ -116,4 +128,5 @@ help:
 	
 run:
 	@echo "Executing Main Program"
+	@timeout /t 1 >nul
 	java -cp src Main

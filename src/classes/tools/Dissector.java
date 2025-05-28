@@ -41,7 +41,7 @@ public class Dissector implements ConstLibrary, MethodLibrary, StatementLibrary 
 		private String absPath;
 		private int lines;
 		private int numberOfFunctions;
-		private int[] mainIndexes = new int[2];
+		private final int[] mainIndexes = new int[2];
 		private int[][] functionIndexes;
 	//================================================================
 	

@@ -6,6 +6,7 @@ import classes.libraries.MethodLibrary;
 import classes.libraries.StatementLibrary;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class Statement implements ConstLibrary, MethodLibrary, StatementLibrary 
     // Global variables
     //================================================================
         private String[] text;
-        private List<String> keywords;
+        private final List<String> keywords;
         private int depth;
         private int textPos;
         private int codePos;
@@ -22,6 +23,7 @@ public class Statement implements ConstLibrary, MethodLibrary, StatementLibrary 
     // Constructor
     //================================================================
         public Statement(String[] text, int textPos) {
+            keywords = new ArrayList<>();
             mutateBase(text);
             setTextPos(textPos);
             setCodePos(-1);

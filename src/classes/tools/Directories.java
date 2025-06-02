@@ -49,12 +49,9 @@ public class Directories implements ConstLibrary, MethodLibrary {
 			ArrayList<String> path = splitPath(currentDir());
 			int rootDir = path.indexOf("PseudoCompiler");
 			int dirDepth = (path.size()-1) - rootDir;
-			StringBuilder targetPath = new StringBuilder();
 
-            targetPath.append("../".repeat(Math.max(0, dirDepth)));
-			targetPath.append(dirPath);
-
-			return targetPath.toString();
+            return "../".repeat(Math.max(0, dirDepth)) +
+                    dirPath;
 		}
 	//================================================================
 

@@ -6,13 +6,15 @@ SRC_DIR := src
 
 
 # Output Directories
-CLASS_DIRS = classes/libraries classes/tools core
+DIR_LIB = src/classes/libraries/
+DIR_DATATYPES = src/classes/datatypes/
+DIR_TOOLS = src/classes/tools/
 
 
 # Source files
-SOURCES_LIBRARIES = src/classes/libraries/ConstLibrary.java src/classes/libraries/ColorLibrary.java src/classes/libraries/MethodLibrary.java
-SOURCES_DATATYPES = src/classes/datatypes/Num.java
-SOURCES_TOOLS = src/classes/tools/Directories.java src/classes/tools/ColoringTools.java src/classes/tools/StartupTools.java src/classes/tools/Grouper.java src/classes/tools/Formatter.java src/classes/tools/Dissector.java
+SOURCES_LIBRARIES = $(DIR_LIB)ConstLibrary.java $(DIR_LIB)ColorLibrary.java $(DIR_LIB)MethodLibrary.java $(DIR_LIB)StatementLibrary.java
+SOURCES_DATATYPES = $(DIR_DATATYPES)Num.java $(DIR_DATATYPES)Statement.java
+SOURCES_TOOLS = $(DIR_TOOLS)Directories.java $(DIR_TOOLS)ColoringTools.java $(DIR_TOOLS)StartupTools.java $(DIR_TOOLS)Grouper.java $(DIR_TOOLS)Formatter.java $(DIR_TOOLS)Dissector.java
 SOURCE_MAIN = src/Main.java
 
 
@@ -35,18 +37,18 @@ JC_FLAGS := -d $(SRC_DIR)/ -cp $(SRC_DIR)/
 .PHONY: all clean
 
 # Default targets
-all: libraries datatypes tools main clear run
+all: new run_clear2 run
 
 
 # Build all required .class files
-build: print_new libraries datatypes tools main
+build: print_new libraries datatypes tools main run_clear3 print_compile_success wait
 
 
 # Build all required .class files
-build-clear: print_new libraries datatypes tools main clear
+build-clear: build clear
 
 # Rebuild program
-new: clear clean run_clear print_new build
+new: clear clean run_clear1 print_new build
 
 # Build Main Class
 main: $(CLASS_MAIN)
@@ -92,13 +94,25 @@ clean:
 clear:
 	@cls
 
-run_clear:
+run_clear1:
+	@cls
+	
+run_clear2:
 	@cls
 
-# Print echo statement
+run_clear3:
+	@cls
+
+# Print echo statements
 print_new:
 	@echo "Building new files..."
 
+print_compile_success:
+	@echo "Compiled successfully"
+	
+# Wait 1 second
+wait:
+	@timeout /t 1 >nul
 
 # Name and explain necessary commands
 help:
@@ -114,4 +128,5 @@ help:
 	
 run:
 	@echo "Executing Main Program"
+	@timeout /t 1 >nul
 	java -cp src Main

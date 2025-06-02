@@ -15,11 +15,9 @@ import java.util.Scanner;
 import classes.libraries.ColorLibrary;
 import classes.libraries.ConstLibrary;
 import classes.libraries.MethodLibrary;
+import classes.libraries.StatementLibrary;
 
-// Import Tool Classes
-
-
-public class Dissector implements ConstLibrary, MethodLibrary {	
+public class Dissector implements ConstLibrary, MethodLibrary, StatementLibrary {
 	//Cool tests wat werk
 	//Gebruik printInfo om inligting oor die invoer file te wys
 	//Gebruik die getters om inligting oor die file apart op te roep
@@ -43,7 +41,7 @@ public class Dissector implements ConstLibrary, MethodLibrary {
 		private String absPath;
 		private int lines;
 		private int numberOfFunctions;
-		private int[] mainIndexes = new int[2];
+		private final int[] mainIndexes = new int[2];
 		private int[][] functionIndexes;
 	//================================================================
 	

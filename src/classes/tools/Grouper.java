@@ -7,10 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 
 // Import Custom Libraries
-import classes.libraries.ConstLibrary;
 import classes.libraries.MethodLibrary;
 
-public class Grouper implements ConstLibrary, MethodLibrary {
+public class Grouper implements MethodLibrary {
     // Global variables
     //================================================================
         private List<String> finalText  = new ArrayList<>();

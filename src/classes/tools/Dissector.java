@@ -13,11 +13,10 @@ import java.util.Scanner;
 
 // Import Custom Libraries
 import classes.libraries.ColorLibrary;
-import classes.libraries.ConstLibrary;
 import classes.libraries.MethodLibrary;
 import classes.libraries.StatementLibrary;
 
-public class Dissector implements ConstLibrary, MethodLibrary, StatementLibrary {
+public class Dissector implements MethodLibrary, StatementLibrary {
 	//Cool tests wat werk
 	//Gebruik printInfo om inligting oor die invoer file te wys
 	//Gebruik die getters om inligting oor die file apart op te roep

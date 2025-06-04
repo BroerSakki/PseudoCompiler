@@ -9,10 +9,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 // Import Custom Libraries
-import classes.libraries.ConstLibrary;
 import classes.libraries.MethodLibrary;
 
-public class Directories implements ConstLibrary, MethodLibrary {
+public class Directories implements MethodLibrary {
 	//================================================================
 		public static String[] methodIndex() {
 			return MethodLibrary.returnMethodIndex(Directories.class);
@@ -91,7 +90,7 @@ public class Directories implements ConstLibrary, MethodLibrary {
 		 * @return Path variable of the current working directory to the target read file
 		 */
 		public static Path readPath(String fileNameOrPath) {
-			return Paths.get(buildPath(targetDir(ConstLibrary.DIR_USER_READ_TXT), fileNameOrPath));
+			return Paths.get(buildPath(targetDir(DIR_USER_READ_TXT), fileNameOrPath));
 		}
 		/**
 		 * Builds and returns a custom path to the predefined write destination as documented in ConstLibrary

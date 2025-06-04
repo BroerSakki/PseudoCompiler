@@ -1,16 +1,14 @@
 // Package Statement class to datatypes
 package classes.datatypes;
 
-import classes.libraries.ConstLibrary;
 import classes.libraries.MethodLibrary;
 import classes.libraries.StatementLibrary;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Statement implements ConstLibrary, MethodLibrary, StatementLibrary {
+public class Statement implements MethodLibrary, StatementLibrary {
     // Global variables
     //================================================================
         private String[] text;

@@ -8,9 +8,8 @@ import java.util.List;
 
 // Import Custom Libraries
 import classes.libraries.MethodLibrary;
-import classes.libraries.ConstLibrary;
 
-public class Formatter implements ConstLibrary, MethodLibrary {
+public class Formatter implements MethodLibrary {
 	// Declarations
 	//================================================================
 		final public static Class<?> currentClass = Formatter.class;

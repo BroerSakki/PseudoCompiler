@@ -2,14 +2,12 @@
 package classes.tools;
 
 // Import Java Classes
-import java.util.ArrayList;
-import java.util.Arrays;
+import classes.libraries.MethodLibrary;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-// Import Custom Libraries
-import classes.libraries.MethodLibrary;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Directories implements MethodLibrary {
 	//================================================================
@@ -77,8 +75,9 @@ public class Directories implements MethodLibrary {
 		private static String buildPath(String dirPath, String fileNameOrPath) {
 			//Local variables
 			String dir = targetDir(dirPath);
+			String fileName = fileNameOrPath.substring(fileNameOrPath.lastIndexOf('/'));
 			
-			return dir + fileName(fileNameOrPath);
+			return dir + fileName(fileName);
 		}
 	//================================================================
 
@@ -90,7 +89,7 @@ public class Directories implements MethodLibrary {
 		 * @return Path variable of the current working directory to the target read file
 		 */
 		public static Path readPath(String fileNameOrPath) {
-			return Paths.get(buildPath(targetDir(DIR_USER_READ_TXT), fileNameOrPath));
+			return Paths.get(buildPath(DIR_USER_READ_TXT, fileNameOrPath));
 		}
 		/**
 		 * Builds and returns a custom path to the predefined write destination as documented in ConstLibrary
@@ -98,7 +97,7 @@ public class Directories implements MethodLibrary {
 		 * @return Path variable of the current working directory to the target write file
 		 */
 		public static Path writePath(String fileNameOrPath) {
-			return Paths.get(buildPath(targetDir(DIR_USER_WRITE_TXT), fileNameOrPath));
+			return Paths.get(buildPath(DIR_USER_WRITE_TXT, fileNameOrPath));
 		}
 	
 		/**

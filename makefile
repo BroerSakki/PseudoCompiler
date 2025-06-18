@@ -35,18 +35,19 @@ JC_FLAGS := -d $(SRC_DIR)/ -cp $(SRC_DIR)/
 .SUFFIXES: .java
 
 # Target that does not produce output files
-.PHONY: all clean wait
+.PHONY: all clean
 
 # Default targets
 all: new clear_all run
 
+update: clear_update build_clear run
 
 # Build all required .class files
 build: print_new libraries datatypes tools main clear_build print_compile_success wait_build
 
 
 # Build all required .class files
-build-clear: build clear_buildcl
+build_clear: build clear_buildcl
 
 # Rebuild program
 new: clear_new1 clean clear_new2 print_new build
@@ -90,6 +91,9 @@ run_clean:
 
 # Clear screen
 clear_all:
+	@cmd /c cls
+
+clear_update:
 	@cmd /c cls
 
 clear_build:
@@ -153,7 +157,7 @@ help:
 	@echo "Run 'make run':		Run the compiled program"
 	@echo "Run 'make <directory name>':	Compile all files from <directory name>"
 	@echo "Run 'make  build':		Compile all java code"
-	@echo "Run 'make build-clear':	Compile all java code then clear the terminal"
+	@echo "Run 'make build_clear':	Compile all java code then clear the terminal"
 	@echo "Run 'make clear':		Clear the terminal"
 	
 

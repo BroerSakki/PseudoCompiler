@@ -7,20 +7,19 @@ import java.util.Arrays;
 import java.util.List;
 
 // Import Custom Libraries
-import classes.libraries.ConstLibrary;
 import classes.libraries.MethodLibrary;
 
-public class Grouper implements ConstLibrary, MethodLibrary {
+public class Grouper implements MethodLibrary {
     // Global variables
     //================================================================
         private List<String> finalText  = new ArrayList<>();
-        private List<String> result = new ArrayList<>();
-        private StringBuilder current = new StringBuilder();
+        private final List<String> result = new ArrayList<>();
+        private final StringBuilder current = new StringBuilder();
         private String baseText;
         private boolean inQuotes;
         private boolean inBrackets;
         private char quoteChar;
-        private int bracketDepth[] = {0, 0};
+        private final int[] bracketDepth = {0, 0};
     //================================================================
 
     // Constructor

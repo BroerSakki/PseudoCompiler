@@ -8,16 +8,15 @@ import java.util.List;
 
 // Import Custom Libraries
 import classes.libraries.MethodLibrary;
-import classes.libraries.ConstLibrary;
 
-public class Formatter implements ConstLibrary, MethodLibrary {
+public class Formatter implements MethodLibrary {
 	// Declarations
 	//================================================================
 		final public static Class<?> currentClass = Formatter.class;
-		public static ArrayList<String> methodIndex = new ArrayList<String>();
+		public static ArrayList<String> methodIndex = new ArrayList<>();
 		private static int spaceTop = 0;
 		private static int spaceBottom = 0;
-		private static ColoringTools coloring = new ColoringTools();
+		private static final ColoringTools coloring = new ColoringTools();
 	//================================================================
 	
 	// Reset Variables

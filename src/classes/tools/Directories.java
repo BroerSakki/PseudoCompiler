@@ -2,23 +2,14 @@
 package classes.tools;
 
 // Import Java Classes
-import java.util.ArrayList;
-import java.util.Arrays;
+import classes.libraries.MethodLibrary;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-// Import Custom Libraries
-import classes.libraries.ConstLibrary;
-import classes.libraries.MethodLibrary;
-
-public class Directories implements ConstLibrary, MethodLibrary {
-	//================================================================
-		public static String[] methodIndex() {
-			return MethodLibrary.returnMethodIndex(Directories.class);
-		}
-	//================================================================
-
+public class Directories implements MethodLibrary {
 	// Path details
 	//================================================================
 		/**
@@ -49,12 +40,9 @@ public class Directories implements ConstLibrary, MethodLibrary {
 			ArrayList<String> path = splitPath(currentDir());
 			int rootDir = path.indexOf("PseudoCompiler");
 			int dirDepth = (path.size()-1) - rootDir;
-			StringBuilder targetPath = new StringBuilder();
 
-            targetPath.append("../".repeat(Math.max(0, dirDepth)));
-			targetPath.append(dirPath);
-
-			return targetPath.toString();
+            return "../".repeat(Math.max(0, dirDepth)) +
+                    dirPath;
 		}
 	//================================================================
 
@@ -94,7 +82,7 @@ public class Directories implements ConstLibrary, MethodLibrary {
 		 * @return Path variable of the current working directory to the target read file
 		 */
 		public static Path readPath(String fileNameOrPath) {
-			return Paths.get(buildPath(targetDir(ConstLibrary.DIR_USER_READ_TXT), fileNameOrPath));
+			return Paths.get(buildPath(DIR_USER_READ_TXT, fileNameOrPath));
 		}
 		/**
 		 * Builds and returns a custom path to the predefined write destination as documented in ConstLibrary
@@ -102,7 +90,7 @@ public class Directories implements ConstLibrary, MethodLibrary {
 		 * @return Path variable of the current working directory to the target write file
 		 */
 		public static Path writePath(String fileNameOrPath) {
-			return Paths.get(buildPath(targetDir(DIR_USER_WRITE_TXT), fileNameOrPath));
+			return Paths.get(buildPath(DIR_USER_WRITE_TXT, fileNameOrPath));
 		}
 	
 		/**
@@ -112,12 +100,13 @@ public class Directories implements ConstLibrary, MethodLibrary {
 		 */
 		public static File readFile(String fileNameOrPath) {
 			//Local variables
-			File attemptFile = null;
+			File attemptFile;
 
 			try {
 				attemptFile = readPath(fileNameOrPath).toFile();
 			} catch (Exception e) {
 				System.out.println("Error: File not found");
+				attemptFile = null;
 			}
 
 			return attemptFile;
@@ -129,12 +118,13 @@ public class Directories implements ConstLibrary, MethodLibrary {
 		 */
 		public static File writeFile(String fileNameOrPath) {
 			//Local variables
-			File attemptFile = null;
+			File attemptFile;
 
 			try {
 				attemptFile = writePath(fileNameOrPath).toFile();
 			} catch (Exception e) {
 				System.out.println("Error: File not found");
+				attemptFile = null;
 			}
 
 			return attemptFile;

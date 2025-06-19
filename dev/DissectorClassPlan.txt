@@ -1,0 +1,232 @@
+class
+	Declarations
+		private boolean fileExists
+		private File textFile
+		private Scanner reader
+		private string fileName
+		private num numLines
+		private num numFunctions
+		private string baseText[]
+		private Statement perStatement[]
+		private num startStopIndexPair[]
+		private Array functionReturnIndexPairs[type : num]
+		
+	public Dissector(string fileName)
+		setFileName(fileName)
+		setDefaults()
+	return
+	
+	public Dissector(Path filePath)
+		setFileName(filePath)
+		setDefaults()
+	return
+	
+	public Dissector(File file)
+		setFileName(file)
+		setDefaults()
+	return
+	
+	public setDefaults()
+		if fileName = null is true then
+			output "Error: File has not been assigned"
+		else
+			checkFileExists(fileName)
+			if fileExists is true then
+				setTextFile(Directories.readFile(fileName))
+				setReader(textFile)
+				readData()
+				setIndexPairs()
+			endif
+		endif
+	return
+	
+	private setFileExists(boolean fileExists)
+		this.fileExists = fileExists
+	return
+	
+	private setTextFile(File textFile)
+		this.textFile = textFile
+	return
+	
+	private setReader(File file)
+		this.reader = new Scanner(file)
+	return
+	
+	private setFileName(string fileName)
+		this.fileName = fileName
+	return
+	
+	private setFileName(Path filePath)
+		this.fileName = filePath.getFileName().toString()
+	return
+	
+	private setFileName(File file)
+		this.fileName = file.getName()
+	return
+	
+	private setNumLines(num numLines)
+		this.numLines = numLines
+	return
+	
+	private setNumFunctions(num numFunctions)
+		this.numFunctions = numFunctions
+	return
+	
+	private setBaseText(Array<string> baseText)
+		this.baseText = baseText
+	return
+	
+	private setPerStatement(Array<Statement> perStatement)
+		this.perStatement = perStatement
+	return
+	
+	private setIndexPairs()
+		if fileExists is true then
+			Declarations
+				num totalFunctions
+				num functionNum
+				num declarationIndex
+				num returnIndex
+				num startIndex
+				num stopIndex
+			totalFunctions = getNumLines()
+			functionNum = -1
+			declarationIndex = -1
+			returnIndex = -1
+			this.functionReturnIndexPairs = new Array(totalFunctions)
+			for i = 0 to baseText.length-1 step 1
+				if baseText[i].equals("start") is true then
+					startIndex = i
+				else if baseText[i].equals("stop") is true then
+					stopIndex = i
+				else if countFunction(baseText[i])
+					functionNum++
+					declarationIndex = i
+				else if baseText[i].trim().startsWith("return") is true then
+					returnIndex = i
+					addFunctionReturnIndexPair(functionNum, declarationIndex, returnIndex)
+				endif
+			endfor
+			setStartStopIndexPair(startIndex, stopIndex)
+		else
+			output "Error: File does not exist"
+		endif
+	return
+	
+	private setStartStopIndexPair(num startIndex, num stopIndex)
+		if fileExists is true then
+			this.startStopIndexPair[] = new Array(2)
+			startStopIndexPair[0] = startIndex
+			startStopIndexPair[1] = stopIndex
+		else
+			output "Error: File does not exist"
+			startStopIndexPair = null
+		endif
+	return
+	
+	private addFunctionReturnIndexPair(num functionNum, num declarationIndex, num returnIndex)
+		if fileExists is true then
+			functionReturnIndexPairs[functionNum][0] = declarationIndex
+			functionReturnIndexPairs[functionNum][1] = returnIndex
+		else
+			output "Error: File does not exist"
+		return
+	return
+	
+	public getFileExists()
+	return fileExists
+	
+	public getTextFile()
+	return textFile
+	
+	public getFileName()
+	return fileName
+	
+	public getNumLines()
+	return numLines
+	
+	public getNumFunctions()
+	return numFunctions
+	
+	public getStartStopIndexPair()
+	return startStopIndexPair
+	
+	public getFunctionReturnIndexPairs()
+	return functionReturnIndexPairs
+	
+	public getBaseText()
+	return baseText
+	
+	public getPerStatement()
+	return perStatement
+	
+	private checkFileExists(string fileName)
+		try
+			Directories.readPath(fileName)
+			setFileExists(true)
+		catch(FileNotFoundException e)
+			output "Error: File \"", fileName, "\" not found"
+			setFileExists(false)
+			setFileName(null)
+		endcatch
+	return
+	
+	private countFunction(string currentLine)
+		Declarations
+			boolean isFunction
+			string trimmedLine
+			regex pattern = "^(public|private|protected)?\s+(static)?\s+(\w+)\\(\s*(\w+\s+\w+\s*[,;]?\s*)*\\)\s*$"
+		isFunction = false
+		trimmedLine = currentLine.trim()
+		if trimmedLine.startsWith("//") OR trimmedLine.startsWith("#") OR trimmedLine.isEmpty() is true then
+			isFunction = false
+			break
+		endif
+		if trimmedLine.matches(pattern) is true then
+			isFunction = true
+		else
+			isFunction = false
+		endif
+	return isFunction
+	
+	private asWords(string line)
+		Declarations
+			string formattedLine
+			Grouper lineGroup
+			List words[type : string]
+		formattedLine = line.replaceAll(TOKEN_FORMAT_TAB[1], TOKEN_FORMAT_TAB[0])
+		formattedLine = formattedLine.concat(TOKEN_FORMAT_ENTER[0])
+		lineGroup = new Grouper(formattedLine)
+		words = lineGroup.getFinalText()
+	return words.toArray()
+	
+	private readData(File textFile)
+		Declarations
+			List textBody[type : string]
+			List statements[type : Statement]
+			Statement currentStatement
+			string currentLine
+			num totalLines
+			num totalFunctions
+		try
+			totalLines = 0
+			totalFunctions = 0
+			while reader.hasNextLine() do
+				totalLines++
+				currentLine = reader.nextLine()
+				if countFunction(currentLine) is true then
+					totalFunctions++
+				endif
+				currentStatement = new Statement(asWords(currentLine), totalLines-1)
+				statements.add(currentStatement)
+				textBody.add(currentLine)
+			endwhile
+			setBaseText(textBody.toArray())
+			setNumLines(totalLines)
+			setNumFunctions(totalFunctions)
+			setPerStatement(statements.toArray())
+		catch(FileNotFoundException e)
+			output "Error reading data: File not found"
+		endcatch
+	return
+endclass

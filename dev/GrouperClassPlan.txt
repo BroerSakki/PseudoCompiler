@@ -9,8 +9,8 @@ class Grouper inheritsFrom ConstLibrary, MethodLibrary
 		private char quoteChar
 		private num bracketDepth[2]
 		
-	public Grouper(string input)
-		setBaseText(input.replaceAll("\\s+", " "))
+	public Grouper(string text)
+		setBaseText(text.replaceAll("\\s+", " "))
 		setDefaults()
 		group()
 	return
@@ -37,15 +37,15 @@ class Grouper inheritsFrom ConstLibrary, MethodLibrary
 		this.baseText = baseText
 	return
 	
-	private setInBrackets(boolean : inBrackets)
+	private setInBrackets(boolean inBrackets)
 		this.inBrackets = inBrackets
 	return
 	
-	private setInQuotes(boolean : inQuotes)
+	private setInQuotes(boolean inQuotes)
 		this.inQuotes = inQuotes
 	return
 	
-	private setQuoteChar(char : quoteChar)
+	private setQuoteChar(char quoteChar)
 		this.quoteChar = quoteChar
 	return
 	

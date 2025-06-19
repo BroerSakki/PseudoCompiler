@@ -3,7 +3,6 @@ package classes.datatypes;
 
 import classes.libraries.MethodLibrary;
 import classes.libraries.StatementLibrary;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,13 +27,6 @@ public class Statement implements MethodLibrary, StatementLibrary {
         }
     //================================================================
 
-    // Method Index
-    //================================================================
-        public static String[] methodIndex() {
-            return MethodLibrary.returnMethodIndex(Statement.class);
-        }
-    //================================================================
-
     // Setters
     //================================================================
         private void setText(String[] text) {
@@ -46,7 +38,7 @@ public class Statement implements MethodLibrary, StatementLibrary {
         private void setTextPos(int textPos) {
             this.textPos = textPos;
         }
-        public void setCodePos(int codePos) {
+        private void setCodePos(int codePos) {
             this.codePos = codePos;
         }
     //================================================================
@@ -56,7 +48,7 @@ public class Statement implements MethodLibrary, StatementLibrary {
         private void addKeyword(String keyword) {
             keywords.add(keyword);
         }
-        public void mutateBase(String[] text) {
+        private  void mutateBase(String[] text) {
             setText(text);
             findKeywords();
             setDepth();

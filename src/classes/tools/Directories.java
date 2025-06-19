@@ -10,12 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Directories implements MethodLibrary {
-	//================================================================
-		public static String[] methodIndex() {
-			return MethodLibrary.returnMethodIndex(Directories.class);
-		}
-	//================================================================
-
 	// Path details
 	//================================================================
 		/**
@@ -75,9 +69,8 @@ public class Directories implements MethodLibrary {
 		private static String buildPath(String dirPath, String fileNameOrPath) {
 			//Local variables
 			String dir = targetDir(dirPath);
-			String fileName = fileNameOrPath.substring(fileNameOrPath.lastIndexOf('/'));
 			
-			return dir + fileName(fileName);
+			return dir + fileName(fileNameOrPath);
 		}
 	//================================================================
 
@@ -107,12 +100,13 @@ public class Directories implements MethodLibrary {
 		 */
 		public static File readFile(String fileNameOrPath) {
 			//Local variables
-			File attemptFile = null;
+			File attemptFile;
 
 			try {
 				attemptFile = readPath(fileNameOrPath).toFile();
 			} catch (Exception e) {
 				System.out.println("Error: File not found");
+				attemptFile = null;
 			}
 
 			return attemptFile;
@@ -124,12 +118,13 @@ public class Directories implements MethodLibrary {
 		 */
 		public static File writeFile(String fileNameOrPath) {
 			//Local variables
-			File attemptFile = null;
+			File attemptFile;
 
 			try {
 				attemptFile = writePath(fileNameOrPath).toFile();
 			} catch (Exception e) {
 				System.out.println("Error: File not found");
+				attemptFile = null;
 			}
 
 			return attemptFile;

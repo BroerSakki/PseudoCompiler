@@ -1,341 +1,321 @@
 // Package Dissector to tools folder
 package classes.tools;
 
-// Import Java Classes
+import classes.datatypes.Statement;
+import classes.libraries.MethodLibrary;
+import classes.libraries.StatementLibrary;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
-// Import Custom Libraries
-import classes.libraries.ColorLibrary;
-import classes.libraries.MethodLibrary;
-import classes.libraries.StatementLibrary;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Dissector implements MethodLibrary, StatementLibrary {
-	//Cool tests wat werk
-	//Gebruik printInfo om inligting oor die invoer file te wys
-	//Gebruik die getters om inligting oor die file apart op te roep
-	//Meeste setters word in die constructor gebruik, maar kan ook later aparte aspekte verander
-	//Gebruik update om te verseker dat alle inliging oor die file nog op datum is
+	// Global variables
+	//================================================================
+		private boolean fileExists;
+		private File textFile;
+		private Scanner reader;
+		private String fileName;
+		private int numLines;
+		private int numFunctions;
+		private String[] baseText;
+		private Statement[] perStatement;
+		private int[] startStopIndexPair;
+		private int[][] functionReturnIndexPairs;
+	//================================================================
 
-	final public static Class<?> currentClass = Dissector.class;
-	public static ArrayList<String> methodIndex = new ArrayList<>();
-
-	// Create Objects
+	// Constructors
 	//================================================================
-		// File handling
-		private static File file;
-		private static Path pathVariable;
-		private static Scanner reader;
-	//================================================================
-	
-	// Variables
-	//================================================================
-		private String filePath;
-		private String absPath;
-		private int lines;
-		private int numberOfFunctions;
-		private final int[] mainIndexes = new int[2];
-		private int[][] functionIndexes;
-	//================================================================
-	
-	// Create textBody Object
-	//================================================================
-		ArrayList<String> textBody = new ArrayList<>();
-		ArrayList<String> textBodyFormatted = new ArrayList<>();
-	//================================================================
-	
-	// Constructor
-	//================================================================
-		/**
-		 * Constructor for Dissector class
-		 */
 		public Dissector(String fileName) {
-			setPath(fileName);
-			List<String> list = Arrays.asList(MethodLibrary.returnMethodIndex(currentClass));
-			methodIndex = new ArrayList<>(list);
+			setFileName(fileName);
+			setDefaults();
+		}
+		public Dissector(Path filePath) {
+			setFileName(filePath);
+			setDefaults();
+		}
+		public Dissector(File file) {
+			setFileName(file);
+			setDefaults();
 		}
 	//================================================================
-	
-	// Print Methods
+
+	// Setters
 	//================================================================
-		// Overloaded printInfo
-		/**
-		 * Prints information about file to screen
-         */
-		public void printInfo() {
-			String printAbsPath = "File path-absolute: " + absPath;
-			Formatter.modSpace(2, 0);
-			Formatter.makeGradientLine('-', printAbsPath.length(), ColorLibrary.MATRIX_GREEN_START, ColorLibrary.MATRIX_GREEN_STOP);
-			
-			info();
-			
-			Formatter.modSpace(0, 2);
-			Formatter.makeGradientLine('-', printAbsPath.length(), ColorLibrary.MATRIX_GREEN_STOP, ColorLibrary.MATRIX_GREEN_START);
-			Formatter.modSpace(0, 0);
-		}
-		public void printInfo(boolean hasFormat) {
-			if (hasFormat) {
-				printInfo();
+		private void  setDefaults() {
+			if (fileName == null) {
+				System.out.println("Error: File has not been assigned");
 			} else {
-				info();
-				System.out.println();
+				if (checkFileExists(fileName)) {
+					setTextFile(Directories.readFile(fileName));
+					readData(textFile);
+
+					setIndexPairs();
+				} else {
+					System.out.println("Error: File does not exist");
+				}
 			}
 		}
-		private void info() {
-			System.out.println("File path: " + filePath);
-			System.out.println("File path-absolute: " + absPath);
-			System.out.println("Lines in file: " + lines);
-			System.out.println("Number of functions: " + numberOfFunctions);
+
+		private void setFileExists(boolean fileExists) {
+			this.fileExists = fileExists;
 		}
-		
-		// Overloaded printTextBody
-		/**
-		 * Prints the body of the file being dissected to the screen
-         */
-		public void printTextBody() {
-			for (int i = 0; i < textBody.size(); i++) {
-				System.out.println((i+1) + ":\t" + textBody.get(i));
+
+		private void setTextFile(File textFile) {
+			this.textFile = textFile;
+		}
+
+		private void setReader(File file) {
+			try {
+				this.reader = new Scanner(file);
+			} catch (FileNotFoundException e) {
+				setFileExists(false);
 			}
 		}
-		public void printTextBody(boolean hasIndex) {
-			if (hasIndex) {
-				printTextBody();
+
+		// Overloaded setFileName
+		private void setFileName(String fileName) {
+			this.fileName = fileName;
+		}
+		private void setFileName(Path filePath) {
+			this.fileName = filePath.getFileName().toString();
+		}
+		private void setFileName(File file) {
+			this.fileName = file.getName();
+		}
+
+		private void setNumLines(int numLines) {
+			this.numLines = numLines;
+		}
+
+		private void setNumFunctions(int numFunctions) {
+			this.numFunctions = numFunctions;
+		}
+
+		private void setBaseText(String[] baseText) {
+			this.baseText = baseText;
+		}
+
+		private void setPerStatement(Statement[] perStatement) {
+			this.perStatement = perStatement;
+		}
+
+		private void setIndexPairs() {
+			if (fileExists) {
+				//Local variables
+				int totalFunctions = getNumLines();
+				int functionNum = -1;
+				int declarationIndex = -1;
+				int returnIndex;
+				int startIndex = -1;
+				int stopIndex = -1;
+
+				//Assign a size to the functionReturnIndexPairs base array
+				this.functionReturnIndexPairs = new int[totalFunctions][2];
+
+				//Go through the base text line by line
+				for (int i = 0; i < baseText.length; i++) {
+
+					//Check if it is the start index
+					if (baseText[i].equals("start")) {
+						startIndex = i;
+						System.out.println("Function num: " + functionNum + " Index: " + i);
+
+					//Check if it is the stop index
+					} else if (baseText[i].equals("stop")) {
+						stopIndex = i;
+						System.out.println("Function num: " + functionNum + " Index: " + i);
+
+					//Check if it is a declaration index
+					} else if (countFunction(baseText[i])) {
+						functionNum++;
+						declarationIndex = i;
+						System.out.println("Declaration num: " + functionNum + " Index: " + i);
+
+					//Check if it is a return index
+					} else if (baseText[i].trim().startsWith("return")) {
+						returnIndex = i;
+						addFunctionReturnIndexPair(functionNum, declarationIndex, returnIndex);
+						System.out.println("Return num: " + functionNum + " Index " + i);
+					}
+				}
+
+				setStartStopIndexPair(startIndex, stopIndex);
+
 			} else {
-                for (String s : textBody) {
-                    System.out.println(s);
-                }
+				System.out.println("Error: File does not exist");
 			}
 		}
-		
-		// Overloaded printTextBodyFormatted
-		/**
-		 * Prints the body of text as formatted closer to tokens
-         */
-		public void printTextBodyFormatted() {
-			for (String method : textBodyFormatted) {
-				System.out.println(method + "\n");
+
+		private void setStartStopIndexPair(int startIndex, int stopIndex) {
+			//Check fileExists
+			if (fileExists) {
+				//Create startStopIndexPair array
+				this.startStopIndexPair = new int[2];
+
+				//Assign startIndex and stopIndex
+				startStopIndexPair[0] = startIndex;
+				startStopIndexPair[1] = stopIndex;
+			} else {
+				//Assign null to startStopIndexPairs
+				startStopIndexPair = null;
+				System.out.println("Error: File does not exist");
+			}
+		}
+	//================================================================
+
+	// Mutators
+	//================================================================
+		private void addFunctionReturnIndexPair(int functionNum, int declarationIndex, int returnIndex) {
+			//Check fileExists
+			if (fileExists) {
+				//Add declarationIndex and returnIndex to selected position
+				functionReturnIndexPairs[functionNum][0] = declarationIndex;
+				functionReturnIndexPairs[functionNum][1] = returnIndex;
+			} else {
+				//Assign null to functionReturnIndexPairs
+				functionReturnIndexPairs = null;
+				System.out.println("Error: file does not exist");
 			}
 		}
 	//================================================================
 
 	// Getters
 	//================================================================
-		// Get filePath
-		/**
-		 * Returns a path from the current directory to the target directory
-		 * @return The filePath variable
-		 */
-		public String getInputPath() {
-			return filePath;
+		public boolean getFileExists() {
+			return this.fileExists;
 		}
-		
-		
-		// Get absPath
-		/**
-		 * Returns the absolute path of the target file
-		 * @return The absPath variable
-		 */
-		public String getAbsPath() {
-			return absPath;
+		public File getTextFile() {
+			return this.textFile;
 		}
-		
-		// Get lines
-		/**
-		 * Returns the number of lines in the file
-		 * @return The lines variable
-		 */
-		public int getLen() {
-			return lines;
+		public String getFileName() {
+			return this.fileName;
 		}
-		
-		// Get textBody
-		/**
-		 * Returns the body of the text as an ArrayList of type String
-		 * @return The textBody variable
-		 */
-		public ArrayList<String> getTextBody() {
-			return textBody;
+		public int getNumLines() {
+			return this.numLines;
 		}
-		
-		
-		// Get line of text
-		/**
-		 * Returns a single line of text from the file
-		 * @param lineNum Integer that represents the position of the line top return
-		 * @return The text at the indicated line as a String
-		 */
-		public String getLine(int lineNum) {
-			try {
-				return textBody.get(lineNum-1);
-			} catch (ArrayIndexOutOfBoundsException e) {
-				System.out.println("Error: Index out of bounds");
-				return "";
-			}
+		public int getNumFunctions() {
+			return this.numFunctions;
+		}
+		public String[] getBaseText() {
+			return this.baseText;
+		}
+		public Statement[] getPerStatement() {
+			return this.perStatement;
+		}
+		public int[] getStartStopIndexPair() {
+			return this.startStopIndexPair;
+		}
+		public int[][] getFunctionReturnIndexPairs() {
+			return this.functionReturnIndexPairs;
 		}
 	//================================================================
 
-	// Setters
+	// Work methods
 	//================================================================
-		// Set filePath
-		/**
-		 * Sets the filePath String variable, as well as the pathVariable for the target file
-		 * @param fileName String variable to be converted to path
-         */
-		public void setPath(String fileName) {
-			// Declarations
-			boolean hasType, isTxt;
-			String type, filePathStep;
-			
-			// Verify file name and type
-			hasType = (fileName.lastIndexOf(".") != 0);
-			if (!hasType) {
-				filePathStep = fileName + ".txt";
-			}
-			
-			isTxt = (fileName.lastIndexOf(".txt") != 0);
-			type = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
-			
-			if (isTxt) {
-				filePathStep = fileName;
+		public boolean checkFileExists(String fileName) {
+			//Local variables
+			File testFile = Directories.readFile(fileName);
+
+			//Check if file exists
+			if (testFile.exists()) {
+				setFileExists(true);
 			} else {
-				filePathStep = fileName.replaceAll(fileName.substring(fileName.lastIndexOf("."), fileName.length()), ".txt");
+				setFileExists(false);
 			}
-			
-			filePath = Directories.readPath(filePathStep).toString();
-			pathVariable = Paths.get(filePath);
-			
-			update();
+
+			//Return fileExists
+			return fileExists;
 		}
-		
-		// Set reader
-		/**
-		 * Sets and links the reader Scanner object to the target file
-         */
-		public void setReader() {
-			reader.close();
-			reader = new Scanner(filePath);
+
+		private boolean countFunction(String currentLine) {
+			//Local variables
+			boolean isFunction = false;
+			String trimmedLine = currentLine.trim();
+			String regex = "^(public|private|protected)?\\s*(static)?\\s*(\\w+)\\(\\s*(\\w+\\s+\\w+\\s*[,;]?\\s*)*\\)\\s*$";
+			Pattern pattern = Pattern.compile(regex);
+			Matcher matcher = pattern.matcher(trimmedLine);
+
+			//Basic checks
+			if (trimmedLine.startsWith("//") || trimmedLine.startsWith("#") || trimmedLine.isEmpty()) {
+				isFunction = false;
+
+			//Match with regex pattern
+			} else if (matcher.matches()) {
+				isFunction = true;
+			}
+
+			//Return isFunction
+			return isFunction;
 		}
-		
-		// Set textBody
-		/**
-		 * Extracts, then sets the contents of the target file to the textBody ArrayList
-         */
-		private void setTextBody() {
-			textBody.clear();
-			try {
-					file = pathVariable.toFile();
-					reader = new Scanner(file);
-					absPath = file.getAbsolutePath();
-					
-					// Extract textfile data to ArrayList
-					while (reader.hasNextLine()) {
-						String line = reader.nextLine();
-						textBody.add(line);
-					}
-					
-				} catch (FileNotFoundException e) {
-					System.out.println("Error: File not found");
-				}
-		}
-		
-		// Set textBodyFormatted
-		/**
-		 * Convert text-body into tokens
-         */
-		private void setTextBodyFormatted() {
-			//Declarations
-			String textFormatStep = "";
+
+		private String[] asWords(String line) {
+			//Local variables
+			String formattedLine;
 			Grouper lineGroup;
+			List<String> words;
 
-			//Separate text, then functions
-			for (int i = mainIndexes[0]; i <= mainIndexes[1]; i++) {
-				String line = textBody.get(i);
-				line = line.replaceAll(TOKEN_FORMAT_TAB[1], TOKEN_FORMAT_TAB[0]);
-			
-				line = line.concat(TOKEN_FORMAT_ENTER[0]);
-				lineGroup = new Grouper(line);
-				List<String> words = lineGroup.getFinalText();
-				if (i == mainIndexes[1]) {
-					textFormatStep = textFormatStep.concat("|");
-				}
-				textFormatStep = textFormatStep.concat(String.join("|", words));
-			}
+			//Set up formatted line
+			formattedLine = line.replaceAll(TOKEN_FORMAT_TAB[1], TOKEN_FORMAT_TAB[0]);
+			formattedLine = formattedLine.concat(TOKEN_FORMAT_ENTER[0]);
 
-			textBodyFormatted.add(textFormatStep);
+			//Group formatted text based on punctuation
+			lineGroup = new Grouper(formattedLine);
 
-			for (int i = 0; i < numberOfFunctions; i++) {
-				textFormatStep = "";
+			//Split line into seperate words
+			words = lineGroup.getFinalText();
 
-				for (int j = functionIndexes[i][0]; j <= functionIndexes[i][1]; j++) {
-					String line = textBody.get(j);
-					line = line.replaceAll(TOKEN_FORMAT_TAB[1], TOKEN_FORMAT_TAB[0]);
-				
-					line = line.concat(TOKEN_FORMAT_ENTER[0]);
-					lineGroup = new Grouper(line);
-					List<String> words = lineGroup.getFinalText();
-					if (j == functionIndexes[i][1]) {
-						textFormatStep = textFormatStep.concat("|");
+			//Return as Array of String
+			return words.toArray(String[]::new);
+		}
+
+		private void readData(File texFile) {
+			//Local variables
+			List<String> textBody = new ArrayList<>();
+			List<Statement> statements = new ArrayList<>();
+			Statement currentStatement;
+			String currentLine;
+			int totalLines = 0;
+			int totalFunctions = 0;
+
+			try {
+				//Assign reader to textFile
+				setReader(texFile);
+
+				//Assess each line
+				while (reader.hasNextLine()) {
+					//Read line
+					currentLine = reader.nextLine();
+
+					//Check if function count increases 
+					if (countFunction(currentLine)) {
+						totalFunctions++;
 					}
-					textFormatStep = textFormatStep.concat(String.join("|", words));
+
+					//Save lines and statements
+					currentStatement = new Statement(asWords(currentLine), totalLines);
+					textBody.add(currentLine);
+					statements.add(currentStatement);
+
+					//Increase counted lines
+					totalLines++;
 				}
 
-				textBodyFormatted.add(textFormatStep);
-			}
-		}
-
-		private void setFunctionNumbers() {
-			numberOfFunctions = countOccurrences(textBody, KEY_RETURN);
-			functionIndexes = new int[numberOfFunctions][2];
-			mainIndexes[0] = textBody.indexOf(KEY_START);
-			mainIndexes[1] = textBody.indexOf(KEY_STOP);
-
-			int count = 0;
-
-			for (int i = 0; i < textBody.size(); i++) {
-				if (i < mainIndexes[0] || i > mainIndexes[1]) {
-					if (textBody.get(i).equals(KEY_RETURN)) {
-						functionIndexes[count][1] = i;
-						count++;
-					} else if (!textBody.get(i).contains(TOKEN_FORMAT_TAB[1])) {
-						functionIndexes[count][0] = i;
-					}
-				}
+				//Set base variables equal local variabls
+				setBaseText(textBody.toArray(String[]::new));
+				setNumLines(totalLines);
+				setNumFunctions(totalFunctions);
+				setPerStatement(statements.toArray(Statement[]::new));
+			} catch (Exception e) {
+				System.out.println("Error: could not read data");
 			}
 
-		}
-	//================================================================
-	
-	// Update data
-	/**
-	 * Runs methods to set al default information of the program
-     */
-	public void update() {
-		// Reset file data
-		setTextBody();
-		setFunctionNumbers();
-		setTextBodyFormatted();
-		absPath = file.getAbsolutePath();
-		lines = textBody.size();
-	}
-
-	// Close Scanners
-	public void closeReader() {
-		reader.close();
-	}
-	
-	// Method Index output
-	//================================================================
-		public ArrayList<String> getMethodIndex() {
-			return methodIndex;
-		}
-		public void printMethodIndex() {
-			MethodLibrary.displayMethodIndex(currentClass);
+			//Close the reader
+			reader.close();
 		}
 	//================================================================
 }

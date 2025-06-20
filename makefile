@@ -14,7 +14,7 @@ DIR_TOOLS = src/classes/tools/
 
 # Source files
 SOURCES_LIBRARIES = $(DIR_LIB)ConstLibrary.java $(DIR_LIB)ColorLibrary.java $(DIR_LIB)MethodLibrary.java $(DIR_LIB)StatementLibrary.java
-SOURCES_DATATYPES = $(DIR_DATATYPES)Num.java $(DIR_DATATYPES)Statement.java
+SOURCES_DATATYPES = $(DIR_DATATYPES)Num.java $(DIR_DATATYPES)Statement.java $(DIR_DATATYPES)Variable.java
 SOURCES_TOOLS = $(DIR_TOOLS)Directories.java $(DIR_TOOLS)ColoringTools.java $(DIR_TOOLS)StartupTools.java $(DIR_TOOLS)Grouper.java $(DIR_TOOLS)Formatter.java $(DIR_TOOLS)Dissector.java
 SOURCE_MAIN = src/Main.java
 

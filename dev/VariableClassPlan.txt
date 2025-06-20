@@ -1,0 +1,102 @@
+class Variable inheritsfrom ConstLibrary, MethodLibrary, StatementLibrary
+	Declarations
+		private string accessSpecifier
+		private boolean isStatic
+		private string datatype
+		private string identifier
+		private string value
+		
+	public Variable(Statement statement)
+		readStatement(statement)
+	return
+	
+	private setAccessSpecifier(string accessSpecifier)
+		this.accessSpecifier = accessSpecifier
+	return
+	
+	private setIsStatic(boolean isStatic)
+		this.isStatic = isStatic
+	return
+	
+	private setDatatype(string datatype)
+		this.datatype = datatype
+	return
+	
+	private setIdentifier(string identifier)
+		this.identifier = identifier
+	return
+	
+	public setValue(string value)
+		if identifier = null OR datatype = null is true then
+			setToNull()
+		else
+			this.value = value
+		endif
+	return
+	
+	public getAccessSpecifier()
+	return accessSpecifier
+	
+	public getIsStatic()
+	return isStatic
+	
+	public getDatatype()
+	return datatype
+	
+	public getIdentifier()
+	return identifier
+	
+	public getValue()
+	return value
+	
+	private readStatement(Statement statement)
+		Declarations
+			string testString
+			string regexDeclare
+			string regexInitialize
+			boolean isDeclaration
+			num datatypeIndex
+		testString = statement.getText().join(" ")
+		regexDeclare = "^(0_TAB)+\\s*((public|private|protected)\\s+(static\\s+)?)?(string|num|boolean)\\s+\\w+\\s*;?\\s*(0_ENTER)\\s*$"
+		regexInitialize = "^(0_TAB)+\\s*((public|private|protected)\\s+(static\\s+)?)?(string|num|boolean)\\s+\\w+\\s*=\\s*\\w+\\s*(0_ENTER)\\s*$"
+		isDeclaration = true
+		if testString.matches(regexDeclare) is true then
+			setValue(null)
+		else if testString.matches(regexInitialize) is true then
+			setValue(statement.getText()[statement.getText().length-2])
+		else
+			setToNull()
+			isDeclaration = false
+		endif
+		if isDeclaration is true then
+			if containsElement(KEYS_STATEMENT_DECLARATION_START, statement.getText()[statement.getDepth()]) is true then
+				setAccessSpecifier(statement.getText()[statement.getDepth()])
+				if statement.getText()[statement.getDepth()+1] = KEY_STATIC is true then
+					setIsStatic(true)
+					datatypeIndex = statement.getDepth()+2
+				else
+					setIsStatic(false)
+					datatypeIndex = statement.getDepth()+1
+				endif
+			else if statement.getText()[statement.getDepth()] = KEY_STATIC is true then
+				setAccessSpecifier(KEY_PROTECTED)
+				setIsStatic(true)
+				datatypeIndex = statement.getDepth()+1
+			else
+				setAccessSpecifier(KEY_PROTECTED)
+				setIsStatic(false)
+				datatypeIndex = statement.getDepth()
+			endif
+			setDatatype(datatypeIndex)
+			setIdentifier(statement[datatypeIndex+1])
+		endif
+	return
+	
+	public setToNull()
+		setAccessSpecifier(null)
+		setIsStatic(false)
+		setDatatype(null)
+		setIdentifier(null)
+		this.value = null
+	return
+endclass

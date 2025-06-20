@@ -6,6 +6,8 @@ import classes.libraries.StatementLibrary;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Statement implements MethodLibrary, StatementLibrary {
     // Global variables
@@ -85,6 +87,21 @@ public class Statement implements MethodLibrary, StatementLibrary {
                     addKeyword(match);
                 }
             }
+        }
+
+        public boolean checkIfFunctionDeclaration() {
+            //Local variables
+            boolean isFunctionDeclaration = false;
+            String testString = String.join(" ", getText());
+            String regex = "^((public|private|protected)\\s+(static\\s+)?)?\\w+\\((\\w+\\s+\\w+\\s*[,;]?(\\s*)?)*\\)\\s*(0_ENTER)$";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(testString);
+
+            if (matcher.matches()) {
+                isFunctionDeclaration = true;
+            }
+
+            return isFunctionDeclaration;
         }
     //================================================================
 }

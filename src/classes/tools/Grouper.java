@@ -2,12 +2,10 @@
 package classes.tools;
 
 // Import Java Classes
+import classes.libraries.MethodLibrary;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-// Import Custom Libraries
-import classes.libraries.MethodLibrary;
 
 public class Grouper implements MethodLibrary {
     // Global variables
@@ -51,7 +49,7 @@ public class Grouper implements MethodLibrary {
         /**
          * Set all relevant variables to default values
          */
-        public void setDefaults() {
+        private void setDefaults() {
             finalText.clear();
             result.clear();
             current.setLength(0);
@@ -97,7 +95,7 @@ public class Grouper implements MethodLibrary {
          */
         public void mutateInBrackets() {
             if (bracketDepth[0] == 0 && bracketDepth[1] == 0) {
-                setInBrackets(false);;
+                setInBrackets(false);
             } else if (bracketDepth[0] > 0 || bracketDepth[1] > 0) {
                 setInBrackets(true);
             } else {
@@ -113,18 +111,10 @@ public class Grouper implements MethodLibrary {
          */
         public void mutateBracketDepth(char c) {
             switch (c) {
-                case '(':
-                    bracketDepth[0]++;
-                    break;
-                case '[':
-                    bracketDepth[1]++;
-                    break;
-                case ')':
-                    bracketDepth[0]--;
-                    break;
-                case ']':
-                    bracketDepth[1]--;
-                    break;
+                case '(' -> bracketDepth[0]++;
+                case '[' -> bracketDepth[1]++;
+                case ')' -> bracketDepth[0]--;
+                case ']' -> bracketDepth[1]--;
             }
         }
     //================================================================
@@ -178,7 +168,7 @@ public class Grouper implements MethodLibrary {
          * Groups the data form the baseText variable per character and saves it to the finalText variable
          * @return finalText
          */
-        public List<String> group() {
+        private List<String> group() {
             if (finalText != null) {
                 finalText.clear();
             }

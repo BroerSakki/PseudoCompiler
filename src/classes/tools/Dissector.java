@@ -123,24 +123,20 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 					//Check if it is the start index
 					if (baseText[i].equals("start")) {
 						startIndex = i;
-						System.out.println("Function num: " + functionNum + " Index: " + i);
 
 					//Check if it is the stop index
 					} else if (baseText[i].equals("stop")) {
 						stopIndex = i;
-						System.out.println("Function num: " + functionNum + " Index: " + i);
 
 					//Check if it is a declaration index
 					} else if (countFunction(baseText[i])) {
 						functionNum++;
 						declarationIndex = i;
-						System.out.println("Declaration num: " + functionNum + " Index: " + i);
 
 					//Check if it is a return index
 					} else if (baseText[i].trim().startsWith("return")) {
 						returnIndex = i;
 						addFunctionReturnIndexPair(functionNum, declarationIndex, returnIndex);
-						System.out.println("Return num: " + functionNum + " Index " + i);
 					}
 				}
 

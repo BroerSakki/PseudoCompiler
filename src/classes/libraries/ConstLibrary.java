@@ -57,8 +57,8 @@ public interface ConstLibrary {
 	
 	//Tokens
 		//Formatting
-		String[] TOKEN_FORMAT_TAB = {" 0_TAB ", "\t"};
-		String[] TOKEN_FORMAT_ENTER = {" 0_ENTER ", "\n"};
+		String[] TOKEN_FORMAT_TAB = {"0_TAB ", "\t"};
+		String[] TOKEN_FORMAT_ENTER = {" 0_ENTER", "\n"};
 
 		//Grouping operators
 		char[] TOKEN_OPERATORS_QUOTES = {'\'', '\"'};

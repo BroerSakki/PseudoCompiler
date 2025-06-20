@@ -2,6 +2,6 @@
 
 Compiler for Pseudocode to java :)
 
-Compiles to java 23.0.2
+Compiles to java 24
 
 Created by BroerSakki and Morras321

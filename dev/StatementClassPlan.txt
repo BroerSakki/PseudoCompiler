@@ -70,4 +70,17 @@ class Statement inheretsFrom ConstLibrary, MethodLibrary, StatementLibrary
 			endif
 		endfor
 	return
+	
+	public checkIfFunctionDeclaration()
+	Declarations
+		boolean isFunctionDeclaration
+		string regex
+		string testString[]
+	regex = "^((public|private|protected)\\s+(static\\s+)?)?\\w+\\((\\w+[,;]?)*\\)\\s*(0_ENTER)$"
+	isFunctionDeclaration = false
+	testString = getText()
+	if testString.join(' ').matches(regex) is true then
+		isFunctionDeclaration = true
+	endif
+	return isFunctionDeclaration
 endclass

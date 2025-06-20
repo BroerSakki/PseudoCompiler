@@ -1,4 +1,4 @@
-class
+class Dissector inheritsfrom ConstLibrary, MethodLibrary
 	Declarations
 		private boolean fileExists
 		private File textFile

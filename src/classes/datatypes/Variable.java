@@ -3,7 +3,6 @@ package classes.datatypes;
 import classes.libraries.MethodLibrary;
 import classes.libraries.StatementLibrary;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Variable implements MethodLibrary, StatementLibrary {
     // Global variables
@@ -13,12 +12,14 @@ public class Variable implements MethodLibrary, StatementLibrary {
         private String datatype;
         private String identifier;
         private String value;
+        private int size;
     //================================================================
 
     // Constructors
     //================================================================
         public Variable(Statement statement) {
-            readStatement(statement);
+            setToNull();
+            readDeclaration(statement);
         }
     //================================================================
 
@@ -47,6 +48,10 @@ public class Variable implements MethodLibrary, StatementLibrary {
                 this.value = value;
             }
         }
+
+        private void setSize(int size) {
+            this.size = size;
+        }
     //================================================================
 
     // Getters
@@ -66,71 +71,108 @@ public class Variable implements MethodLibrary, StatementLibrary {
         public String getValue() {
             return value;
         }
+        public int getSize() {
+            return  size;
+        }
     //================================================================
 
     // Work methods
     //================================================================
-        private void readStatement(Statement statement) {
+        private void readDeclaration(Statement statement) {
             //Local variables
-            String testString = String.join(" ", statement.getText());
-            String regexDeclare = "^(0_TAB\\s*)+\\s*((public|private|protected)\\s+(static\\s+)?)?(string|num|boolean)\\s+\\w+(\\[\\w+\\])*\\s*;?\\s*(0_ENTER)\\s*$";
-            String regexInitialize = "^(0_TAB\\s*)+\\s*((public|private|protected)\\s+(static\\s+)?)?(string|num|boolean)\\s+\\w+(\\[\\w+\\])*\\s*=\\s*(\\w+|\"([^\"]*)\")\\s*(0_ENTER)\\s*$";
-            Pattern patternDeclare = Pattern.compile(regexDeclare);
-            Pattern patternInitialize = Pattern.compile(regexInitialize);
-            Matcher matcherDeclare = patternDeclare.matcher(testString);
-            Matcher matcherInitialize = patternInitialize.matcher(testString);
-            boolean isDeclaration = true;
-            boolean initialize = false;
-            int datatypeIndex;
+			Matcher matcher = StatementLibrary.getMatcher(REGEX_VARIABLE_DECLARATION, statement.toString());
+			
+			//Declare Variable
 
-            //Check whether the variable is declared and or initialized
-            if (matcherDeclare.matches()) {
-                this.value = null;
-            } else if (matcherInitialize.matches()) {
-                initialize = true;
-            } else {
-                setToNull();
-                isDeclaration = false;
-            }
-
-            //Declare the variable if the line is a declaration
-            if (isDeclaration) {
-                if (containsElement(KEYS_STATEMENT_DECLARATION_START, statement.getText()[statement.getDepth()])) {
-                    setAccessSpecifier(statement.getText()[statement.getDepth()]);
-                    if (statement.getText()[statement.getDepth()+1].equals(KEY_STATIC)) {
-                        setIsStatic(true);
-                        datatypeIndex = statement.getDepth()+2;
-                    } else {
-                        setIsStatic(false);
-                        datatypeIndex = statement.getDepth()+1;
-                    }
-                } else if (statement.getText()[statement.getDepth()].equals(KEY_STATIC)) {
-                    setAccessSpecifier(KEY_PROTECTED);
-                    setIsStatic(true);
-                    datatypeIndex = statement.getDepth()+1;
-                } else {
-                    setAccessSpecifier(KEY_PROTECTED);
-                    setIsStatic(false);
-                    datatypeIndex = statement.getDepth();
-                }
-
-                //Set datatype and identifier values
-                setDatatype(statement.getText()[datatypeIndex]);
-                setIdentifier(statement.getText()[datatypeIndex+1]);
-
-            // Set the value if the statement is being initialized
-            if (initialize) {
-                setValue(statement.getText()[statement.getText().length-2]);
-            }
-            }
+            //Check if the statement is a valid variable declaration
+            //If it is, set the variable's properties
+			if (matcher.matches()) {
+				setAccessSpecifier(matcher.group(1));
+				if (matcher.group(2).equals("static")) {
+					setIsStatic(true);
+				} else {
+					setIsStatic(false);
+				}
+				setDatatype(matcher.group(3));
+				setIdentifier(matcher.group(4));
+				setValue(matcher.group(6));
+			} else {
+				setToNull();
+			}
         }
+		
+		public void readAssignment(Statement statement) {
+			//Local variables
+			Matcher matcher = StatementLibrary.getMatcher(REGEX_VARIABLE_ASSIGNMENT, statement.toString());
+			
+			//Assign value
+			if (matcher.matches()) {
+				setValue(matcher.group(3));
+			}
+		}
 
-        public void setToNull() {
+        public final void setToNull() {
             setAccessSpecifier(null);
             setIsStatic(false);
             setDatatype(null);
             setIdentifier(null);
+            setSize(-1);
             this.value = null;
+        }
+    //================================================================
+
+    //Static toJava methods
+    //================================================================
+        //Convert the variable to a Java declaration string
+        public static String toJavaDeclaration(Variable variable) {
+            StringBuilder sb = new StringBuilder();
+            if (variable.getAccessSpecifier() != null) {
+                sb.append(variable.getAccessSpecifier()).append(" ");
+            }
+            if (variable.getIsStatic()) {
+                sb.append("static ");
+            }
+            sb.append(variable.getDatatype()).append(" ").append(variable.getIdentifier());
+            if (variable.getSize() > 0) {
+                sb.append("[").append(variable.getSize()).append("]");
+            }
+            if (variable.getValue() != null) {
+                sb.append(" = ").append(variable.getValue());
+            }
+            sb.append(";");
+
+            return sb.toString();
+        }
+        public static String toJavaDeclaration(Statement statement) {
+            Variable variable = new Variable(statement);
+            return toJavaDeclaration(variable);
+        }
+
+        //Convert the variable to a Java assignment string
+        public static String toJavaAssignment(Variable variable) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(variable.getIdentifier());
+
+            sb.append(" = ").append(variable.getValue()).append(";");
+
+            return sb.toString();
+        }
+        public static String toJavaAssignment(Variable variable, int index, String value) {
+            StringBuilder sb = new StringBuilder();
+
+            sb.append(variable.getIdentifier());
+            sb.append("[").append(index).append("]");
+            sb.append(" = ").append(value).append(";");
+
+            return sb.toString();
+        }
+        public static String toJavaAssignment(Variable variable, String value) {
+            variable.setValue(value);
+            return toJavaAssignment(variable);
+        }
+        public static String toJavaAssignment(Statement statement) {
+            Variable variable = new Variable(statement);
+            return toJavaAssignment(variable);
         }
     //================================================================
 }

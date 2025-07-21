@@ -57,8 +57,8 @@ public interface ConstLibrary {
 	
 	//Tokens
 		//Formatting
-		String[] TOKEN_FORMAT_TAB = {"0_TAB ", "\t"};
-		String[] TOKEN_FORMAT_ENTER = {" 0_ENTER", "\n"};
+		String TOKEN_FORMAT_TAB = "0_TAB ";
+		String TOKEN_FORMAT_ENTER = " 0_ENTER";
 
 		//Grouping operators
 		char[] TOKEN_OPERATORS_QUOTES = {'\'', '\"'};
@@ -67,10 +67,7 @@ public interface ConstLibrary {
 		char[] TOKEN_OPERATORS_SPLITTERS = {' ', ','};
 
 		//Operators
-		char TOKEN_OPERATOR_COMMA = ',';
-		char[] TOKEN_OPERATORS_SINGLE = {'*', '/', '%', '+', '-', '<', '>', '='};
-		char[][] TOKEN_OPERATORS_MULTI = {{'<', '='}, {'>', '='}, {'=', '='}, {'!', '='}};
-		char[][] TOKEN_OPERATORS_WORDS = {{'N', 'O', 'T'}, {'A', 'N', 'D'}, {'O', 'R'}};
+		String[] TOKEN_OPERATORS_CONDITIONS = {"=", "<", ">", "<=", ">=", "<>", "&&", "\\|\\|", " AND ", " OR "};
 
 	//Steps
 		//Logo

@@ -2,137 +2,106 @@
 package classes.datatypes;
 
 // Import Java Classes
-import java.util.ArrayList;
-
-// Import custom libraries
 import classes.libraries.MethodLibrary;
 
+
 public class Num implements MethodLibrary {
-	// Global constants
-	//================================================================
-		final public static Class<?> currentClass = Num.class;
-	//================================================================
-	
 	// Global variables
 	//================================================================
-		public static ArrayList<String> methodIndex = new ArrayList<String>();
-		private byte numByte;
-		private short numShort;
-		private int numInt;
-		private long numLong;
-		private float numFloat;
-		private double numDouble;
-		public String type = "";
-		public String name = "";
-		public boolean declaredAndUsed = false;
-		private boolean hasValue = true;
+	private String value = null;
+	private String[] values = null;
+	private boolean isArray; // Indicates if this is an array of values
 	//================================================================
-	
-	// Overloaded constructor to detirmine number datatype
+
+
+	// Constructors
 	//================================================================
-		public Num(String varName, byte value) {
-			type = "byte";
-			name = varName;
-			numByte = value;
-		}
-		public Num(String varName, short value) {
-			type = "short";
-			name = varName;
-			numShort = value;
-		}
-		public Num(String varName, int value) {
-			type = "int";
-			name = varName;
-			numInt = value;
-		}
-		public Num(String varName, long value) {
-			type = "long";
-			name = varName;
-			numLong = value;
-		}
-		public Num(String varName, float value) {
-			type = "float";
-			name = varName;
-			numFloat = value;
-		}
-		public Num(String varName, double value) {
-			type = "double";
-			name = varName;
-			numDouble = value;
-		}
-		public Num(String varName) {
-			name = varName;
-			hasValue = false;
-		}
+	public Num(String value) {
+		this.value = value;
+		this.values = null;
+		setIsArray(false);
+	}
+	public Num(String[] values) {
+		this.values = values;
+		this.value = null;
+		setIsArray(true);
+	}
 	//================================================================
-	
-	// Set methods
+
+
+	// Setters
 	//================================================================
-		// Overloaded set
-		public static Num set(String varName, byte value) {
-			return new Num(varName, value);
+	// Only allow updating the current mode (single or array), not switching between them
+	public void setValue(String value) {
+		if (!isArray) { // Only if this is a single-value Num
+			this.value = value;
+			setIsArray(false);
 		}
-		public static Num set(String varName, short value) {
-			return new Num(varName, value);
+	}
+	public void setValue(int index, String value) {
+		if (isArray && index >= 0 && index < this.values.length) {
+			this.values[index] = value;
+		} else {
+			throw new IndexOutOfBoundsException("Index out of bounds for values array.");
 		}
-		public static Num set(String varName, int value) {
-			return new Num(varName, value);
+	}
+	public void setValues(String[] values) {
+		if (isArray) { // Only if this is an array-value Num
+			this.values = values;
+			setIsArray(true);
 		}
-		public static Num set(String varName, long value) {
-			return new Num(varName, value);
-		}
-		public static Num set(String varName, float value) {
-			return new Num(varName, value);
-		}
-		public static Num set(String varName, double value) {
-			return new Num(varName, value);
-		}
+	}
+	private void setIsArray(boolean isArray) {
+		this.isArray = isArray;
+	}
 	//================================================================
-	
-	// Get methods
+
+
+	// Getters
 	//================================================================
-		public String getDeclaration() {
-			String declaration = "";
-			if (hasValue) {
-				switch(type) {
-					case "byte":
-						declaration = type + " " + name + " = " + numByte + ";";
-						break;
-					case "short":
-						declaration = type + " " + name + " = " + numShort + ";";
-						break;
-					case "int":
-						declaration = type + " " + name + " = " + numInt + ";";
-						break;
-					case "long":
-						declaration = type + " " + name + " = " + numLong + ";";
-						break;
-					case "float":
-						declaration = type + " " + name + " = " + numFloat + ";";
-						break;
-					case "double":
-						declaration = type + " " + name + " = " + numDouble + ";";
-						break;
-					default:
-						declaration = "Error: Num not declared";
-				}
-			} else if (!type.isEmpty()) {
-				declaration = type + " " + name + ";";
-			} else {
-				declaration = "Error: Type not yet initialized";
-			}
-			
-			return declaration;
-		}
+	public String getValue() {
+		return value;
+	}
+	public String[] getValues() {
+		return values;
+	}
+	public boolean getIsArray() {
+		return isArray;
+	}
 	//================================================================
-	
-	// Method Index output
+
+	// Methods
 	//================================================================
-		public ArrayList<String> getMethodIndex() {
-			return methodIndex;
+	@Override
+	public String toString() {
+		return MethodLibrary.toJson(this, true);
+	}
+	public int toInt() {
+		if (isArray) {
+			throw new UnsupportedOperationException("Cannot convert an array Num to int.");
 		}
-		public void printMethodIndex() {
-			MethodLibrary.displayMethodIndex(currentClass);
+		// Parse as double, then cast to int
+		return (int) Double.parseDouble(value);
+	}
+	public int[] toIntArray() {
+		if (!isArray) {
+			throw new UnsupportedOperationException("Cannot convert a single-value Num to int array.");
 		}
+		return java.util.Arrays.stream(values)
+			.mapToInt(s -> (int) Double.parseDouble(s))
+			.toArray();
+	}
+	public double toDouble() {
+		if (isArray) {
+			throw new UnsupportedOperationException("Cannot convert an array Num to double.");
+		}
+		return Double.parseDouble(value);
+	}
+	public double[] toDoubleArray() {
+		if (!isArray) {
+			throw new UnsupportedOperationException("Cannot convert a single-value Num to double array.");
+		}
+		return java.util.Arrays.stream(values).mapToDouble(Double::parseDouble).toArray();
+	}
 	//================================================================
 }

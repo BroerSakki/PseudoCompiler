@@ -1,0 +1,180 @@
+class Procedure inheritsfrom ConstLibrary, MethodLibrary
+	Declarations
+		private string accessSpecifier
+		private boolean isStatic
+		private string returnType
+		private string returnValue
+		private string identifier
+		private string parameters[]
+		private Variable externalVariables[]
+		private Variable localVariables[]
+		private Statement statements[]
+		
+	public Procedure(Array<Statement> statements)
+		if statements[0].checkIfFunctionDeclaration() is true then
+			setStatements(statements)
+			readDeclaration()
+			readReturn()
+		else
+			setToNull()
+		endif
+	return
+	
+	public Procedure(Array<Statement> statements, Array<Variable> externalVariables)
+		if statements[0].checkIfFunctionDeclaration() is true then
+			setStatements(statements)
+			readDeclaration()
+			readReturn()
+		else
+			setToNull()
+		endif
+	return
+	
+	private setAccessSpecifier(string accessSpecifier)
+		this.accessSpecifier = accessSpecifier
+	return
+	
+	private setIsStatic(boolean isStatic)
+		this.isStatic = isStatic
+	return
+	
+	private setReturnType(string returnType)
+		this.returnType = returnType
+	return
+	
+	private setReturnValue(string returnValue)
+		this.returnValue = returnValue
+	return
+	
+	private setIdentifier(string identifier)
+		this.identifier = identifier
+	return
+	
+	private setParameters(Array<string> parameters)
+		this.parameters = parameters
+	return
+	
+	private setExternalVariables(Array<Variable> externalVariables)
+		this.externalVariables = externalVariables
+	return
+	
+	private setLocalVariables(Array<string> localVariables)
+		this.localVariables = localVariables
+	return
+	
+	private setStatements(Array<Statement> statements)
+		this.statements = statements
+	return
+	
+	public getAccessSpecifier()
+	return accessSpecifier
+	
+	public getIsStatic()
+	return isStatic
+	
+	public getReturnType()
+	return returnType
+	
+	public getReturnValue()
+	return returnValue
+	
+	public getIdentifier()
+	return identifier
+	
+	public getParameters()
+	return parameters
+	
+	public getExternalVariables()
+	return externalVariables
+	
+	public getLocalVariables()
+	return localVariables
+	
+	public getStatements()
+	return statements
+	
+	private readDeclaration()
+		Declarations
+			Statement functionDeclaration
+			num identifierIndex
+			num paramStartIndex
+			string declarationString
+			string parameterString
+			string parameterArray[]
+		functionDeclaration = statements[0]
+		if containsElement(KEYS_STATEMENT_DECLARATION_START, functionDeclaration.getText()[0]) is true then
+			setAccessSpecifier(functionDeclaration.getText()[0])
+			if functionDeclaration.getText()[1].equals(KEY_STATIC) is true then
+				setIsStatic(true)
+				identifierIndex = 2
+			else
+				setIsStatic(false)
+				identifierIndex = 1
+			endif
+		else
+			setAccessSpecifier(KEY_PROTECTED)
+			setIsStatic(false)
+			identifierIndex = 0
+		endif
+		declarationString = functionDeclaration.getText()[identifierIndex]
+		paramStartIndex = declarationString.indexOf('(')) + 1
+		parameterString = declarationString.substring(paramStartIndex, declarationString.length-1)
+		setIdentifier(declarationString.substring(0, paramStartIndex-1)
+		parameterArray = String.split(",", parameterString)
+		foreach(string element : parameterArray) do
+			element = element.trim()
+		endfor
+		setParameters(parameterArray)
+	return
+	
+	private readReturn()
+		Declarations
+			string returnString
+		returnString = statements[statements.length-1].getText()
+		if returnString[0].equals(KEY_RETURN) is true then
+			if returnString[1].equals(TOKEN_FORMAT_ENTER[0]) is true then
+				setReturnType(KEY_TYPE_VOID)
+				setReturnValue(null)
+			else
+				if testReturnValue(returnString[1]) = -1 is true then
+					setReturnType("1_LITERAL")
+				else if testReturnValue(returnString[1]) = 0 is true then
+					//
+				endif
+				setReturnValue(returnString[1])
+			endif
+		else
+			setToNull()
+		endif
+	return
+	
+	private testReturnValue(string returnValue)
+		Declarations
+			num valueLocation
+			List<string> externalIdentifiers
+			List<string> localIdentifiers
+		for string varIdentifier : externalVariables.getIdentifier() do
+			externalIdentifiers.add(varIdentifier)
+		endfor
+		for string varIdentifier : localVariables.getIdentifier() do
+			localIdentifiers.add(varIdentifier)
+		endfor
+		if containsElement(localIdentifiers, returnValue) is true then
+			valueLocation = 0
+		else if containsElement(externalIdentifiers, returnValue) is true then
+			valueLocation = 1
+		else
+			valueLocation = -1
+		endif
+	return isVariable
+	
+	private setToNull()
+		setAccessSpecifier(null)
+		setIsStatic(false)
+		setReturnType(null)
+		setReturnValue(null)
+		setIdentifier(null)
+		setParameters(null)
+		setStatements(null)
+	return
+endclass

@@ -5,6 +5,7 @@ package classes.tools;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 // Import Custom Libraries
 import classes.libraries.MethodLibrary;
@@ -47,6 +48,31 @@ public class ColoringTools implements MethodLibrary
 		}
 	}
 
+	public String randomColorText(String text, boolean print)
+	{
+		Random rand = new Random();
+
+		int r = rand.nextInt(255);
+		int g = rand.nextInt(255);
+		int b = rand.nextInt(255);
+		//Set rgb colors using R, G, B values
+		String ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
+		
+		//Resets cmd color to default
+		String ANSI_RESET = "\033[0m";
+		
+		//Creates colored text
+		String recoloredText = ANSI_COLOR + text + ANSI_RESET;
+
+		if (print) {
+			System.out.print(recoloredText);
+			return "";
+		} else {
+			//Returns colored text
+			return recoloredText;
+		}
+	}
+
 	/**
 	 * Changes and returns color of text character
 	 * @param character The character to recolor
@@ -64,6 +90,31 @@ public class ColoringTools implements MethodLibrary
 		//Creates colored text
 		String recoloredCharacter = ANSI_COLOR + character + ANSI_RESET;
 		
+		if (print) {
+			System.out.print(recoloredCharacter);
+			return "";
+		} else {
+			//Returns colored text
+			return recoloredCharacter;
+		}
+	}
+
+	public String randomColorChar(char character, boolean print)
+	{
+		Random rand = new Random();
+
+		int r = rand.nextInt(255);
+		int g = rand.nextInt(255);
+		int b = rand.nextInt(255);
+		//Set rgb colors using R, G, B values
+		String ANSI_COLOR = "\033[38;2;" + r + ";" + g + ";" + b + "m";
+		
+		//Resets cmd color to default
+		String ANSI_RESET = "\033[0m";
+		
+		//Creates colored text
+		String recoloredCharacter = ANSI_COLOR + character + ANSI_RESET;
+
 		if (print) {
 			System.out.print(recoloredCharacter);
 			return "";

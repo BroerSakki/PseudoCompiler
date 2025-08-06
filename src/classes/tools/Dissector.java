@@ -256,8 +256,8 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 			List<String> words;
 
 			//Set up formatted line
-			formattedLine = line.replaceAll(TOKEN_FORMAT_TAB[1], TOKEN_FORMAT_TAB[0]);
-			formattedLine = formattedLine.concat(TOKEN_FORMAT_ENTER[0]);
+			formattedLine = line.replaceAll("\t", TOKEN_FORMAT_TAB);
+			formattedLine = formattedLine.concat(TOKEN_FORMAT_ENTER);
 
 			//Group formatted text based on punctuation
 			lineGroup = new Grouper(formattedLine);

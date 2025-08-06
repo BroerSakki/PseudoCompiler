@@ -1,166 +1,158 @@
-# Makefile for compiling Java program
+# Makefile for Compiling Java Program
 
-SHELL := cmd.exe
+# Set Terminal Specific Commands
+#======================================================================================================================================================
+# Detect if running in WSL
+IS_WSL := $(shell uname -r 2>/dev/null | grep -i -E 'microsoft|WSL')
 
-# Source Directory
-SRC_DIR := src
+# Default to Windows commands if OS is Windows_NT, unless WSL is detected
+ifeq ($(OS),Windows_NT)
+ifneq ($(IS_WSL),)
+# WSL (Unix-like commands)
+RM := rm -f
+MKDIR := mkdir -p
+CLEAR := clear
+CLEAN := find . -type f -name "*.class" -delete
+DELAY := sleep 1
+else
+# Windows (cmd.exe or PowerShell)
+RM := del /Q
+MKDIR := mkdir
+CLEAR := cls
+CLEAN := for /R %%d in (*.class) do del /Q "%%d"
+DELAY := ping -n 2 127.0.0.1 >nul
+endif
+else
+# Unix-like shell (bash, sh, etc.)
+RM := rm -f
+MKDIR := mkdir -p
+CLEAR := clear
+CLEAN := find . -type f -name "*.class" -delete
+DELAY := sleep 1
+endif
+#======================================================================================================================================================
 
+# Global Variables
+#======================================================================================================================================================
+#Directories
+DIR_SRC := src
+DIR_LIB := src/classes/libraries/
+DIR_DATATYPES := src/classes/datatypes/
+DIR_TOOLS := src/classes/tools/
 
-# Output Directories
-DIR_LIB = src/classes/libraries/
-DIR_DATATYPES = src/classes/datatypes/
-DIR_TOOLS = src/classes/tools/
-
-
-# Source files
+#Source Files
 SOURCES_LIBRARIES = $(DIR_LIB)ConstLibrary.java $(DIR_LIB)ColorLibrary.java $(DIR_LIB)MethodLibrary.java $(DIR_LIB)StatementLibrary.java
 SOURCES_DATATYPES = $(DIR_DATATYPES)Num.java $(DIR_DATATYPES)Statement.java $(DIR_DATATYPES)Variable.java
 SOURCES_TOOLS = $(DIR_TOOLS)Directories.java $(DIR_TOOLS)ColoringTools.java $(DIR_TOOLS)StartupTools.java $(DIR_TOOLS)Grouper.java $(DIR_TOOLS)Formatter.java $(DIR_TOOLS)Dissector.java
 SOURCE_MAIN = src/Main.java
 
+#Class Files
+CLASS_MAIN = $(SOURCE_MAIN:$(DIR_SRC)/%.java=$(DIR_SRC)/%.class)
+CLASSES_LIBRARIES = $(SOURCES_LIBRARIES:$(DIR_SRC)/%.java=$(DIR_SRC)/%.class)
+CLASSES_DATATYPES = $(SOURCES_DATATYPES:$(DIR_SRC)/%.java=$(DIR_SRC)/%.class)
+CLASSES_TOOLS = $(SOURCES_TOOLS:$(DIR_SRC)/%.java=$(DIR_SRC)/%.class)
 
-# Class files (replace .java with .class)
-CLASS_MAIN = $(SOURCE_MAIN:$(SRC_DIR)/%.java=$(SRC_DIR)/%.class)
-CLASSES_LIBRARIES = $(SOURCES_LIBRARIES:$(SRC_DIR)/%.java=$(SRC_DIR)/%.class)
-CLASSES_DATATYPES = $(SOURCES_DATATYPES:$(SRC_DIR)/%.java=$(SRC_DIR)/%.class)
-CLASSES_TOOLS = $(SOURCES_TOOLS:$(SRC_DIR)/%.java=$(SRC_DIR)/%.class)
-
-
-# Compiler and Compile Flags
+#Compiler and Run Flags
 JC := javac
 JVM := java
-JC_FLAGS := -d $(SRC_DIR)/ -cp $(SRC_DIR)/
+JC_FLAGS := -d $(DIR_SRC)/ -cp $(DIR_SRC)/
+#======================================================================================================================================================
+
+# Message Variables
+#======================================================================================================================================================
+HELP_MAKE := "make:			Reset, recompile and run PseudoCompiler"
+HELP_MAKE_CLEAN := "make clean:			Remove all .class files"
+HELP_MAKE_RUN := "make run:			Run Main class of PseudoCompiler"
+HELP_MAKE_BUILD := "make build:			Compile all java code"
+HELP_MAKE_CLEAR := "make clear:			Clear the terminal"
+#======================================================================================================================================================
 
 # Suffixes
+#======================================================================================================================================================
 .SUFFIXES: .java
+#======================================================================================================================================================
 
-# Target that does not produce output files
-.PHONY: all clean
-
-# Default targets
+# Base Commands
+#======================================================================================================================================================
+#Default
 all: new clear_all run
+run:
+	@java -cp src Main
 
-update: clear_update build_clear run
-
-# Build all required .class files
-build: print_new libraries datatypes tools main clear_build print_compile_success wait_build
-
-
-# Build all required .class files
-build_clear: build clear_buildcl
-
-# Rebuild program
+#Updates
 new: clear_new1 clean clear_new2 print_new build
 
-# Build Main Class
-main: $(CLASS_MAIN)
-$(CLASS_MAIN): $(SRC_DIR)/%.class: $(SRC_DIR)/%.java
-	$(JC) $(JC_FLAGS) $<
-	
-# Build Libraries Directory
-libraries: $(CLASSES_LIBRARIES)
-$(CLASSES_LIBRARIES): $(SRC_DIR)/%.class: $(SRC_DIR)/%.java
-	$(JC) $(JC_FLAGS) $<
-	
-# Build Datatypes Directory
-datatypes: $(CLASSES_DATATYPES)
-$(CLASSES_DATATYPES): $(SRC_DIR)/%.class: $(SRC_DIR)/%.java
-	$(JC) $(JC_FLAGS) $<
-	
-# Build Tools Directory
-tools: $(CLASSES_TOOLS)
-$(CLASSES_TOOLS): $(SRC_DIR)/%.class: $(SRC_DIR)/%.java
-	$(JC) $(JC_FLAGS) $<
+#Build
+build: print_new libraries datatypes tools main clear_build print_compile_success wait_build
+build_clear: build clear_buildcl
+#======================================================================================================================================================
 
-
-
-# List all classes
-list_classes:
-	@echo "Listing all .class files:"
-	dir /S *.class
-
-
-
-# Clean up any output files
-clean: clear_clean1 print_clean run_clean wait_clean1 clear_clean2 print_clean_success wait_clean2
-	
-run_clean:
-	@for /R %%d in (*.class) do del /Q "%%d"
-
-
-
-# Clear screen
-clear_all:
-	@cmd /c cls
-
-clear_update:
-	@cmd /c cls
-
-clear_build:
-	@cmd /c cls
-	
-clear_buildcl:
-	@cmd /c cls
-
-clear_new1:
-	@cmd /c cls
-
-clear_new2:
-	@cmd /c cls
-
-clear_clean1:
-	@cmd /c cls
-
-clear_clean2:
-	@cmd /c cls
-
-
-
-# Print echo statements
+# Formatting Commands
+#======================================================================================================================================================
+#Print
 print_execute:
 	@echo "Executing Main Program"
-
 print_clean:
 	@echo "Removing all .class files..."
-
 print_clean_success:
 	@echo "Class files removed successfully"
-
 print_new:
 	@echo "Building new files..."
-
 print_compile_success:
 	@echo "Compiled successfully"
-
-
-
-# Wait 1 second
-wait_build:
-	@ping -n 2 127.0.0.1 >nul
-
-wait_clean1:
-	@ping -n 2 127.0.0.1 >nul
-
-wait_clean2:
-	@ping -n 2 127.0.0.1 >nul
-
-wait_run:
-	@ping -n 2 127.0.0.1 >nul
-
-
-
-# Name and explain necessary commands
 help:
-	@echo "Run 'make':			Creates then runs all .class files"
-	@echo "Run 'make list_classes':	Print all .class files"
-	@echo "Run 'make clean':		Deletes all .class files"
-	@echo "Run 'make run':		Run the compiled program"
-	@echo "Run 'make <directory name>':	Compile all files from <directory name>"
-	@echo "Run 'make  build':		Compile all java code"
-	@echo "Run 'make build_clear':	Compile all java code then clear the terminal"
-	@echo "Run 'make clear':		Clear the terminal"
-	
+	@echo $(HELP_MAKE)
+	@echo $(HELP_MAKE_CLEAN)
+	@echo $(HELP_MAKE_RUN)
+	@echo $(HELP_MAKE_BUILD)
+	@echo $(HELP_MAKE_CLEAR)
 
+#Clear
+clear_all:
+	$(CLEAR)
+clear_update:
+	$(CLEAR)
+clear_build:
+	$(CLEAR)
+clear_buildcl:
+	$(CLEAR)
+clear_new1:
+	$(CLEAR)
+clear_new2:
+	$(CLEAR)
+clear_clean1:
+	$(CLEAR)
+clear_clean2:
+	$(CLEAR)
 	
-run: print_execute wait_run
-	@java -cp src Main
+#Wait
+wait_build:
+	@$(DELAY)
+wait_clean1:
+	@$(DELAY)
+wait_clean2:
+	@$(DELAY)
+wait_run:
+	@$(DELAY)
+	
+#Clean
+clean_execute:
+	@$(CLEAN)
+clean: clear_clean1 print_clean clean_execute wait_clean1 clear_clean2 print_clean_success wait_clean2
+#======================================================================================================================================================
+
+# Library Build Commands
+#======================================================================================================================================================
+main: $(CLASS_MAIN)
+$(CLASS_MAIN): $(DIR_SRC)/%.class: $(DIR_SRC)/%.java
+	$(JC) $(JC_FLAGS) $<
+libraries: $(CLASSES_LIBRARIES)
+$(CLASSES_LIBRARIES): $(DIR_SRC)/%.class: $(DIR_SRC)/%.java
+	$(JC) $(JC_FLAGS) $<
+datatypes: $(CLASSES_DATATYPES)
+$(CLASSES_DATATYPES): $(DIR_SRC)/%.class: $(DIR_SRC)/%.java
+	$(JC) $(JC_FLAGS) $<
+tools: $(CLASSES_TOOLS)
+$(CLASSES_TOOLS): $(DIR_SRC)/%.class: $(DIR_SRC)/%.java
+	$(JC) $(JC_FLAGS) $<
+#======================================================================================================================================================

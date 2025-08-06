@@ -79,7 +79,7 @@ class Dissector inheritsfrom ConstLibrary, MethodLibrary
 	private setPerStatement(Array<Statement> perStatement)
 		this.perStatement = perStatement
 	return
-	
+
 	private setIndexPairs()
 		if fileExists is true then
 			Declarations

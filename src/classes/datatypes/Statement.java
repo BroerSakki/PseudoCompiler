@@ -3,11 +3,10 @@ package classes.datatypes;
 
 import classes.libraries.MethodLibrary;
 import classes.libraries.StatementLibrary;
+import classes.tools.Grouper;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Statement implements MethodLibrary, StatementLibrary {
     // Global variables
@@ -16,7 +15,6 @@ public class Statement implements MethodLibrary, StatementLibrary {
         private final List<String> keywords;
         private int depth;
         private int textPos;
-        private int codePos;
     //================================================================
 
     // Constructor
@@ -25,7 +23,19 @@ public class Statement implements MethodLibrary, StatementLibrary {
             keywords = new ArrayList<>();
             mutateBase(text);
             setTextPos(textPos);
-            setCodePos(-1);
+        }
+		public Statement(String[] text) {
+            keywords = new ArrayList<>();
+            mutateBase(text);
+			setTextPos(-1);
+        }
+		public Statement(String text) {
+			//Local variables
+			Grouper group = new Grouper(text);
+			String[] words = group.getFinalText().toArray(String[]::new);
+            keywords = new ArrayList<>();
+            mutateBase(words);
+            setTextPos(-1);
         }
     //================================================================
 
@@ -39,9 +49,6 @@ public class Statement implements MethodLibrary, StatementLibrary {
         }
         private void setTextPos(int textPos) {
             this.textPos = textPos;
-        }
-        private void setCodePos(int codePos) {
-            this.codePos = codePos;
         }
     //================================================================
 
@@ -65,17 +72,18 @@ public class Statement implements MethodLibrary, StatementLibrary {
         public List<String> getKeywords() {
             return keywords;
         }
-        public String getKeyword(int index) {
-            return keywords.get(index);
-        }
         public int getDepth() {
             return depth;
         }
         public int getTextPos() {
             return textPos;
         }
-        public int getCodePos() {
-            return codePos;
+        @Override
+        public String toString() {
+            return String.join(" ", getText());
+        }
+        public String toString(String delimiter) {
+            return String.join(delimiter, getText());
         }
     //================================================================
 
@@ -87,21 +95,6 @@ public class Statement implements MethodLibrary, StatementLibrary {
                     addKeyword(match);
                 }
             }
-        }
-
-        public boolean checkIfFunctionDeclaration() {
-            //Local variables
-            boolean isFunctionDeclaration = false;
-            String testString = String.join(" ", getText());
-            String regex = "^((public|private|protected)\\s+(static\\s+)?)?\\w+\\((\\w+\\s+\\w+\\s*[,;]?(\\s*)?)*\\)\\s*(0_ENTER)$";
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(testString);
-
-            if (matcher.matches()) {
-                isFunctionDeclaration = true;
-            }
-
-            return isFunctionDeclaration;
         }
     //================================================================
 }

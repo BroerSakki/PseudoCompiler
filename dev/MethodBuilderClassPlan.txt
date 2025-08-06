@@ -1,0 +1,32 @@
+class MethodBuilder inheritsfrom MethodLibrary, StatementLibrary
+	Declarations
+		private Statement head
+		private Statement body[]
+		private string tail
+		private string returnValue
+		
+	public MethodBuilder()
+		Declarations
+			Statement emptyArr[]
+		emptyArr = null
+		methodBuilder(emptyArr)
+	return
+	
+	public MethodBuilder(Array<Statement> body)
+		Declarations
+			Statement declarationMain
+		declarationMain = new Statement("public static void main(String[] args)")
+		MethodBuilder(declarationMain, body, null)
+	return
+	
+	public MethodBuilder(Statement head)
+		MethodBuilder(head, null, null)
+	return
+	
+	public MethodBuilder(Statement head, Array<Statement> body, returnValue)
+		setHead(head)
+		setBody(body)
+		setReturnValue(returnValue)
+		setTail()
+	return
+endclass

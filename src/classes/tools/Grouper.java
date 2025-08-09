@@ -86,13 +86,8 @@ public class Grouper implements MethodLibrary {
     // Mutators
     //================================================================
         /**
-         * <h4>Condition 1</h4>
-         * Sets the inBrackets variable to false if both of the bracketDepth elements are equal to 0
-         * <h4>Condition 2</h4>
-         * Sets the inBrackets variable to true if either bracketDepth elements are greater than 0
-         * <h4>Exception</h4>
-         * Prints an error message and resets all bracketDepth elements to 0 if conditions 1 and 2 are both false
-         */
+		 * Mutate the inBrackets variable based on the current state of bracketDepth
+		 */
         public void mutateInBrackets() {
             if (bracketDepth[0] == 0 && bracketDepth[1] == 0) {
                 setInBrackets(false);
@@ -106,9 +101,9 @@ public class Grouper implements MethodLibrary {
         }
 
         /**
-         * Increase or decrease the correct bracketDepth element based on opening or closing respective brackets
-         * @param c Char variable to test and compare to cases
-         */
+		 * Mutate the bracketDepth variable based on the current character
+		 * @param c Character to be analyzed
+		 */
         public void mutateBracketDepth(char c) {
             switch (c) {
                 case '(' -> bracketDepth[0]++;
@@ -122,9 +117,11 @@ public class Grouper implements MethodLibrary {
     // Work methods
     //================================================================
         /**
-         * Determine the charicaristics of the chosen character and assign it accordingly
-         * @param c Char to be analized and possibly added to current and or result
-         */
+		 * Check if a character is in the given array of characters
+		 * @param arr Array of characters to check against
+		 * @param c Character to check
+		 * @return true if the character is in the array, false otherwise
+		 */
         private void findCriteria(char c) {
             if (containsElement(TOKEN_OPERATORS_QUOTES, c)) {
                 if (!inQuotes) {

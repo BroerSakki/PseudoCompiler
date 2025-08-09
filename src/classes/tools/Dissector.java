@@ -80,6 +80,7 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 		// Overloaded setFileName
 		private void setFileName(String fileName) {
 			this.fileName = fileName;
+			buildFileName();
 		}
 		private void setFileName(Path filePath) {
 			this.fileName = filePath.getFileName().toString();
@@ -182,30 +183,66 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 
 	// Getters
 	//================================================================
+		/**
+		 * Returns whether the file exists or not.
+		 * @return boolean indicating if the file exists.
+		 */
 		public boolean getFileExists() {
 			return this.fileExists;
 		}
+		/**
+		 * Returns the text file being dissected.
+		 * @return File object representing the text file.
+		 */
 		public File getTextFile() {
 			return this.textFile;
 		}
+		/**
+		 * Returns the name of the file being dissected.
+		 * @return String representing the file name.
+		 */
 		public String getFileName() {
 			return this.fileName;
 		}
+		/**
+		 * Returns the number of lines in the text file.
+		 * @return int representing the number of lines.
+		 */
 		public int getNumLines() {
 			return this.numLines;
 		}
+		/**
+		 * Returns the number of functions found in the text file.
+		 * @return int representing the number of functions.
+		 */
 		public int getNumFunctions() {
 			return this.numFunctions;
 		}
+		/**
+		 * Returns the base text of the file as an array of strings.
+		 * @return String array containing the lines of text.
+		 */
 		public String[] getBaseText() {
 			return this.baseText;
 		}
+		/**
+		 * Returns the statements parsed from the text file.
+		 * @return Statement array containing the parsed statements.
+		 */
 		public Statement[] getPerStatement() {
 			return this.perStatement;
 		}
+		/**
+		 * Returns the indeces of start and stop of the pseudocode.
+		 * @return int array containing the start and stop indices.
+		 */
 		public int[] getStartStopIndexPair() {
 			return this.startStopIndexPair;
 		}
+		/**
+		 * Returns the pairs of function declaration and return indices.
+		 * @return 2D int array where each row contains a declaration index and a return index.
+		 */
 		public int[][] getFunctionReturnIndexPairs() {
 			return this.functionReturnIndexPairs;
 		}
@@ -312,6 +349,65 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 
 			//Close the reader
 			reader.close();
+		}
+		
+		/**
+		 * Builds the file name by ensuring it is not null or empty and appending ".txt" if necessary.
+		 * Throws IllegalArgumentException if the file name is invalid.
+		 */
+		private void buildFileName() {
+			if (fileName == null || fileName.isEmpty()) {
+				throw new IllegalArgumentException("File name cannot be null or empty");
+			} else if (!fileName.endsWith(".txt")) {
+				fileName += ".txt"; // Ensure the file name ends with .txt
+			}
+		}
+	//================================================================
+		
+	// Print Methods
+	//================================================================
+		/**
+		 * Returns a string representation of the Dissector object.
+		 * @return String containing details about the file and its contents.
+		 */
+		@Override
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Dissector for file: ").append(fileName).append("\n");
+			sb.append("File exists: ").append(fileExists).append("\n");
+			sb.append("Number of lines: ").append(numLines).append("\n");
+			sb.append("Number of functions: ").append(numFunctions).append("\n");
+			sb.append("Base text:\n");
+			for (String line : baseText) {
+				sb.append(line).append("\n");
+			}
+			return sb.toString();
+		}
+		
+		/**
+		 * Prints the base text of the file.
+		 */
+		public void printBaseText() {
+			if (fileExists) {
+				for (String line : baseText) {
+					System.out.println(line);
+				}
+			} else {
+				System.out.println("Error: File does not exist");
+			}
+		}
+
+		/**
+		 * Prints the statements parsed from the file.
+		 */
+		public void printStatements() {
+			if (fileExists) {
+				for (Statement statement : perStatement) {
+					System.out.println(statement);
+				}
+			} else {
+				System.out.println("Error: File does not exist");
+			}
 		}
 	//================================================================
 }

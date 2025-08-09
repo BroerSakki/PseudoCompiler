@@ -12,8 +12,6 @@ import classes.libraries.MethodLibrary;
 public class Formatter implements MethodLibrary {
 	// Declarations
 	//================================================================
-		final public static Class<?> currentClass = Formatter.class;
-		public static ArrayList<String> methodIndex = new ArrayList<>();
 		private static int spaceTop = 0;
 		private static int spaceBottom = 0;
 		private static final ColoringTools coloring = new ColoringTools();
@@ -150,24 +148,6 @@ public class Formatter implements MethodLibrary {
 			coloring.dynamicGradientText(line, rgb1, rgb2, false, true);
 			System.out.println();
 			space(spaceBottom);
-		}
-	//================================================================
-	
-	// Constructor
-	//================================================================
-		public Formatter() {
-			List<String> list = Arrays.asList(MethodLibrary.returnMethodIndex(currentClass));
-			methodIndex = new ArrayList<>(list);
-		}
-	//================================================================
-	
-	// Method Index output
-	//================================================================
-		public ArrayList<String> getMethodIndex() {
-			return methodIndex;
-		}
-		public void printMethodIndex() {
-			MethodLibrary.displayMethodIndex(currentClass);
 		}
 	//================================================================
 }

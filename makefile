@@ -109,21 +109,21 @@ help:
 
 #Clear
 clear_all:
-	$(CLEAR)
+	@$(CLEAR)
 clear_update:
-	$(CLEAR)
+	@$(CLEAR)
 clear_build:
-	$(CLEAR)
+	@$(CLEAR)
 clear_buildcl:
-	$(CLEAR)
+	@$(CLEAR)
 clear_new1:
-	$(CLEAR)
+	@$(CLEAR)
 clear_new2:
-	$(CLEAR)
+	@$(CLEAR)
 clear_clean1:
-	$(CLEAR)
+	@$(CLEAR)
 clear_clean2:
-	$(CLEAR)
+	@$(CLEAR)
 	
 #Wait
 wait_build:

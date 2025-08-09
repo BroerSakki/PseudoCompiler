@@ -66,22 +66,47 @@ public class Statement implements MethodLibrary, StatementLibrary {
 
     // Getters
     //================================================================
+        /**
+		 * Returns the final text of the statement
+		 * @return String[] representing the text of the statement
+		 */
         public String[] getText() {
             return text;
         }
-        public List<String> getKeywords() {
+        /**
+         * Returns the keywords found in the statement
+         * @return List<String> containing the keywords
+         */
+         public List<String> getKeywords() {
             return keywords;
         }
-        public int getDepth() {
+        /**
+         * Returns the amount of tabulations in the statement, which is used to determine the depth of the statement
+         * @return int representing the depth of the statement
+         */
+         public int getDepth() {
             return depth;
         }
+        /**
+		 * Returns the position of the statement in the text, if available
+		 * @return int representing the position of the statement in the text, or -1 if not set
+		 */
         public int getTextPos() {
             return textPos;
         }
+        /**
+         * Returns the text of the statement as a single String
+		 * @return String representing the text of the statement
+         */
         @Override
         public String toString() {
             return String.join(" ", getText());
         }
+        /**
+		 * Returns the text of the statement as a single String with a specified delimiter
+		 * @param delimiter String to be used as a delimiter between words
+		 * @return String representing the text of the statement with the specified delimiter
+		 */
         public String toString(String delimiter) {
             return String.join(delimiter, getText());
         }

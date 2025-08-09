@@ -6,8 +6,6 @@ package classes.libraries;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
 public interface StatementLibrary {
     // Keywords
         String KEY_START = "start";
@@ -74,6 +72,12 @@ public interface StatementLibrary {
         return  matcher.matches();
     }
 
+    /**
+	 * Get a Matcher object for a given regex and test string
+	 * @param regex The regex pattern to compile
+	 * @param testString The string to match against the regex
+	 * @return Matcher object that can be used to find matches in the test string
+	 */
     public static Matcher getMatcher(String regex, String testString) {
         //Local variables
         Pattern pattern = Pattern.compile(regex);

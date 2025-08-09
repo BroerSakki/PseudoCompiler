@@ -56,21 +56,45 @@ public class Variable implements MethodLibrary, StatementLibrary {
 
     // Getters
     //================================================================
+        /**
+         * Get the access specifier of the variable
+         * @return
+         */
         public String getAccessSpecifier() {
             return accessSpecifier;
         }
+        /**
+		 * Get if the variable is static
+		 * @return boolean indicating if the variable is static
+		 */
         public boolean getIsStatic() {
             return isStatic;
         }
+        /**
+		 * Get the datatype of the variable
+		 * @return String representing the datatype of the variable
+		 */
         public String getDatatype() {
             return datatype;
         }
+        /**
+         * Get the identifier of the variable
+         * @return String representing the identifier of the variable
+         */
         public String getIdentifier() {
             return identifier;
         }
+        /**
+		 * Get the value of the variable
+		 * @return String representing the value of the variable
+		 */
         public String getValue() {
             return value;
         }
+        /**
+		 * Get the size of the variable (for arrays)
+		 * @return int representing the size of the variable
+		 */
         public int getSize() {
             return  size;
         }
@@ -124,6 +148,11 @@ public class Variable implements MethodLibrary, StatementLibrary {
     //Static toJava methods
     //================================================================
         //Convert the variable to a Java declaration string
+        /**
+         * Convert a Variable object to a Java declaration string
+         * @param variable Variable object to be converted
+         * @return String representing the Java declaration of the variable
+         */
         public static String toJavaDeclaration(Variable variable) {
             StringBuilder sb = new StringBuilder();
             if (variable.getAccessSpecifier() != null) {
@@ -143,12 +172,23 @@ public class Variable implements MethodLibrary, StatementLibrary {
 
             return sb.toString();
         }
+        
+        /**
+         * Convert a Statement object to a Java declaration string
+         * @param statement Statement object to be converted
+         * @return String representing the Java declaration of the variable
+         */
         public static String toJavaDeclaration(Statement statement) {
             Variable variable = new Variable(statement);
             return toJavaDeclaration(variable);
         }
 
         //Convert the variable to a Java assignment string
+        /**
+		 * Convert a Variable object to a Java assignment string
+		 * @param variable Variable object to be converted
+		 * @return String representing the Java assignment of the variable
+		 */
         public static String toJavaAssignment(Variable variable) {
             StringBuilder sb = new StringBuilder();
             sb.append(variable.getIdentifier());
@@ -157,6 +197,14 @@ public class Variable implements MethodLibrary, StatementLibrary {
 
             return sb.toString();
         }
+        
+        /**
+		 * Convert a Variable object to a Java assignment string with an index
+		 * @param variable Variable object to be converted
+		 * @param index Index of the variable in an array
+		 * @param value Value to be assigned to the variable at the specified index
+		 * @return String representing the Java assignment of the variable at the specified index
+		 */
         public static String toJavaAssignment(Variable variable, int index, String value) {
             StringBuilder sb = new StringBuilder();
 
@@ -166,10 +214,23 @@ public class Variable implements MethodLibrary, StatementLibrary {
 
             return sb.toString();
         }
+        
+        /**
+		 * Convert a Variable object to a Java assignment string with a value
+		 * @param variable Variable object to be converted
+		 * @param value Value to be assigned to the variable
+		 * @return String representing the Java assignment of the variable with the specified value
+		 */
         public static String toJavaAssignment(Variable variable, String value) {
             variable.setValue(value);
             return toJavaAssignment(variable);
         }
+        
+        /**
+		 * Convert a Statement object to a Java assignment string
+		 * @param statement Statement object to be converted
+		 * @return String representing the Java assignment of the variable
+		 */
         public static String toJavaAssignment(Statement statement) {
             Variable variable = new Variable(statement);
             return toJavaAssignment(variable);

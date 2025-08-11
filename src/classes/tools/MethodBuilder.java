@@ -111,20 +111,24 @@ public class MethodBuilder {
 		private void checkReturnValue() {
 			if (head.getKeywords().contains("void") && returnValue != null) {
 				this.returnValue = null; // If the method is void, returnValue should be null
+			} else if (returnValue == null) {
+				if (head.getKeywords().contains("string")) {
+					this.returnValue = "null";
+				}
 			}
 		}
 		
 		@Override
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
-			sb.append(head.toString()).append("\n{\n");
+			sb.append("\t").append(head.toString()).append("\n\t{\n");
 			for (Statement stmt : body) {
-				sb.append("    ").append(stmt.toString()).append("\n");
+				sb.append(stmt.getDepthTabs()).append("\t").append(stmt.toString()).append("\n");
 			}
 			if (returnValue != null) {
-				sb.append("\treturn ").append(returnValue).append(";\n");
+				sb.append("\t\treturn ").append(returnValue).append(";\n");
 			}
-			sb.append("}");
+			sb.append("\t}");
 			return sb.toString();
 		}
 	//================================================================

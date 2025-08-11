@@ -104,7 +104,7 @@ public class Variable implements MethodLibrary, StatementLibrary {
     //================================================================
         private void readDeclaration(Statement statement) {
             //Local variables
-			Matcher matcher = StatementLibrary.getMatcher(REGEX_VARIABLE_DECLARATION, statement.toString());
+			Matcher matcher = statement.getMatcher(REGEX_VARIABLE_DECLARATION, statement.toString());
 			
 			//Declare Variable
 
@@ -127,7 +127,7 @@ public class Variable implements MethodLibrary, StatementLibrary {
 		
 		public void readAssignment(Statement statement) {
 			//Local variables
-			Matcher matcher = StatementLibrary.getMatcher(REGEX_VARIABLE_ASSIGNMENT, statement.toString());
+			Matcher matcher = statement.getMatcher(REGEX_VARIABLE_ASSIGNMENT, statement.toString());
 			
 			//Assign value
 			if (matcher.matches()) {

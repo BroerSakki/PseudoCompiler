@@ -41,22 +41,16 @@ public interface StatementLibrary {
     String[] KEYS_STATEMENT_IO = {KEY_INPUT, KEY_OUTPUT};
 
     // Regex collections
-    String REGEX_MAIN_DECLARATION = "^(?:start)\\s+(?:0_ENTER)$";
-    String REGEX_MAIN_STOP = "^(?:stop)\\s+(?:0_ENTER)$";
+    String REGEX_MAIN_DECLARATION = "^(?:0_TAB\\s+)(?:start)\\s+(?:0_ENTER)$";
+    String REGEX_MAIN_STOP = "^(?:0_TAB\\s+)(?:stop)\\s+(?:0_ENTER)$";
   
-    String REGEX_FUNCTION_DECLARATION = "^(?:(public|private|protected)\\s+)?(static\\s+)?(\\w+)(?:\\((\\s*(?:(?:boolean|num|string)\\s+)(?:\\w+\\s*)(?:(?:[,:]\\s*)(?:(?:boolean|num|string)\\s+)(?:\\w+\\s*))*)?\\)\\s+)(?:0_ENTER)";
-    String REGEX_FUNCTION_RETURN = "^(?:return\\s+)(\\w+\\s+)?(?:0_ENTER)$";
-  
-    String REGEX_VARIABLE_DECLARATION = "^(?:0_TAB\\s+)+(?:(public|private|protected)\\s+)?(?:(static)\\s+)?(?:(boolean|num|string)\\s+)(?:(\\w+)(?:\\[(?:(\\w+))\\])?\\s*)(?:(?:=\\s*)((?:(?:\\w+\\s*)|(?:\"(?:[^\"]*)\"))(?:" + "(?:,\\s*(?:(?:\\w+)|(?:\"(?:[^\"]*)\"))\\s*)*" + ")))?(?:\\s+)(?:0_ENTER)$";
-    String REGEX_VARIABLE_ASSIGNMENT = "^(?:0_TAB\\s+)+(\\w+)(?:\\[(\\s*\\w+\\s*)\\])?(?:\\s*)(?:=\\s*)(((?:\\w+)|(?:(?:\"[?:^\"]*)\"))\\s+)(?:0_ENTER)$";
+    String REGEX_VARIABLE_DECLARATION = "^(?:0_TAB\\s+)*(?:(public|private|protected)\\s+)?(?:(static)\\s+)?(?:(boolean|num|string)\\s+)(?:(\\w+)(?:\\[(?:(\\w+))\\])?\\s*)(?:(?:=\\s*)((?:(?:\\w+\\s*)|(?:\"(?:[^\"]*)\"))(?:" + "(?:,\\s*(?:(?:\\w+)|(?:\"(?:[^\"]*)\"))\\s*)*" + ")))?(?:\\s+)(?:0_ENTER)$";
+    String REGEX_VARIABLE_ASSIGNMENT = "^(?:0_TAB\\s+)*(\\w+)(?:\\[(\\s*\\w+\\s*)\\])?(?:\\s*)(?:=\\s*)(((?:\\w+)|(?:(?:\"[?:^\"]*)\"))\\s+)(?:0_ENTER)$";
     
     String REGEX_IO = "^(?:0_TAB\\s+)+(?:(input|output)\\s+)(?:(?:\\w+|(?:\"[^\"]*)\"\\s*)(?:([,;]\\s*)(?:\\w+|(?:\"[^\"]*)\")\\s*)*\\s+)(?:0_ENTER)$";
     String REGEX_IO_INPUT = "^(?:0_TAB\\s+)+(?:input\\s+)(\\w+\\s+)(?:0_ENTER)$";
     String REGEX_IO_OUTPUT = "^(?:0_TAB\\s+)+(?:output\\s+)((?:\\w+|(?:\"[^\"]*)\"\\s*)(?:([,;]\\s*)(?:\\w+|(?:\"[^\"]*)\")\\s*)*\\s+)(?:0_ENTER)$";
     
-    String REGEX_LOOP_WHILE = "^(0_TAB\\s+)*(while\\s+)(((NOT\\s+)?(\\w+|(\"([^\"])\"))(\\s*(" + String.join("|", ConstLibrary.TOKEN_OPERATORS_CONDITIONS) + "))\\s*(NOT\\s+)?(\\w+|(\"([^\"]*)\")))*\\s+)(is\\s+(true|false)\\s+)(do\\s+)(0_ENTER)$";
-    String REGEX_LOOP_FOR = "^(?:0_TAB\\s+)*(?:for\\s+)(\\w+\\s*)(?:=\\s*)(\\d+\\s+)(?:to\\s+)(\\w+\\s+)((?:step\\s+)(\\d+\\s+))?(?:do\\s+)?(?:0_ENTER)$";
-
     // Regex comparisons
     /**
      * Use regex to test a string
@@ -64,7 +58,7 @@ public interface StatementLibrary {
      * @param testString
      * @return True if the String matches, false if the String does not
      */
-    public static boolean compareRegex(String regex, String testString) {
+    default boolean compareRegex(String regex, String testString) {
         //Local variables
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(testString);
@@ -78,7 +72,7 @@ public interface StatementLibrary {
 	 * @param testString The string to match against the regex
 	 * @return Matcher object that can be used to find matches in the test string
 	 */
-    public static Matcher getMatcher(String regex, String testString) {
+    default Matcher getMatcher(String regex, String testString) {
         //Local variables
         Pattern pattern = Pattern.compile(regex);
 

@@ -7,6 +7,7 @@ import classes.tools.Grouper;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
 
 public class Statement implements MethodLibrary, StatementLibrary {
     // Global variables
@@ -114,6 +115,12 @@ public class Statement implements MethodLibrary, StatementLibrary {
 
     // Work methods
     //================================================================
+        /**
+		 * Checks if the given element is present in the specified array
+		 * @param array String[] to check against
+		 * @param element String to search for in the array
+		 * @return boolean true if the element is found, false otherwise
+		 */
         private void findKeywords() {
             for (String match : text) {
                 if (containsElement(KEYS_STATEMENT_TYPE, match)) {
@@ -121,5 +128,26 @@ public class Statement implements MethodLibrary, StatementLibrary {
                 }
             }
         }
+        /**
+         * Returns a String of tab characters based on the depth of the statement
+         * @return String containing tab characters corresponding to the depth of the statement
+         */
+        public String getDepthTabs() {
+			StringBuilder tabs = new StringBuilder();
+			for (int i = 0; i < this.depth; i++) {
+				tabs.append("\t");
+			}
+			return tabs.toString();
+		}
+        /**
+         * Returns a Matcher object for the given regex pattern against the statement's text
+         * @param regex The regex pattern to match against the statement's text
+         * @return Matcher object that can be used to find matches in the statement's text
+         */
+        public Matcher getMatcher(String regex) {
+        	// Local variables
+        	Matcher matcher = getMatcher(regex, this.toString());
+			return matcher;
+		}
     //================================================================
 }

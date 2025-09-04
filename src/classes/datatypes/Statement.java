@@ -20,23 +20,17 @@ public class Statement implements MethodLibrary, StatementLibrary {
 
     // Constructor
     //================================================================
-        public Statement(String[] text, int textPos) {
-            keywords = new ArrayList<>();
-            mutateBase(text);
-            setTextPos(textPos);
-        }
 		public Statement(String[] text) {
             keywords = new ArrayList<>();
             mutateBase(text);
-			setTextPos(-1);
         }
 		public Statement(String text) {
 			//Local variables
 			Grouper group = new Grouper(text);
 			String[] words = group.getFinalText().toArray(String[]::new);
             keywords = new ArrayList<>();
+            
             mutateBase(words);
-            setTextPos(-1);
         }
     //================================================================
 
@@ -47,9 +41,6 @@ public class Statement implements MethodLibrary, StatementLibrary {
         }
         private void setDepth() {
             this.depth = Collections.frequency(List.of(text), "0_TAB");
-        }
-        private void setTextPos(int textPos) {
-            this.textPos = textPos;
         }
     //================================================================
 

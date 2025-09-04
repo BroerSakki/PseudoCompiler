@@ -330,7 +330,7 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 					}
 
 					//Save lines and statements
-					currentStatement = new Statement(asWords(currentLine), totalLines);
+					currentStatement = new Statement(asWords(currentLine));
 					textBody.add(currentLine);
 					statements.add(currentStatement);
 

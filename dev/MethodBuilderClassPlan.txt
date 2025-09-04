@@ -9,21 +9,21 @@ class MethodBuilder inheritsfrom MethodLibrary, StatementLibrary
 		Declarations
 			Statement emptyArr[]
 		emptyArr = null
-		methodBuilder(emptyArr)
+		this(emptyArr)
 	return
 	
 	public MethodBuilder(Array<Statement> body)
 		Declarations
 			Statement declarationMain
 		declarationMain = new Statement("public static void main(String[] args)")
-		MethodBuilder(declarationMain, body, null)
+		this(declarationMain, body, null)
 	return
 	
 	public MethodBuilder(Statement head)
-		MethodBuilder(head, null, null)
+		this(head, null, null)
 	return
-	
-	public MethodBuilder(Statement head, Array<Statement> body, returnValue)
+
+	public MethodBuilder(Statement head, Array<Statement> body, string returnValue)
 		setHead(head)
 		setBody(body)
 		setReturnValue(returnValue)

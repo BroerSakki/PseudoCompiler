@@ -1,7 +1,4 @@
-class Directories inheritsFrom ConstLibrary, MethodLibrary
-	public static methodIndex()
-	return MethodLibrary.returnMethodIndex(Directories.class)
-	
+class Directories inheritsFrom ConstLibrary, MethodLibrary	
 	private static fileName(string filePath)
 		Declarations
 			ArrayList<string> path = splitPath(filePath)

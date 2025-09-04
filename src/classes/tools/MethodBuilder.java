@@ -120,15 +120,18 @@ public class MethodBuilder {
 		
 		@Override
 		public String toString() {
+			//Local variables
 			StringBuilder sb = new StringBuilder();
-			sb.append("\t").append(head.toString()).append("\n\t{\n");
+			String text = head.toString().replace("0_TAB", "").replace("0_ENTER", "").trim();
+			
+			sb.append(head.getDepthTabs()).append(text).append("\n" + head.getDepthTabs() + "{\n");
 			for (Statement stmt : body) {
 				sb.append(stmt.getDepthTabs()).append("\t").append(stmt.toString()).append("\n");
 			}
 			if (returnValue != null) {
-				sb.append("\t\treturn ").append(returnValue).append(";\n");
+				sb.append(head.getDepthTabs() + "\treturn ").append(returnValue).append(";\n");
 			}
-			sb.append("\t}");
+			sb.append(head.getDepthTabs() + "}\n");
 			return sb.toString();
 		}
 	//================================================================

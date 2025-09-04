@@ -1,7 +1,7 @@
 // Package Num class to datatypes folder
 package classes.datatypes;
 
-// Import Java Classes
+// Import MethodLibrary interface
 import classes.libraries.MethodLibrary;
 
 

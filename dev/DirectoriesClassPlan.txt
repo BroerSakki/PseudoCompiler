@@ -1,0 +1,63 @@
+class Directories inheritsFrom ConstLibrary, MethodLibrary
+	public static methodIndex()
+	return MethodLibrary.returnMethodIndex(Directories.class)
+	
+	private static fileName(string filePath)
+		Declarations
+			ArrayList<string> path = splitPath(filePath)
+	return path(path.size()-1)
+	
+	public static currentDir()
+	return System.getProperty("user.dir")
+	
+	private static targetDir(string dirPath)
+		Declarations
+			ArrayList<string> path = splitPath(currentDir())
+			int rootDir = path.indexOf("PseudoCompiler")
+			int dirDepth = (path.size() - 1) - rootDir
+			StringBuilder targetPath = new StringBuilder()
+		for i = 0 to dirDepth step 1
+			targetPath.append("../")
+		endfor
+		targetPath.append(dirPath)
+	return targetPath.toString()
+	
+	private static splitPath(string filePath)
+		Declarations
+			string arrPath[] = filePath.split("\\\\")
+			ArrayList<string> path = new ArrayList<String>(Arrays.asList(arrPath))
+	return path
+	
+	private static buildPath(string dirPath, string fileNameOrPath)
+		Declarations
+			string dir = targetDir(dirPath)
+	return dir + fileName(fileNameOrPath)
+	
+	public static readPath(string fileNameOrPath)
+	return Paths.get(buildPath(targetDir(DIR_USER_READ_TXT), fileNameOrPath))
+
+	public static writePath(string fileNameOrPath)
+	return Paths.get(buildPath(targetDir(DIR_USER_WRITE_TXT), fileNameOrPath))
+	
+	public static readFile(string fileNameOrPath)
+		Declarations
+			File attemptFile = null
+		try
+			attemptFile = readPath(fileNameOrPath).toFile()
+		catch Exception e
+			output "Error: File not found"
+			e.printStackTrace()
+		endtry
+	return attemptFile
+	
+	public static writeFile(string fileNameOrPath)
+		Declarations
+			File attemptFile = null
+		try
+			attemptFile = writePath(fileNameOrPath).toFile()
+		catch Exception e
+			output "Error: File not found"
+			e.printStackTrace()
+		endtry
+	return attemptFile
+endclass

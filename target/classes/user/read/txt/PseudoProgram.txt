@@ -1,0 +1,37 @@
+start
+	Declarations
+		private string PROMPT_USER_NAME = "Enter username >> "
+		private string PROMPT_USER_AGE = "Enter user age >> "
+		private string END = "Program Terminated"
+		private num SIZE = 5
+		private string username[SIZE]
+		private num age[SIZE]
+		num count
+	houseKeeping()
+	detail()
+	endOfJob()
+stop
+
+private houseKeeping()
+	for count = 0 to SIZE - 1 step 1
+		output PROMPT_USER_NAME
+		input username[count]
+		output PROMPT_USER_AGE
+		input age[count]
+	endfor
+return
+
+private detail()
+	for count = 0 to SIZE - 1 step 1
+		output username[count], ":"
+		if (age >= 18) is true then
+			output "You are an adult (barely)"
+		else
+			output "You are a minor"
+		endif
+	endfor
+return
+
+private endOfJob()
+	output END
+return

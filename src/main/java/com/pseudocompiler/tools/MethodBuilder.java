@@ -36,11 +36,18 @@ public class MethodBuilder {
     	}
     	/**
 		 * Creates a MethodBuilder instance with a head and an empty body, with no return value.
-		 * @param head the head of the method, typically a Statement object
 		 */
-    	public MethodBuilder(Statement head) {
-    		this(buildHeadMain(), new Statement[] {}, null);
+    	public MethodBuilder() {
+            this(buildHeadMain(), new Statement[] {}, null);
     	}
+
+        /**
+         * Creates a MethodBuilder instance of a 'main' method
+         * @param body the body of the method, an array of Statement objects
+         */
+        public MethodBuilder(Statement[] body) {
+            this(buildHeadMain(), body, null);
+        }
     //================================================================
     	
     // Setters
@@ -100,7 +107,7 @@ public class MethodBuilder {
 		 * Build a Statement for the main method.
 		 * @return a Statement object representing the main method head
 		 */
-		private static Statement buildHeadMain() {
+		public static Statement buildHeadMain() {
 			return new Statement("public static void main(String[] args)");
 		}
 		
@@ -124,14 +131,15 @@ public class MethodBuilder {
 			StringBuilder sb = new StringBuilder();
 			String text = head.toString().replace("0_TAB", "").replace("0_ENTER", "").trim();
 			
-			sb.append(head.getDepthTabs()).append(text).append("\n" + head.getDepthTabs() + "{\n");
+			sb.append(head.getDepthTabs()).append(text).append("\n").append(head.getDepthTabs()).append("{\n");
 			for (Statement stmt : body) {
-				sb.append(stmt.getDepthTabs()).append("\t").append(stmt.toString()).append("\n");
+                String line = stmt.toString().replace("0_TAB", "").replace("0_ENTER", "").trim();
+				sb.append("\t".repeat(Math.max(0, stmt.getDepth()-1))).append("\t").append(line).append("\n");
 			}
 			if (returnValue != null) {
-				sb.append(head.getDepthTabs() + "\treturn ").append(returnValue).append(";\n");
+				sb.append(head.getDepthTabs()).append("\treturn ").append(returnValue).append(";\n");
 			}
-			sb.append(head.getDepthTabs() + "}\n");
+			sb.append(head.getDepthTabs()).append("}\n");
 			return sb.toString();
 		}
 	//================================================================

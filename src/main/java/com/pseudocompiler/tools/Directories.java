@@ -2,14 +2,17 @@
 package com.pseudocompiler.tools;
 
 // Import Java Classes
+import com.pseudocompiler.libraries.ConstLibrary;
 import com.pseudocompiler.libraries.MethodLibrary;
 import java.io.File;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Directories implements MethodLibrary {
+public abstract class Directories implements MethodLibrary, ConstLibrary {
 	// Path details
 	//================================================================
 		/**
@@ -38,8 +41,16 @@ public class Directories implements MethodLibrary {
 		private static String targetDir(String dirPath) {
 			//Local variables
 			ArrayList<String> path = splitPath(currentDir());
-			int rootDir = path.indexOf("main");
-			int dirDepth = (path.size()-1) - rootDir;
+            int rootDir;
+            int dirDepth;
+
+            if (path.getLast().equals("PseudoCompiler")) {
+                rootDir = path.size() - 1;
+            } else {
+                rootDir = path.indexOf("PseudoCompiler");
+            }
+
+            dirDepth = (path.size()-1) - rootDir;
 
             return "../".repeat(Math.max(0, dirDepth)) + dirPath;
 		}
@@ -48,13 +59,14 @@ public class Directories implements MethodLibrary {
 	// Work methods
 	//================================================================
 		/**
-		 * Splits a String by the '\' character
+		 * Splits a String by the separator character
 		 * @param filePath String variable representing the path to a file
 		 * @return ArrayList<String> Object where each element is the name of a directory, and the final element being the file name
 		 */
 		private static ArrayList<String> splitPath(String filePath) {
 			//Local variables
-			String[] arrPath = filePath.split("\\\\");
+            FileSystem fs = FileSystems.getDefault();
+			String[] arrPath = filePath.split(fs.getSeparator());
 
             return new ArrayList<>(Arrays.asList(arrPath));
 		}
@@ -81,7 +93,7 @@ public class Directories implements MethodLibrary {
 		 * @return Path variable of the current working directory to the target read file
 		 */
 		public static Path readPath(String fileNameOrPath) {
-			return Paths.get(buildPath(DIR_USER_READ_TXT, fileNameOrPath));
+            return Paths.get(buildPath(DIR_USER_READ_TXT, fileNameOrPath));
 		}
 		/**
 		 * Builds and returns a custom path to the predefined write destination as documented in ConstLibrary

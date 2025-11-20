@@ -3,18 +3,21 @@ package com.pseudocompiler;
 
 import com.pseudocompiler.datatypes.Num;
 import com.pseudocompiler.datatypes.Statement;
+import com.pseudocompiler.tools.Dissector;
+import com.pseudocompiler.tools.MethodBuilder;
+
+import java.util.Arrays;
 
 public class Main {
 	public static void main(String[] args) {
-		String[] values = {"3.14", "2.71", "1.41"};
-		Num numArray = new Num(values);
+        System.out.println("\n=== PROGRAM START ===\n");
 
-		Num numSingle = new Num("42");
+        Dissector file = new Dissector("PseudoProgram");
 
-		System.out.println("Single Num value: " + numSingle);
-		System.out.println("Array Num values: " + numArray);
+        for (MethodBuilder method : file.getMethods()) {
+            System.out.println(method);
+        }
 
-		Statement statement = new Statement("public static void main(String[] args)");
-		System.out.println("Statement text: " + statement.toString());
+        System.out.println("\n=== PROGRAM STOP ===\n");
 	}
 }

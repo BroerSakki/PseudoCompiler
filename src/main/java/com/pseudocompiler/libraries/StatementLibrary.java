@@ -2,6 +2,8 @@
 package com.pseudocompiler.libraries;
 
 // Import Java CLasses
+import java.util.ArrayList;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,7 +44,10 @@ public interface StatementLibrary {
     // Regex collections
     String REGEX_MAIN_DECLARATION = "^(?:0_TAB\\s+)(?:start)\\s+(?:0_ENTER)$";
     String REGEX_MAIN_STOP = "^(?:0_TAB\\s+)(?:stop)\\s+(?:0_ENTER)$";
-  
+
+    String REGEX_METHOD = "^(public|private|protected)?\\s*(static)?\\s*(\\w+)\\(\\s*(\\w+\\s+\\w+(?:\\[[^]]*])*\\s*[,;]?\\s*)*\\)\\s*$";
+    String REGEX_METHOD_RETURN = "^\\s*return\\b\\s*(.*?)\\s*$";
+
     String REGEX_VARIABLE_DECLARATION = "^(?:0_TAB\\s+)*(?:(public|private|protected)\\s+)?(?:(static)\\s+)?(?:(boolean|num|string)\\s+)(?:(\\w+)(?:\\[(?:(\\w+))\\])?\\s*)(?:(?:=\\s*)((?:(?:\\w+\\s*)|(?:\"(?:[^\"]*)\"))(?:" + "(?:,\\s*(?:(?:\\w+)|(?:\"(?:[^\"]*)\"))\\s*)*" + ")))?(?:\\s+)(?:0_ENTER)$";
     String REGEX_VARIABLE_ASSIGNMENT = "^(?:0_TAB\\s+)*(\\w+)(?:\\[(\\s*\\w+\\s*)\\])?(?:\\s*)(?:=\\s*)(((?:\\w+)|(?:(?:\"[?:^\"]*)\"))\\s+)(?:0_ENTER)$";
     
@@ -53,8 +58,8 @@ public interface StatementLibrary {
     // Regex comparisons
     /**
      * Use regex to test a string
-     * @param regex
-     * @param testString
+     * @param regex Regular expression to test against
+     * @param testString String to be tested
      * @return True if the String matches, false if the String does not
      */
     default boolean compareRegex(String regex, String testString) {
@@ -76,5 +81,19 @@ public interface StatementLibrary {
         Pattern pattern = Pattern.compile(regex);
 
         return pattern.matcher(testString);
+    }
+
+    default String getReturn(String testString) {
+        //Local variables
+        Pattern pattern = Pattern.compile(REGEX_METHOD_RETURN);
+        Matcher matcher = pattern.matcher(testString);
+
+        if (matcher.find()) {
+            if (!Objects.equals(matcher.group(1), "")) {
+                return matcher.group(1);
+            }
+        }
+
+        return null;
     }
 }

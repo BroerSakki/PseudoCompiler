@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -48,7 +49,7 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 	//================================================================
 		private void  setDefaults() {
 			if (fileName == null) {
-				System.out.println("Error: File has not been assigned");
+				System.out.println("Error (setDefaults): File has not been assigned");
 			} else {
 				if (checkFileExists(fileName)) {
 					setTextFile(Directories.readFile(fileName));
@@ -56,7 +57,7 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 
 					setIndexPairs();
 				} else {
-					System.out.println("Error: File does not exist");
+					System.out.println("Error (setDefaults): File does not exist");
 				}
 			}
 		}
@@ -90,12 +91,8 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 		}
 
 		private void setNumLines(int numLines) {
-			this.numLines = numLines;
-		}
-
-		private void setNumFunctions(int numFunctions) {
-			this.numFunctions = numFunctions;
-		}
+            this.numLines = numLines;
+        }
 
 		private void setBaseText(String[] baseText) {
 			this.baseText = baseText;
@@ -105,18 +102,30 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 			this.perStatement = perStatement;
 		}
 
+        private void setNumFunctions() {
+            //Local Variables
+            int numFunctions = 0;
+
+            for (String line : baseText) {
+                if (compareRegex(REGEX_METHOD_RETURN, line)) {
+                    numFunctions++;
+                }
+            }
+
+            this.numFunctions = numFunctions;
+        }
+
 		private void setIndexPairs() {
 			if (fileExists) {
 				//Local variables
-				int totalFunctions = getNumLines();
-				int functionNum = -1;
+				int functionNum = 0;
 				int declarationIndex = -1;
 				int returnIndex;
 				int startIndex = -1;
 				int stopIndex = -1;
 
 				//Assign a size to the functionReturnIndexPairs base array
-				this.functionReturnIndexPairs = new int[totalFunctions][2];
+				this.functionReturnIndexPairs = new int[numFunctions][2];
 
 				//Go through the base text line by line
 				for (int i = 0; i < baseText.length; i++) {
@@ -131,20 +140,20 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 
 					//Check if it is a declaration index
 					} else if (countFunction(baseText[i])) {
-						functionNum++;
 						declarationIndex = i;
 
 					//Check if it is a return index
-					} else if (baseText[i].trim().startsWith("return")) {
+					} else if (compareRegex(REGEX_METHOD_RETURN, baseText[i].trim())) {
 						returnIndex = i;
 						addFunctionReturnIndexPair(functionNum, declarationIndex, returnIndex);
+                        functionNum++;
 					}
 				}
 
 				setStartStopIndexPair(startIndex, stopIndex);
 
 			} else {
-				System.out.println("Error: File does not exist");
+				System.out.println("Error (setIndexPairs): File does not exist");
 			}
 		}
 
@@ -160,7 +169,7 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 			} else {
 				//Assign null to startStopIndexPairs
 				startStopIndexPair = null;
-				System.out.println("Error: File does not exist");
+				System.out.println("Error (setStartStopIndexPair): File does not exist");
 			}
 		}
 	//================================================================
@@ -173,10 +182,11 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 				//Add declarationIndex and returnIndex to selected position
 				functionReturnIndexPairs[functionNum][0] = declarationIndex;
 				functionReturnIndexPairs[functionNum][1] = returnIndex;
+
 			} else {
 				//Assign null to functionReturnIndexPairs
 				functionReturnIndexPairs = null;
-				System.out.println("Error: file does not exist");
+				System.out.println("Error (addFunctionReturnIndexPair): file does not exist");
 			}
 		}
 	//================================================================
@@ -233,7 +243,7 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 			return this.perStatement;
 		}
 		/**
-		 * Returns the indeces of start and stop of the pseudocode.
+		 * Returns the indexes of start and stop of the pseudocode.
 		 * @return int array containing the start and stop indices.
 		 */
 		public int[] getStartStopIndexPair() {
@@ -246,20 +256,38 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 		public int[][] getFunctionReturnIndexPairs() {
 			return this.functionReturnIndexPairs;
 		}
+
+        public MethodBuilder getMain() {
+            //Local Variables
+            ArrayList<Statement> lines = new ArrayList<>(Arrays.asList(perStatement).subList(startStopIndexPair[0]+1, startStopIndexPair[1]));
+
+            return new MethodBuilder(lines.toArray(new Statement[0]));
+        }
+
+        public MethodBuilder[] getMethods() {
+            //Local Variables
+            ArrayList<MethodBuilder> methods = new ArrayList<>();
+
+            for (int[] indexPair : functionReturnIndexPairs) {
+                //Local Variables
+                ArrayList<Statement> lines = new ArrayList<>(Arrays.asList(perStatement).subList(indexPair[0] + 1, indexPair[1]));
+                String returnValue = getReturn(baseText[indexPair[1]]);
+                MethodBuilder methodBuilder = new MethodBuilder(perStatement[indexPair[0]], lines.toArray(new Statement[0]), returnValue);
+                methods.add(methodBuilder);
+            }
+
+            return methods.toArray(new MethodBuilder[0]);
+        }
 	//================================================================
 
 	// Work methods
 	//================================================================
 		public boolean checkFileExists(String fileName) {
 			//Local variables
-			File testFile = Directories.readFile(fileName);
+			File testFile = Directories.readPath(fileName).toFile();
 
 			//Check if file exists
-			if (testFile.exists()) {
-				setFileExists(true);
-			} else {
-				setFileExists(false);
-			}
+            setFileExists(testFile.exists());
 
 			//Return fileExists
 			return fileExists;
@@ -269,16 +297,9 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 			//Local variables
 			boolean isFunction = false;
 			String trimmedLine = currentLine.trim();
-			String regex = "^(public|private|protected)?\\s*(static)?\\s*(\\w+)\\(\\s*(\\w+\\s+\\w+\\s*[,;]?\\s*)*\\)\\s*$";
-			Pattern pattern = Pattern.compile(regex);
-			Matcher matcher = pattern.matcher(trimmedLine);
-
-			//Basic checks
-			if (trimmedLine.startsWith("//") || trimmedLine.startsWith("#") || trimmedLine.isEmpty()) {
-				isFunction = false;
 
 			//Match with regex pattern
-			} else if (matcher.matches()) {
+			if (compareRegex(REGEX_METHOD, trimmedLine)) {
 				isFunction = true;
 			}
 
@@ -299,7 +320,7 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 			//Group formatted text based on punctuation
 			lineGroup = new Grouper(formattedLine);
 
-			//Split line into seperate words
+			//Split line into separate words
 			words = lineGroup.getFinalText();
 
 			//Return as Array of String
@@ -338,13 +359,13 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 					totalLines++;
 				}
 
-				//Set base variables equal local variabls
+				//Set base variables equal local variables
 				setBaseText(textBody.toArray(String[]::new));
 				setNumLines(totalLines);
-				setNumFunctions(totalFunctions);
+				setNumFunctions();
 				setPerStatement(statements.toArray(Statement[]::new));
 			} catch (Exception e) {
-				System.out.println("Error: could not read data");
+				System.out.println("Error (readData): could not read data");
 			}
 
 			//Close the reader
@@ -357,7 +378,7 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 		 */
 		private void buildFileName() {
 			if (fileName == null || fileName.isEmpty()) {
-				throw new IllegalArgumentException("File name cannot be null or empty");
+				throw new IllegalArgumentException("Error (buildFileName): File name cannot be null or empty");
 			} else if (!fileName.endsWith(".txt")) {
 				fileName += ".txt"; // Ensure the file name ends with .txt
 			}
@@ -393,7 +414,7 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 					System.out.println(line);
 				}
 			} else {
-				System.out.println("Error: File does not exist");
+				System.out.println("Error (printBaseText): File does not exist");
 			}
 		}
 
@@ -406,7 +427,7 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 					System.out.println(statement);
 				}
 			} else {
-				System.out.println("Error: File does not exist");
+				System.out.println("Error (printStatements): File does not exist");
 			}
 		}
 	//================================================================

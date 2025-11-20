@@ -15,7 +15,6 @@ public class Statement implements MethodLibrary, StatementLibrary {
         private String[] text;
         private final List<String> keywords;
         private int depth;
-        private int textPos;
     //================================================================
 
     // Constructor
@@ -80,13 +79,6 @@ public class Statement implements MethodLibrary, StatementLibrary {
             return depth;
         }
         /**
-		 * Returns the position of the statement in the text, if available
-		 * @return int representing the position of the statement in the text, or -1 if not set
-		 */
-        public int getTextPos() {
-            return textPos;
-        }
-        /**
          * Returns the text of the statement as a single String
 		 * @return String representing the text of the statement
          */
@@ -107,10 +99,7 @@ public class Statement implements MethodLibrary, StatementLibrary {
     // Work methods
     //================================================================
         /**
-		 * Checks if the given element is present in the specified array
-		 * @param array String[] to check against
-		 * @param element String to search for in the array
-		 * @return boolean true if the element is found, false otherwise
+		 * Adds keywords to Statement
 		 */
         private void findKeywords() {
             for (String match : text) {
@@ -124,11 +113,7 @@ public class Statement implements MethodLibrary, StatementLibrary {
          * @return String containing tab characters corresponding to the depth of the statement
          */
         public String getDepthTabs() {
-			StringBuilder tabs = new StringBuilder();
-			for (int i = 0; i < this.depth; i++) {
-				tabs.append("\t");
-			}
-			return tabs.toString();
+            return "\t".repeat(Math.max(0, this.depth));
 		}
         /**
          * Returns a Matcher object for the given regex pattern against the statement's text
@@ -136,9 +121,7 @@ public class Statement implements MethodLibrary, StatementLibrary {
          * @return Matcher object that can be used to find matches in the statement's text
          */
         public Matcher getMatcher(String regex) {
-        	// Local variables
-        	Matcher matcher = getMatcher(regex, this.toString());
-			return matcher;
+            return getMatcher(regex, this.toString());
 		}
     //================================================================
 }

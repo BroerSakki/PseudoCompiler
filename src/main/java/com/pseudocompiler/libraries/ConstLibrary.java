@@ -52,8 +52,8 @@ public interface ConstLibrary {
 	String DEV = "dev";
 
 	// Directory locations
-	String DIR_USER_READ_TXT = "resources/user/read/txt/";
-	String DIR_USER_WRITE_TXT = "resources/user/write/txt/";
+	String DIR_USER_READ_TXT = "src/main/resources/user/read/txt/";
+	String DIR_USER_WRITE_TXT = "src/main/resources/user/write/txt/";
 	
 	//Tokens
 		//Formatting

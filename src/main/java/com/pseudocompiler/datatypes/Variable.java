@@ -58,7 +58,6 @@ public class Variable implements MethodLibrary, StatementLibrary {
     //================================================================
         /**
          * Get the access specifier of the variable
-         * @return
          */
         public String getAccessSpecifier() {
             return accessSpecifier;
@@ -105,18 +104,12 @@ public class Variable implements MethodLibrary, StatementLibrary {
         private void readDeclaration(Statement statement) {
             //Local variables
 			Matcher matcher = statement.getMatcher(REGEX_VARIABLE_DECLARATION, statement.toString());
-			
-			//Declare Variable
 
             //Check if the statement is a valid variable declaration
             //If it is, set the variable's properties
 			if (matcher.matches()) {
 				setAccessSpecifier(matcher.group(1));
-				if (matcher.group(2).equals("static")) {
-					setIsStatic(true);
-				} else {
-					setIsStatic(false);
-				}
+                setIsStatic(matcher.group(2).equals("static"));
 				setDatatype(matcher.group(3));
 				setIdentifier(matcher.group(4));
 				setValue(matcher.group(6));
@@ -190,12 +183,9 @@ public class Variable implements MethodLibrary, StatementLibrary {
 		 * @return String representing the Java assignment of the variable
 		 */
         public static String toJavaAssignment(Variable variable) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(variable.getIdentifier());
 
-            sb.append(" = ").append(variable.getValue()).append(";");
-
-            return sb.toString();
+            return variable.getIdentifier() +
+                    " = " + variable.getValue() + ";";
         }
         
         /**
@@ -206,13 +196,10 @@ public class Variable implements MethodLibrary, StatementLibrary {
 		 * @return String representing the Java assignment of the variable at the specified index
 		 */
         public static String toJavaAssignment(Variable variable, int index, String value) {
-            StringBuilder sb = new StringBuilder();
 
-            sb.append(variable.getIdentifier());
-            sb.append("[").append(index).append("]");
-            sb.append(" = ").append(value).append(";");
-
-            return sb.toString();
+            return variable.getIdentifier() +
+                    "[" + index + "]" +
+                    " = " + value + ";";
         }
         
         /**

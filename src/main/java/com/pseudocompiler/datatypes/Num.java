@@ -8,8 +8,8 @@ import com.pseudocompiler.libraries.MethodLibrary;
 public class Num implements MethodLibrary {
 	// Global variables
 	//================================================================
-	private String value = null;
-	private String[] values = null;
+	private String value;
+	private String[] values;
 	private boolean isArray; // Indicates if this is an array of values
 	//================================================================
 

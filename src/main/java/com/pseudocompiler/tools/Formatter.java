@@ -126,11 +126,11 @@ public class Formatter implements MethodLibrary {
 		 */
 		public static void makeRainbowLine(char lineChar, int len) {
 			space(spaceTop);
-			String line = "";
+			StringBuilder line = new StringBuilder();
 			for (int i = 1; i <= len; i++) {
-				line += lineChar;
+				line.append(lineChar);
 			}
-			coloring.dynamicRainbowText(line, false, true);
+			coloring.dynamicRainbowText(line.toString(), false, true);
 			System.out.println();
 			space(spaceBottom);
 		}
@@ -143,11 +143,7 @@ public class Formatter implements MethodLibrary {
 		 */
 		public static void makeGradientLine(char lineChar, int len, int[] rgb1, int[] rgb2) {
 			space(spaceTop);
-			String line = "";
-			for (int i = 1; i <= len; i++) {
-				line += lineChar;
-			}
-			coloring.dynamicGradientText(line, rgb1, rgb2, false, true);
+            coloring.dynamicGradientText(String.valueOf(lineChar).repeat(Math.max(0, len)), rgb1, rgb2, false, true);
 			System.out.println();
 			space(spaceBottom);
 		}

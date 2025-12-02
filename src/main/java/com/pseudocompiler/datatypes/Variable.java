@@ -1,226 +1,92 @@
 package com.pseudocompiler.datatypes;
 
-import com.pseudocompiler.libraries.MethodLibrary;
+import com.pseudocompiler.datatypes.Statement;
 import com.pseudocompiler.libraries.StatementLibrary;
+
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 
-public class Variable implements MethodLibrary, StatementLibrary {
-    // Global variables
-    //================================================================
-        private String accessSpecifier;
-        private boolean isStatic;
+public class Variable {
+
+    // Attributes
+    //====================================================================================================
         private String datatype;
         private String identifier;
         private String value;
         private int size;
-    //================================================================
+    //====================================================================================================
 
     // Constructors
-    //================================================================
+    //====================================================================================================
         public Variable(Statement statement) {
-            setToNull();
             readDeclaration(statement);
         }
-    //================================================================
+    //====================================================================================================
 
     // Setters
-    //================================================================
-        private void setAccessSpecifier(String accessSpecifier) {
-            this.accessSpecifier = accessSpecifier;
+    //====================================================================================================
+        public void setValue(String value) {
+            this.value = value;
         }
-
-        private void setIsStatic(boolean isStatic) {
-            this.isStatic = isStatic;
-        }
-
-        private void setDatatype(String datatype) {
-            this.datatype = datatype;
-        }
-
-        private void setIdentifier(String identifier) {
-            this.identifier = identifier;
-        }
-
-        private void setValue(String value) {
-            if (identifier == null || datatype == null) {
-                setToNull();
-            } else {
-                this.value = value;
-            }
-        }
-
-        private void setSize(int size) {
-            this.size = size;
-        }
-    //================================================================
+    //====================================================================================================
 
     // Getters
-    //================================================================
-        /**
-         * Get the access specifier of the variable
-         */
-        public String getAccessSpecifier() {
-            return accessSpecifier;
-        }
-        /**
-		 * Get if the variable is static
-		 * @return boolean indicating if the variable is static
-		 */
-        public boolean getIsStatic() {
-            return isStatic;
-        }
-        /**
-		 * Get the datatype of the variable
-		 * @return String representing the datatype of the variable
-		 */
+    //====================================================================================================
         public String getDatatype() {
             return datatype;
         }
-        /**
-         * Get the identifier of the variable
-         * @return String representing the identifier of the variable
-         */
         public String getIdentifier() {
             return identifier;
         }
-        /**
-		 * Get the value of the variable
-		 * @return String representing the value of the variable
-		 */
         public String getValue() {
             return value;
         }
-        /**
-		 * Get the size of the variable (for arrays)
-		 * @return int representing the size of the variable
-		 */
         public int getSize() {
-            return  size;
+            return size;
         }
-    //================================================================
+    //====================================================================================================
 
-    // Work methods
-    //================================================================
+    // Work Methods
+    //====================================================================================================
         private void readDeclaration(Statement statement) {
-            //Local variables
-			Matcher matcher = statement.getMatcher(REGEX_VARIABLE_DECLARATION, statement.toString());
+            //Local Variables
+            Matcher matcher;
+            String[] attributes;
 
-            //Check if the statement is a valid variable declaration
-            //If it is, set the variable's properties
-			if (matcher.matches()) {
-				setAccessSpecifier(matcher.group(1));
-                setIsStatic(matcher.group(2).equals("static"));
-				setDatatype(matcher.group(3));
-				setIdentifier(matcher.group(4));
-				setValue(matcher.group(6));
-			} else {
-				setToNull();
-			}
+            //Get Relevant Matcher
+            matcher = StatementLibrary.getMatcher(StatementLibrary.REGEX_VARIABLE_DECLARE_ASSIGN, statement.toString());
+
+            //Analyze Declaration
+            attributes = analyzeDeclaration(matcher);
         }
-		
-		public void readAssignment(Statement statement) {
-			//Local variables
-			Matcher matcher = statement.getMatcher(REGEX_VARIABLE_ASSIGNMENT, statement.toString());
-			
-			//Assign value
-			if (matcher.matches()) {
-				setValue(matcher.group(3));
-			}
-		}
 
-        public final void setToNull() {
-            setAccessSpecifier(null);
-            setIsStatic(false);
-            setDatatype(null);
-            setIdentifier(null);
-            setSize(-1);
-            this.value = null;
-        }
-    //================================================================
+        private String[] analyzeDeclaration(Matcher matcher) {
+            //Local Variables
+            ArrayList<String> attributes = new ArrayList<>();
 
-    //Static toJava methods
-    //================================================================
-        //Convert the variable to a Java declaration string
-        /**
-         * Convert a Variable object to a Java declaration string
-         * @param variable Variable object to be converted
-         * @return String representing the Java declaration of the variable
-         */
-        public static String toJavaDeclaration(Variable variable) {
-            StringBuilder sb = new StringBuilder();
-            if (variable.getAccessSpecifier() != null) {
-                sb.append(variable.getAccessSpecifier()).append(" ");
+            //Check Statement Validity
+            if (matcher.matches()) {
+                for (int i = 1; i < matcher.groupCount(); i++) {
+                    System.out.printf("Group %d: %s", i, matcher.group(i));
+                }
             }
-            if (variable.getIsStatic()) {
-                sb.append("static ");
-            }
-            sb.append(variable.getDatatype()).append(" ").append(variable.getIdentifier());
-            if (variable.getSize() > 0) {
-                sb.append("[").append(variable.getSize()).append("]");
-            }
-            if (variable.getValue() != null) {
-                sb.append(" = ").append(variable.getValue());
-            }
-            sb.append(";");
 
-            return sb.toString();
+            return null;
         }
-        
-        /**
-         * Convert a Statement object to a Java declaration string
-         * @param statement Statement object to be converted
-         * @return String representing the Java declaration of the variable
-         */
-        public static String toJavaDeclaration(Statement statement) {
-            Variable variable = new Variable(statement);
-            return toJavaDeclaration(variable);
-        }
+    //====================================================================================================
 
-        //Convert the variable to a Java assignment string
-        /**
-		 * Convert a Variable object to a Java assignment string
-		 * @param variable Variable object to be converted
-		 * @return String representing the Java assignment of the variable
-		 */
-        public static String toJavaAssignment(Variable variable) {
+    // To String Methods
+    //====================================================================================================
+        @Override
+        public String toString() {
+            return "{\n" +
+                "\t\"datatype\": \"" + datatype + "\",\n" +
+                "\t\"identifier\": \"" + identifier + "\",\n" +
+                "\t\"value\": \"" + value + "\",\n" +
+                "\t\"size\": " + size + "\n" +
+                "}";
+        }
+    //====================================================================================================
 
-            return variable.getIdentifier() +
-                    " = " + variable.getValue() + ";";
-        }
-        
-        /**
-		 * Convert a Variable object to a Java assignment string with an index
-		 * @param variable Variable object to be converted
-		 * @param index Index of the variable in an array
-		 * @param value Value to be assigned to the variable at the specified index
-		 * @return String representing the Java assignment of the variable at the specified index
-		 */
-        public static String toJavaAssignment(Variable variable, int index, String value) {
 
-            return variable.getIdentifier() +
-                    "[" + index + "]" +
-                    " = " + value + ";";
-        }
-        
-        /**
-		 * Convert a Variable object to a Java assignment string with a value
-		 * @param variable Variable object to be converted
-		 * @param value Value to be assigned to the variable
-		 * @return String representing the Java assignment of the variable with the specified value
-		 */
-        public static String toJavaAssignment(Variable variable, String value) {
-            variable.setValue(value);
-            return toJavaAssignment(variable);
-        }
-        
-        /**
-		 * Convert a Statement object to a Java assignment string
-		 * @param statement Statement object to be converted
-		 * @return String representing the Java assignment of the variable
-		 */
-        public static String toJavaAssignment(Statement statement) {
-            Variable variable = new Variable(statement);
-            return toJavaAssignment(variable);
-        }
-    //================================================================
 }

@@ -4,7 +4,6 @@ com/pseudocompiler/libraries/StatementLibrary.class
 com/pseudocompiler/tools/Directories.class
 com/pseudocompiler/libraries/ConstLibrary.class
 com/pseudocompiler/tools/Dissector.class
-com/pseudocompiler/libraries/ExecutionContext.class
 com/pseudocompiler/libraries/MethodLibrary.class
 com/pseudocompiler/datatypes/VariableStatement.class
 com/pseudocompiler/tools/ColoringTools.class

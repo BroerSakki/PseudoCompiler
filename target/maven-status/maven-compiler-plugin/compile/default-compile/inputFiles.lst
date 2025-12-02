@@ -5,7 +5,6 @@
 /home/sakki/Documents/Programming/repos/PseudoCompiler/src/main/java/com/pseudocompiler/datatypes/VariableStatement.java
 /home/sakki/Documents/Programming/repos/PseudoCompiler/src/main/java/com/pseudocompiler/libraries/ColorLibrary.java
 /home/sakki/Documents/Programming/repos/PseudoCompiler/src/main/java/com/pseudocompiler/libraries/ConstLibrary.java
-/home/sakki/Documents/Programming/repos/PseudoCompiler/src/main/java/com/pseudocompiler/libraries/ExecutionContext.java
 /home/sakki/Documents/Programming/repos/PseudoCompiler/src/main/java/com/pseudocompiler/libraries/MethodLibrary.java
 /home/sakki/Documents/Programming/repos/PseudoCompiler/src/main/java/com/pseudocompiler/libraries/StatementLibrary.java
 /home/sakki/Documents/Programming/repos/PseudoCompiler/src/main/java/com/pseudocompiler/tools/ColoringTools.java

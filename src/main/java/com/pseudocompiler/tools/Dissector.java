@@ -4,6 +4,8 @@ package com.pseudocompiler.tools;
 import com.pseudocompiler.datatypes.Statement;
 import com.pseudocompiler.libraries.MethodLibrary;
 import com.pseudocompiler.libraries.StatementLibrary;
+
+import javax.swing.plaf.nimbus.State;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
@@ -34,14 +36,17 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 		public Dissector(String fileName) {
 			setFileName(fileName);
 			setDefaults();
+            System.out.println();
 		}
 		public Dissector(Path filePath) {
 			setFileName(filePath);
 			setDefaults();
+            System.out.println();
 		}
 		public Dissector(File file) {
 			setFileName(file);
 			setDefaults();
+            System.out.println();
 		}
 	//================================================================
 
@@ -95,11 +100,11 @@ public class Dissector implements MethodLibrary, StatementLibrary {
         }
 
 		private void setBaseText(String[] baseText) {
-			this.baseText = baseText;
+            this.baseText = baseText;
 		}
 
 		private void setPerStatement(Statement[] perStatement) {
-			this.perStatement = perStatement;
+            this.perStatement = perStatement;
 		}
 
         private void setNumFunctions() {
@@ -107,7 +112,7 @@ public class Dissector implements MethodLibrary, StatementLibrary {
             int numFunctions = 0;
 
             for (String line : baseText) {
-                if (compareRegex(REGEX_METHOD_RETURN, line)) {
+                if (StatementLibrary.compareRegex(REGEX_METHOD_RETURN, line)) {
                     numFunctions++;
                 }
             }
@@ -124,6 +129,8 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 				int startIndex = -1;
 				int stopIndex = -1;
 
+                System.out.println("Setting index pairs...");
+
 				//Assign a size to the functionReturnIndexPairs base array
 				this.functionReturnIndexPairs = new int[numFunctions][2];
 
@@ -139,11 +146,11 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 						stopIndex = i;
 
 					//Check if it is a declaration index
-					} else if (countFunction(baseText[i])) {
+					} else if (countFunction(perStatement[i])) {
 						declarationIndex = i;
 
 					//Check if it is a return index
-					} else if (compareRegex(REGEX_METHOD_RETURN, baseText[i].trim())) {
+					} else if (StatementLibrary.compareRegex(REGEX_METHOD_RETURN, baseText[i].trim())) {
 						returnIndex = i;
 						addFunctionReturnIndexPair(functionNum, declarationIndex, returnIndex);
                         functionNum++;
@@ -265,16 +272,31 @@ public class Dissector implements MethodLibrary, StatementLibrary {
         }
 
         public MethodBuilder[] getMethods() {
+            //User Message
+            System.out.println("Retrieving Subroutines...");
+
             //Local Variables
             ArrayList<MethodBuilder> methods = new ArrayList<>();
+            MethodBuilder mainMethod = getMain();
 
-            for (int[] indexPair : functionReturnIndexPairs) {
-                //Local Variables
-                ArrayList<Statement> lines = new ArrayList<>(Arrays.asList(perStatement).subList(indexPair[0] + 1, indexPair[1]));
-                String returnValue = getReturn(baseText[indexPair[1]]);
-                MethodBuilder methodBuilder = new MethodBuilder(perStatement[indexPair[0]], lines.toArray(new Statement[0]), returnValue);
-                methods.add(methodBuilder);
+            try {
+                for (int[] indexPair : functionReturnIndexPairs) {
+                    //Local Variables
+                    ArrayList<Statement> lines = new ArrayList<>(Arrays.asList(perStatement).subList(indexPair[0] + 1, indexPair[1]));
+                    String returnValue = getReturn(baseText[indexPair[1]]);
+                    MethodBuilder methodBuilder = new MethodBuilder(perStatement[indexPair[0]], lines.toArray(new Statement[0]), returnValue, mainMethod.getLocalScope());
+                    methods.add(methodBuilder);
+                }
+
+                //Give feedback
+                System.out.printf("Note: A total of %d subroutines were found\n", methods.size());
+
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("Note: No defined subroutines were found\n");
+                return null;
             }
+
+            System.out.println();
 
             return methods.toArray(new MethodBuilder[0]);
         }
@@ -293,32 +315,17 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 			return fileExists;
 		}
 
-		private boolean countFunction(String currentLine) {
-			//Local variables
-			boolean isFunction = false;
-			String trimmedLine = currentLine.trim();
-
-			//Match with regex pattern
-			if (compareRegex(REGEX_METHOD, trimmedLine)) {
-				isFunction = true;
-			}
-
-			//Return isFunction
-			return isFunction;
+		private boolean countFunction(Statement currentStatement) {
+			return StatementLibrary.compareRegex(REGEX_METHOD_DECLARE, currentStatement.toString());
 		}
 
 		private String[] asWords(String line) {
 			//Local variables
-			String formattedLine;
 			Grouper lineGroup;
 			List<String> words;
 
-			//Set up formatted line
-			formattedLine = line.replaceAll("\t", TOKEN_FORMAT_TAB);
-			formattedLine = formattedLine.concat(TOKEN_FORMAT_ENTER);
-
 			//Group formatted text based on punctuation
-			lineGroup = new Grouper(formattedLine);
+			lineGroup = new Grouper(line);
 
 			//Split line into separate words
 			words = lineGroup.getFinalText();
@@ -328,6 +335,9 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 		}
 
 		private void readData(File texFile) {
+            //User Message
+            System.out.println("Reading data...");
+
 			//Local variables
 			List<String> textBody = new ArrayList<>();
 			List<Statement> statements = new ArrayList<>();
@@ -344,14 +354,14 @@ public class Dissector implements MethodLibrary, StatementLibrary {
 				while (reader.hasNextLine()) {
 					//Read line
 					currentLine = reader.nextLine();
+                    currentStatement = new Statement(asWords(currentLine));
 
 					//Check if function count increases 
-					if (countFunction(currentLine)) {
+					if (countFunction(currentStatement)) {
 						totalFunctions++;
 					}
 
 					//Save lines and statements
-					currentStatement = new Statement(asWords(currentLine));
 					textBody.add(currentLine);
 					statements.add(currentStatement);
 

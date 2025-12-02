@@ -1,18 +1,18 @@
 start
 	Declarations
-		private string PROMPT_USER_NAME = "Enter username >> "
-		private string PROMPT_USER_AGE = "Enter user age >> "
-		private string END = "Program Terminated"
-		private num SIZE = 5
-		private string username[SIZE]
-		private num age[SIZE]
+		string PROMPT_USER_NAME = "Enter username >> "
+		string PROMPT_USER_AGE = "Enter user age >> "
+		string END = "Program Terminated"
+		num SIZE = 5
+		string username[SIZE]
+		num age[SIZE]
 		num count
 	houseKeeping()
 	detail()
 	endOfJob()
 stop
 
-private houseKeeping()
+houseKeeping()
 	for count = 0 to SIZE - 1 step 1
 		output PROMPT_USER_NAME
 		input username[count]
@@ -21,7 +21,7 @@ private houseKeeping()
 	endfor
 return
 
-private detail()
+detail()
 	for count = 0 to SIZE - 1 step 1
 		output username[count], ":"
 		if (age >= 18) is true then
@@ -32,6 +32,6 @@ private detail()
 	endfor
 return
 
-private endOfJob()
+endOfJob()
 	output END
-return
+return username

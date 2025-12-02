@@ -33,7 +33,7 @@ public class Grouper implements MethodLibrary {
         }
     //================================================================
 
-    // Auxillary method
+    // Auxiliary method
     //================================================================
         /**
          * Resets the current and result variables
@@ -118,10 +118,8 @@ public class Grouper implements MethodLibrary {
     //================================================================
         /**
 		 * Check if a character is in the given array of characters
-		 * @param arr Array of characters to check against
 		 * @param c Character to check
-		 * @return true if the character is in the array, false otherwise
-		 */
+         */
         private void findCriteria(char c) {
             if (containsElement(TOKEN_OPERATORS_QUOTES, c)) {
                 if (!inQuotes) {
@@ -148,24 +146,17 @@ public class Grouper implements MethodLibrary {
 
         /**
          * Determine if  a character is of the type that splits, and is not in quotes or brackets
-         * @param c Char to be analized
+         * @param c Char to be analyzed
          * @return true if splitting character is not bound by quotes or brackets, and false otherwise
          */
         private boolean willSplitAtChar(char c) {
-            //Local variables
-            boolean check = false;
-
-            if (c == ' ' && !inBrackets && !inQuotes) {
-                check = true;
-            }
-            return check;
+            return c == ' ' && !inBrackets && !inQuotes;
         }
 
         /**
          * Groups the data form the baseText variable per character and saves it to the finalText variable
-         * @return finalText
          */
-        private List<String> group() {
+        private void group() {
             if (finalText != null) {
                 finalText.clear();
             }
@@ -176,13 +167,12 @@ public class Grouper implements MethodLibrary {
                 findCriteria(c);
             }
 
-            if (current.length() > 0) {
+            if (!current.isEmpty()) {
                 result.add(current.toString().trim());
             }
 
             finalText = result;
 
-            return finalText;
         }
     //================================================================
 }
